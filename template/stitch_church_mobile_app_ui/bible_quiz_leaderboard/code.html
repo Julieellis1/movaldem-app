@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&amp;family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;background-color:#fbf9f4;color:#1b1c19;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}@keyframes soundwave{0%,100%{height:4px;}50%{height:16px;}}@keyframes soundwave-mid{0%,100%{height:8px;}50%{height:20px;}}@keyframes soundwave-tall{0%,100%{height:6px;}50%{height:22px;}}.wave-bar-1{animation:soundwave 1.1s ease-in-out infinite;}.wave-bar-2{animation:soundwave-tall 0.9s ease-in-out 0.2s infinite;}.wave-bar-3{animation:soundwave-mid 1.3s ease-in-out 0.4s infinite;}.wave-bar-4{animation:soundwave 1.0s ease-in-out 0.1s infinite;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-surface-variant": "#4e4637", "on-background": "#1b1c19", "on-tertiary": "#ffffff", "sacred-maroon": "#5B1E31", "ink-muted": "#636058", "on-tertiary-fixed": "#3c0519", "on-secondary": "#ffffff", "error-container": "#ffdad6", "surface-bright": "#fbf9f4", "primary-fixed": "#ffdea4", "surface-container-lowest": "#ffffff", "primary-container": "#c89b3c", "surface-container-low": "#f5f3ee", "on-primary-container": "#4b3500", "on-error": "#ffffff", "secondary-fixed": "#caeada", "on-primary-fixed": "#261900", "scripture-ink": "#1A1A18", "inverse-primary": "#f0bf5c", "error": "#ba1a1a", "tertiary-container": "#de899e", "inverse-on-surface": "#f2f1ec", "on-secondary-fixed-variant": "#314c41", "on-primary": "#ffffff", "tertiary-fixed-dim": "#ffb1c3", "vellum-card": "#FFFFFF", "surface-tint": "#7b5900", "tertiary": "#8f485b", "outline-variant": "#d2c5b1", "background": "#fbf9f4", "inverse-surface": "#30312e", "surface-variant": "#e4e2dd", "surface-container-high": "#eae8e3", "secondary-fixed-dim": "#afcdbe", "on-error-container": "#93000a", "altar-gold": "#C89B3C", "on-surface": "#1b1c19", "primary-fixed-dim": "#f0bf5c", "vellum-base": "#FBF9F5", "secondary": "#486458", "surface": "#fbf9f4", "tertiary-fixed": "#ffd9e0", "surface-dim": "#dbdad5", "primary": "#7b5900", "surface-container-highest": "#e4e2dd", "on-tertiary-fixed-variant": "#733144", "on-secondary-fixed": "#042017", "on-primary-fixed-variant": "#5d4200", "on-secondary-container": "#4e6a5e", "secondary-container": "#caeada", "cathedral-evergreen": "#0E2A20", "outline": "#807665", "on-tertiary-container": "#612336", "surface-container": "#f0eee9" }, borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, spacing: { "space-xs": "0.25rem", "margin": "1rem", "space-md": "1rem", "space-xl": "2.25rem", "space-lg": "1.5rem", "margin-tablet": "1.5rem", "space-sm": "0.5rem", "gutter": "1rem" }, fontFamily: { "label-sm": ["Plus Jakarta Sans"], "headline-lg": ["EB Garamond"], "body-lg": ["Plus Jakarta Sans"], "scripture-reading": ["EB Garamond"], "headline-sm": ["EB Garamond"], "label-md": ["Plus Jakarta Sans"], "title-md": ["Plus Jakarta Sans"], "headline-md": ["EB Garamond"], "display": ["EB Garamond"], "title-sm": ["Plus Jakarta Sans"], "body-md": ["Plus Jakarta Sans"] }, fontSize: { "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }], "headline-lg": ["30px", { "lineHeight": "38px", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "26px", "fontWeight": "400" }], "scripture-reading": ["21px", { "lineHeight": "34px", "letterSpacing": "0.01em", "fontWeight": "400" }], "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }], "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "600" }], "title-md": ["16px", { "lineHeight": "24px", "fontWeight": "600" }], "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }], "display": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.01em", "fontWeight": "500" }], "title-sm": ["14px", { "lineHeight": "20px", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "22px", "fontWeight": "400" }] } } } };</script></head><body class="bg-surface font-body-md text-body-md text-on-surface flex flex-col antialiased selection:bg-primary-fixed selection:text-on-primary-fixed"><header class="fixed top-0 inset-x-0 z-50 bg-surface/90 backdrop-blur-xl pt-safe shadow-[0_1px_8px_rgba(14,42,32,0.04)]"><div class="h-16 px-margin flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0"><img alt="Sanctuary Church Emblem" class="h-8 w-auto object-contain flex-shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyPSAe0IuqYtHt3Yck7gYJHqMfATwFDfED_TEJY6BtT58Th84LE3f6Uq6bT2yArxj2gYJGz-aWSlfh8dKl0N29uEUf7322ufEoGkGIqTzhwCe1lumLC4Z7HQN-umLmjEb1WQ4QPZE-GR_BYa8I4QKbb9Mzn3mtlJZ_4Gvrk0Xy97OtMjgsjqibSOFHkw9EmHRTPo8KOB9Shcx_aYv8dXc900V2-bzqmVbtbIlo93y5vN9YkMI9-SC8"/><div class="flex flex-col truncate"><span class="font-title-sm text-title-sm text-on-surface truncate leading-none">Sanctuary Church</span><span class="font-label-sm text-label-sm text-altar-gold truncate mt-0.5">Bible Quiz</span></div></div><div class="flex items-center gap-space-xs flex-shrink-0"><button aria-label="Notifications" class="relative w-11 h-11 flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[24px]">notifications</span><span class="absolute top-2 right-2 flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sacred-maroon opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-sacred-maroon"></span></span></button><button aria-label="User Profile" class="w-11 h-11 flex items-center justify-center p-0.5"><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-1 ring-altar-gold/30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmsnuqMhRZIyNzU1jRy4T2QwE1vYI916flXcV-88kuHNLCmG1hLqpvxwL5Wn8kkzlVaS-8Hm0lJUaSKkuAc4meyJZBKz8eR2oWYB-cP51dHz_kf4XvZhLY0kGOT8wiCku5L5rAIhXbzkScjGdsyEjK6PafCtn1nEZu_Pr8_1s942zVqxlP14txYeFIqFmmU-8cX0EiOchc98woxCig6HFnpEXKrhzoQ8auBrc7FN5NBywa6lR8IUqq"/></button></div></div></header><main class="flex flex-col relative w-full pt-16 pb-36 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<!-- Gamified Liturgical Header: Player Status & Vellum Badges -->
+<section class="px-margin pt-space-md pb-space-sm">
+<div class="relative overflow-hidden bg-cathedral-evergreen text-surface-container-lowest rounded-xl p-space-md shadow-md">
+<!-- Ambient sacred aura illumination behind player stats -->
+<div aria-hidden="true" class="absolute -right-8 -top-8 w-36 h-36 rounded-full bg-primary-container/20 blur-2xl pointer-events-none"></div>
+<div aria-hidden="true" class="absolute -left-6 -bottom-6 w-28 h-28 rounded-full bg-altar-gold/15 blur-xl pointer-events-none"></div>
+<div class="relative z-10 flex items-center justify-between gap-space-sm mb-space-md">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="relative flex-shrink-0">
+<img class="w-12 h-12 rounded-full object-cover shadow-sm" data-alt="Close up profile portrait of Sarah Jenkins, a serene Christian woman with warm lighting and a soft gentle smile, dressed in warm neutral tones against a warm church vellum background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyGK5rp-Qy_IBiX2i3au1cntcyyfBUjuDlkuCZ4RKYkhK1ZqffDZtnn2PI4GWgAMKtMj1frO9dZYtJD6mjQgp0q_yrvMcexnTCzZAVi0nh0ZmwjcJNe0MSIV3kLuRIOFA58yIuXJBTsSOk4e1r2p8saitNJQKxzM-BZj1nJ2o6CKjqfDex63Qm-HYjI9OrEtoTDCXMKWN1Jc83XQ_QfkUKVU7DxbgdBcyagWx_1_L4Q1oSVg886TW5"/>
+<span class="absolute -bottom-1 -right-1 bg-altar-gold text-cathedral-evergreen font-label-md text-label-md px-1.5 py-0.5 rounded-full font-bold shadow-sm">#4</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-title-sm text-title-sm text-surface-container-lowest truncate">Sarah Jenkins</span>
+<span class="material-symbols-outlined text-altar-gold text-[16px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary-fixed truncate">Word Disciple • Covenant Circle</span>
+</div>
+</div>
+<button aria-label="Quiz Rules and Faith Rewards Guide" class="w-9 h-9 rounded-full bg-surface-container-highest/15 text-altar-gold hover:bg-surface-container-highest/25 flex items-center justify-center transition-transform active:scale-95 flex-shrink-0" id="open-rules-btn">
+<span class="material-symbols-outlined text-[20px]">help_center</span>
+</button>
+</div>
+<!-- Player Stats Pill Trio -->
+<div class="relative z-10 grid grid-cols-3 gap-space-xs bg-surface-container-lowest/10 backdrop-blur-md rounded-lg p-space-xs text-center">
+<div class="flex flex-col items-center justify-center py-1">
+<div class="flex items-center gap-1 text-altar-gold">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+<span class="font-title-sm text-title-sm text-surface-container-lowest font-bold">#4</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary-fixed">Global Rank</span>
+</div>
+<div class="flex flex-col items-center justify-center py-1 bg-surface-container-lowest/10 rounded">
+<div class="flex items-center gap-1 text-primary-fixed">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">stars</span>
+<span class="font-title-sm text-title-sm text-surface-container-lowest font-bold">1,450</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary-fixed">Weekly XP</span>
+</div>
+<div class="flex flex-col items-center justify-center py-1">
+<div class="flex items-center gap-1 text-sacred-maroon text-tertiary-fixed">
+<span class="material-symbols-outlined text-[16px] text-tertiary-fixed-dim" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="font-title-sm text-title-sm text-surface-container-lowest font-bold">7 Days</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary-fixed">Holy Streak</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Segmented Tab Navigation -->
+<section class="px-margin pt-space-xs pb-space-sm">
+<div aria-label="Bible Quiz Navigation" class="w-full bg-surface-container p-1 rounded-full flex items-center shadow-sm" role="tablist">
+<button aria-controls="view-daily" aria-selected="true" class="flex-1 py-2 px-3 rounded-full font-title-sm text-title-sm text-surface-container-lowest bg-cathedral-evergreen shadow-sm transition-all duration-200 flex items-center justify-center gap-1.5" id="tab-btn-daily" role="tab">
+<span class="material-symbols-outlined text-[18px]">menu_book</span>
+<span>Daily Challenge</span>
+</button>
+<button aria-controls="view-leaderboard" aria-selected="false" class="flex-1 py-2 px-3 rounded-full font-title-sm text-title-sm text-ink-muted hover:text-on-surface transition-all duration-200 flex items-center justify-center gap-1.5" id="tab-btn-leaderboard" role="tab">
+<span class="material-symbols-outlined text-[18px]">leaderboard</span>
+<span>Leaderboard</span>
+</button>
+</div>
+</section>
+<!-- TAB 1: DAILY CHALLENGE CONTENT -->
+<div aria-labelledby="tab-btn-daily" class="flex flex-col w-full space-y-space-md" id="view-daily" role="tabpanel">
+<!-- Hero Daily Bible Quiz Card -->
+<div class="px-margin">
+<div class="relative overflow-hidden bg-vellum-card rounded-xl shadow-md p-space-md">
+<!-- Subtle illuminated golden background corner badge -->
+<div aria-hidden="true" class="absolute -right-12 -bottom-12 w-40 h-40 rounded-full bg-primary-container/10 blur-xl pointer-events-none"></div>
+<div class="flex items-center justify-between mb-space-xs">
+<div class="flex items-center gap-1.5 bg-primary-fixed/30 text-on-primary-fixed px-2.5 py-1 rounded-full">
+<span class="w-1.5 h-1.5 rounded-full bg-altar-gold animate-pulse"></span>
+<span class="font-label-md text-label-md uppercase tracking-wider font-semibold">Today's Holy Scripture Quest</span>
+</div>
+<span class="font-label-sm text-label-sm text-ink-muted flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[16px] text-altar-gold">schedule</span>
+            Expires in 6h
+          </span>
+</div>
+<h2 class="font-headline-md text-headline-md text-scripture-ink mt-2 mb-1">Epistles of Paul &amp; Gospel Wisdom</h2>
+<p class="font-body-md text-body-md text-ink-muted mb-space-md">Test your comprehension of Romans, Corinthians, and timeless apostolic teachings for spiritual nourishment.</p>
+<!-- Quiz Meta Specs Matrix -->
+<div class="grid grid-cols-3 gap-space-xs py-space-sm px-space-xs bg-surface-container-low rounded-lg mb-space-md text-center">
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-[20px] text-cathedral-evergreen mb-0.5">help_outline</span>
+<span class="font-title-sm text-title-sm text-on-surface">10 Verses</span>
+<span class="font-label-sm text-label-sm text-ink-muted">Questions</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-[20px] text-altar-gold mb-0.5">timer</span>
+<span class="font-title-sm text-title-sm text-on-surface">5 Mins</span>
+<span class="font-label-sm text-label-sm text-ink-muted">Timed</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-[20px] text-sacred-maroon mb-0.5">add_circle</span>
+<span class="font-title-sm text-title-sm text-on-surface">+100 XP</span>
+<span class="font-label-sm text-label-sm text-ink-muted">Per Answer</span>
+</div>
+</div>
+<!-- Start Action Button with tactile feedback -->
+<button class="w-full py-3.5 px-space-md rounded-lg bg-altar-gold text-cathedral-evergreen font-title-sm text-title-sm font-bold shadow-md hover:bg-primary-fixed active:scale-[0.98] transition-all flex items-center justify-center gap-2" id="start-quiz-btn">
+<span class="material-symbols-outlined text-[22px]">play_arrow</span>
+<span>Start Quiz Now</span>
+<span class="font-label-sm text-label-sm bg-cathedral-evergreen/15 text-cathedral-evergreen px-2 py-0.5 rounded-full ml-1">Up to +1,000 XP</span>
+</button>
+</div>
+</div>
+<!-- Devotional Scripture Progress Streak Banner -->
+<div class="px-margin">
+<div class="bg-surface-container-high rounded-xl p-space-md shadow-sm flex items-center gap-space-sm">
+<div class="w-12 h-12 rounded-xl bg-sacred-maroon text-surface-container-lowest flex items-center justify-center flex-shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-[26px]">local_fire_department</span>
+</div>
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center justify-between">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">Streak Milestone: 7/10 Days</span>
+<span class="font-label-md text-label-md text-sacred-maroon font-bold">+250 XP Bonus</span>
+</div>
+<!-- Visual progress bar without borders -->
+<div class="w-full bg-surface-variant h-2 rounded-full overflow-hidden mt-1.5">
+<div class="bg-primary-container h-full rounded-full transition-all duration-500" style="width: 70%;"></div>
+</div>
+<span class="font-label-sm text-label-sm text-ink-muted mt-1 truncate">3 days away from unlocking the Sacred Scholar badge</span>
+</div>
+</div>
+</div>
+<!-- Quiz Topic Exploration Categories -->
+<div class="px-margin pb-space-lg">
+<div class="flex items-center justify-between mb-space-sm">
+<h3 class="font-headline-sm text-headline-sm text-scripture-ink">Scripture Categories</h3>
+<span class="font-label-sm text-label-sm text-altar-gold font-semibold uppercase tracking-wider">4 Tracks Ready</span>
+</div>
+<div class="grid grid-cols-2 gap-space-sm">
+<!-- Category Card 1 -->
+<div class="bg-vellum-card rounded-xl p-space-sm shadow-sm flex flex-col justify-between active:scale-[0.98] transition-transform cursor-pointer">
+<div class="relative w-full h-24 rounded-lg overflow-hidden mb-2 bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Ancient parchment roll with Hebrew script and golden antique oil lamp in soft dramatic church light with warm liturgical shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBel5pAFWfZ4Bi_3GPwDtDQPibYMnXf4U_GmbKrM1N8DxDsM-dtE_WNgYxTi8twAYsvJB73YFj487sQx0Uzwe8yZuLNWZhWIlpzL2dyhKF_ep63a7EUZay8f1bfNXD_x8d9njriuIF_OxK9KskoUnN2JjAOhbYhLvaDuzu2JL1hnUnTCKsMI_6BkdWmtjl6u6icSIP97a5ZVVBXitwk99IpayhQ9joBJKBIm6sQDM_kXpRl9eLUkQyV"/>
+<span class="absolute top-1.5 right-1.5 bg-cathedral-evergreen/80 backdrop-blur-sm text-surface-container-lowest font-label-sm text-label-sm px-1.5 py-0.5 rounded">24 Quizzes</span>
+</div>
+<span class="font-title-sm text-title-sm text-on-surface font-semibold truncate">Old Testament Legends</span>
+<span class="font-label-sm text-label-sm text-ink-muted mt-0.5">Moses, David &amp; Kings</span>
+<div class="flex items-center justify-between mt-2 pt-1">
+<span class="font-label-sm text-label-sm text-altar-gold font-semibold flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">stars</span> 850 XP max
+            </span>
+<span class="material-symbols-outlined text-[18px] text-ink-muted">arrow_forward</span>
+</div>
+</div>
+<!-- Category Card 2 -->
+<div class="bg-vellum-card rounded-xl p-space-sm shadow-sm flex flex-col justify-between active:scale-[0.98] transition-transform cursor-pointer">
+<div class="relative w-full h-24 rounded-lg overflow-hidden mb-2 bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Stained glass illustration of the Good Samaritan offering healing oil under warm golden rays inside a cathedral chapel" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDW-b7dEJm61ZowlYwhQUcMb34-p5uKCZhxvk24Ne3DHNz3SS3v8E_TX5AbJjrJGP9C7VCkILLriSn8o_EP-aud3RUIMkF8okPIo9kYM7Of5oqPx8cIeTfQJDoRov3UQLVyMEb4up-zm36ayxu1n6zKAQAvltyqdhvSE76zjTJ6C-Cb612YA16NAcnr2GN8yKLxfyUv7O6wEBFVP82VXpJUZMh4ZfQw5-9kAfjbJxcCzJ1RZm1oAdI"/>
+<span class="absolute top-1.5 right-1.5 bg-cathedral-evergreen/80 backdrop-blur-sm text-surface-container-lowest font-label-sm text-label-sm px-1.5 py-0.5 rounded">18 Quizzes</span>
+</div>
+<span class="font-title-sm text-title-sm text-on-surface font-semibold truncate">Parables of Jesus</span>
+<span class="font-label-sm text-label-sm text-ink-muted mt-0.5">Stories of Grace &amp; Mercy</span>
+<div class="flex items-center justify-between mt-2 pt-1">
+<span class="font-label-sm text-label-sm text-altar-gold font-semibold flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">stars</span> 900 XP max
+            </span>
+<span class="material-symbols-outlined text-[18px] text-ink-muted">arrow_forward</span>
+</div>
+</div>
+<!-- Category Card 3 -->
+<div class="bg-vellum-card rounded-xl p-space-sm shadow-sm flex flex-col justify-between active:scale-[0.98] transition-transform cursor-pointer">
+<div class="relative w-full h-24 rounded-lg overflow-hidden mb-2 bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Tongues of gentle sacred fire descending upon disciples gathered in prayer classical oil painting style with gold leaf touches" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2u887l_aH2dYHlAlwTUr_1CSvMaIL2EPwRicRNSTr61m9WPOIF7oyg2JFdlC9i4uPxAZiOqYMEPAIg3_UHj6A5nKs4Gss15TskpDCBI-vHBq1AY-YTQeKgn3Eg42vNzCC-j5NPvYdWzFhBuvIonXDPB80xyz8F7uTJg4eruOK6QIjkHCo3RN6Ak1YqLWQa0t7NDzlAwJyJCEUxOz7Mxn9uAZNqXw6mxU1YF-IPXx-PS8b9RT4fLXC"/>
+<span class="absolute top-1.5 right-1.5 bg-cathedral-evergreen/80 backdrop-blur-sm text-surface-container-lowest font-label-sm text-label-sm px-1.5 py-0.5 rounded">15 Quizzes</span>
+</div>
+<span class="font-title-sm text-title-sm text-on-surface font-semibold truncate">Acts &amp; Early Church</span>
+<span class="font-label-sm text-label-sm text-ink-muted mt-0.5">Pentecost to Antioch</span>
+<div class="flex items-center justify-between mt-2 pt-1">
+<span class="font-label-sm text-label-sm text-altar-gold font-semibold flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">stars</span> 700 XP max
+            </span>
+<span class="material-symbols-outlined text-[18px] text-ink-muted">arrow_forward</span>
+</div>
+</div>
+<!-- Category Card 4 -->
+<div class="bg-vellum-card rounded-xl p-space-sm shadow-sm flex flex-col justify-between active:scale-[0.98] transition-transform cursor-pointer">
+<div class="relative w-full h-24 rounded-lg overflow-hidden mb-2 bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Luminous heavenly golden city with radiant gates and seven glowing candle holders in sacred biblical renaissance painting style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYNy153yLE0JGuE7FKvw24bTKTLz8gjE3Viph6U3AIg4zoz3mQLLNPhOINvDu2cbqVk8djy0MYIo-tMn1QERNxcbEqn1V4LHtGO07-f8mdykwSx3wBIPLkfOMUVoPipu0DlZ3tzaVqmSbqTGYMG2guO2g8AMuUkKtZEQQujf2um65cKtVkvCWYYWDyeq8nkhMLvgymkc0Dzn2HkhQydC65p_68JzM6n_YSsgwJ33j_LV-vioIlBlyV"/>
+<span class="absolute top-1.5 right-1.5 bg-cathedral-evergreen/80 backdrop-blur-sm text-surface-container-lowest font-label-sm text-label-sm px-1.5 py-0.5 rounded">12 Quizzes</span>
+</div>
+<span class="font-title-sm text-title-sm text-on-surface font-semibold truncate">Prophecies &amp; Revelation</span>
+<span class="font-label-sm text-label-sm text-ink-muted mt-0.5">Visions of St. John</span>
+<div class="flex items-center justify-between mt-2 pt-1">
+<span class="font-label-sm text-label-sm text-altar-gold font-semibold flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">stars</span> 1,200 XP max
+            </span>
+<span class="material-symbols-outlined text-[18px] text-ink-muted">arrow_forward</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- TAB 2: GLOBAL LEADERBOARD CONTENT -->
+<div aria-labelledby="tab-btn-leaderboard" class="hidden flex-col w-full space-y-space-md" id="view-leaderboard" role="tabpanel">
+<!-- Weekly Season Sub-Header -->
+<div class="px-margin flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md uppercase tracking-wider text-altar-gold font-semibold">Liturgical Season XIV</span>
+<h3 class="font-headline-sm text-headline-sm text-scripture-ink">Sanctuary Hall of Disciples</h3>
+</div>
+<div class="bg-secondary-container text-on-secondary-container px-2.5 py-1 rounded-full font-label-sm text-label-sm flex items-center gap-1 font-semibold">
+<span class="material-symbols-outlined text-[16px]">hourglass_top</span>
+<span>Resets in 2d 14h</span>
+</div>
+</div>
+<!-- Ecclesiastical Podium: 2nd, 1st, 3rd -->
+<div class="px-margin pt-4">
+<div class="relative bg-surface-container-low rounded-xl p-space-md shadow-sm">
+<div class="flex items-end justify-center gap-space-sm pt-4 pb-2">
+<!-- 2ND PLACE (SILVER) -->
+<div class="flex-1 flex flex-col items-center">
+<div class="relative mb-2">
+<div class="w-8 h-8 rounded-full bg-slate-300 text-slate-800 flex items-center justify-center font-bold text-label-md mx-auto mb-1 shadow-sm">
+<span class="material-symbols-outlined text-[18px]">workspace_premium</span>
+</div>
+<img class="w-16 h-16 rounded-full object-cover shadow-md mx-auto" data-alt="Portrait of Sis. Grace, an elegant middle aged African woman in bright patterned headwrap with joyful devotional expression in a church courtyard" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBunGY_t6BCrCHf-ILctiboecbHKmG7APcSYUg9VQZO0h9zBqHmjoJEwq5e8okDv1wKJS1RHtFEj_9Yh1xCmDKr7B_I6evViK4VxOR3wTF7gdXylkI7gqMEPX9tnU1CzHBcqk4jCkagy4XH4KuLeWr1FEw7MDTGXXgoxPHHDm5Hs5Of0ex1nwcmhAhZ_vhXdy3rdjHNd2A7Ea7tmrOoUjJUMgRbXBjGGBUoyvKNVntRRcgDbkqpA_wc"/>
+<span class="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-slate-200 text-slate-800 font-label-sm text-label-sm px-2 py-0.5 rounded-full font-bold shadow-sm">#2</span>
+</div>
+<span class="font-title-sm text-title-sm text-on-surface font-semibold text-center truncate max-w-[90px]">Sis. Grace</span>
+<span class="font-label-sm text-label-sm text-ink-muted text-center truncate max-w-[90px]">Grace Fellow</span>
+<div class="mt-2 bg-slate-200 text-slate-900 px-2 py-1 rounded font-label-md text-label-md font-bold">
+              2,640 XP
+            </div>
+<!-- Podium step height 2 -->
+<div class="w-full h-12 bg-slate-200/80 rounded-t-lg mt-2 flex items-center justify-center text-slate-500 font-bold font-title-sm">2</div>
+</div>
+<!-- 1ST PLACE (GOLD - ELEVATED) -->
+<div class="flex-1 flex flex-col items-center -mt-6">
+<div class="relative mb-2">
+<div class="w-10 h-10 rounded-full bg-altar-gold text-cathedral-evergreen flex items-center justify-center font-bold text-title-sm mx-auto mb-1 shadow-md animate-bounce">
+<span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">crown</span>
+</div>
+<img class="w-20 h-20 rounded-full object-cover shadow-lg mx-auto" data-alt="Portrait of Brother David, a warm bearded elder man with gentle eyes holding a leather scripture book under cathedral amber backlight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAM5Mb9lUdvcOOiXeebcugdrkC4UpHswUbGM-Mp30g1WDr9bqeNVLNy3b8Tl6cDWJDFJT6Smw4w38ttTjF-qw1umLLqr9tSmTNYOANfi047hntI_1Ky7J38Stjezvg9wHm7i9S4W4nFXKUx2G_uzT20iEcYfeLk1AI7XhmXqWNrUx0r4IVSFTSJujlRgUymUiKPiMvxyCm2HTWDRcTPVLBht6NNi0rhYUqe4IhtbyZpUHOsOWgHwnIp"/>
+<span class="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-altar-gold text-cathedral-evergreen font-label-sm text-label-sm px-2.5 py-0.5 rounded-full font-bold shadow-sm">#1</span>
+</div>
+<span class="font-title-sm text-title-sm text-on-surface font-bold text-center truncate max-w-[100px]">Bro. David</span>
+<span class="font-label-sm text-label-sm text-primary font-medium text-center truncate max-w-[100px]">Senior Elder</span>
+<div class="mt-2 bg-primary-fixed text-on-primary-fixed px-2.5 py-1 rounded font-label-md text-label-md font-bold shadow-sm">
+              2,890 XP
+            </div>
+<!-- Podium step height 1 -->
+<div class="w-full h-20 bg-altar-gold/30 rounded-t-lg mt-2 flex items-center justify-center text-on-primary-container font-bold font-title-md">1</div>
+</div>
+<!-- 3RD PLACE (BRONZE) -->
+<div class="flex-1 flex flex-col items-center">
+<div class="relative mb-2">
+<div class="w-8 h-8 rounded-full bg-amber-700 text-amber-100 flex items-center justify-center font-bold text-label-md mx-auto mb-1 shadow-sm">
+<span class="material-symbols-outlined text-[18px]">emoji_events</span>
+</div>
+<img class="w-16 h-16 rounded-full object-cover shadow-md mx-auto" data-alt="Portrait of Deacon Samuel, a young charismatic Hispanic church leader in a linen shirt inside sanctuary choir hall" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGvZlTXDe8Q1OmdBB9nov-5oUC1_SiQpL8gaPz_tpBof-yR0UZJOtF56aLsTbDn76L4hBdq_bqsLhGPfyg1x5TmzG-_p2LsOsj13fWG_H67YhAOlCnYarr1g-JmwpsKmKA0AgrnLTC3qLj_wR7Bq_HF6pso5u2mzH2i32iH7UpTng2whnLLihUSiGXfD4UnK2_S7mNSXDB9lbq09z9WwSxH4OcWVUkTWN5fUKoU41dr2qmiwzIlMrv"/>
+<span class="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-amber-700 text-amber-100 font-label-sm text-label-sm px-2 py-0.5 rounded-full font-bold shadow-sm">#3</span>
+</div>
+<span class="font-title-sm text-title-sm text-on-surface font-semibold text-center truncate max-w-[90px]">Deac. Samuel</span>
+<span class="font-label-sm text-label-sm text-ink-muted text-center truncate max-w-[90px]">Choir Master</span>
+<div class="mt-2 bg-amber-100 text-amber-900 px-2 py-1 rounded font-label-md text-label-md font-bold">
+              2,410 XP
+            </div>
+<!-- Podium step height 3 -->
+<div class="w-full h-8 bg-amber-200/60 rounded-t-lg mt-2 flex items-center justify-center text-amber-800 font-bold font-title-sm">3</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Ranked 4th - 10th Scrollable List -->
+<div class="px-margin space-y-space-xs pb-space-lg">
+<div class="flex items-center justify-between px-space-xs py-1">
+<span class="font-label-md text-label-md uppercase tracking-wider text-ink-muted font-semibold">Sanctuary Contenders (4 - 10)</span>
+<span class="font-label-sm text-label-sm text-ink-muted">Weekly Score</span>
+</div>
+<!-- Rank 4: Current User Highlight -->
+<div class="bg-primary-fixed/20 rounded-xl p-space-sm shadow-sm flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<span class="w-6 text-center font-title-sm text-title-sm text-altar-gold font-bold flex-shrink-0">4</span>
+<img class="w-10 h-10 rounded-full object-cover shadow-sm flex-shrink-0" data-alt="Close up portrait of Sarah Jenkins smiling softly with gentle warm liturgical ambient lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuANXO1Wv9Emrii5nMdClMfKQluf7_3YTSJljglN_AU6Qjm5bXSY80ifxOB4INoSWy7Y_qp5Is72TOzb3sHqAGnfUex5rrW691kgwYqB71LXFMT5AICz6bv3tb8v_uS1frQhEsmzW6bqnkaRZ1CDJfIahRmANQ0C1gV3lhdquuOkQTou5vBlAoyafbP6Mo5qAs0qq37QuO75AJEnvV2WoOvlJJF2YChcKzVz6KDzB1Gjltd_b_pwsV5O"/>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-title-sm text-title-sm text-on-surface font-bold truncate">Sarah Jenkins</span>
+<span class="bg-altar-gold/20 text-on-primary-fixed font-label-sm text-label-sm px-1.5 py-0.2 rounded font-semibold flex-shrink-0">You</span>
+</div>
+<span class="font-label-sm text-label-sm text-sacred-maroon font-medium truncate">Scripture Scholar</span>
+</div>
+</div>
+<div class="flex items-center gap-2 flex-shrink-0">
+<div class="flex flex-col items-end">
+<span class="font-title-sm text-title-sm text-on-surface font-bold">1,450 XP</span>
+<span class="font-label-sm text-label-sm text-ink-muted flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px] text-cathedral-evergreen">trending_up</span> +140 today
+            </span>
+</div>
+</div>
+</div>
+<!-- Rank 5 -->
+<div class="bg-vellum-card rounded-xl p-space-sm shadow-sm flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<span class="w-6 text-center font-title-sm text-title-sm text-ink-muted font-semibold flex-shrink-0">5</span>
+<img class="w-10 h-10 rounded-full object-cover shadow-sm flex-shrink-0" data-alt="Portrait of Pastor Timothy, an African American man with spectacles and warm smile in church vestments" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMnN0_w5vz9slO61JlSl3DJkaVs9WV1Nc6wcuD94uAbzlCAsQgWpN8HVVVOavY6HfdnZX7ax-PR0k1gQ2Ho6V7xA9pcweryVXCGWLxx7Rm5QdGzwcK1-khTDW9ikhSMcE9mextWCrY2x3Xe-CmvMDpOroqc3LuNw1VxmPA5mhZJcv9bX2zbaCJ5Rc010NB4UDCtegsJ_Z20cRCHqxIzYnffhWDaLMlNe1QhI-OrMykqD1kPkMWMjiQ"/>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold truncate">Pastor Timothy</span>
+<span class="font-label-sm text-label-sm text-ink-muted truncate">Word Disciple • Youth Minister</span>
+</div>
+</div>
+<div class="flex flex-col items-end flex-shrink-0">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">1,380 XP</span>
+<span class="font-label-sm text-label-sm text-ink-muted">14 Quizzes</span>
+</div>
+</div>
+<!-- Rank 6 -->
+<div class="bg-vellum-card rounded-xl p-space-sm shadow-sm flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<span class="w-6 text-center font-title-sm text-title-sm text-ink-muted font-semibold flex-shrink-0">6</span>
+<img class="w-10 h-10 rounded-full object-cover shadow-sm flex-shrink-0" data-alt="Portrait of Sister Miriam, an elderly nun or devotional woman praying with rosary beads in church stained glass warm light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpjMoMntZk_Lss4NbocbiODvP3za3zgBgOsBPM8OUV236Blu58nU8BldytLLpv1YOy2KO8SGs4XfgYAHndeQ5CD-r0TDeCQwQPyzOImUxgSAKEN5jN5crN6Fj__Jpt-K2A1_Ed-MhAIHGnVmPLKSaiIpm0zfD8Gpvr3BsQkBKeRETAbI3qYzei7VwoJ2RLwIxz7lxFHSOs6wnCKfhhOpnUINmpJDy5pc6ML5m0hsFCYYbI-h7BgTPn"/>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold truncate">Sis. Miriam E.</span>
+<span class="font-label-sm text-label-sm text-ink-muted truncate">Prayer Warrior • Intercessory</span>
+</div>
+</div>
+<div class="flex flex-col items-end flex-shrink-0">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">1,290 XP</span>
+<span class="font-label-sm text-label-sm text-ink-muted">12 Quizzes</span>
+</div>
+</div>
+<!-- Rank 7 -->
+<div class="bg-vellum-card rounded-xl p-space-sm shadow-sm flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<span class="w-6 text-center font-title-sm text-title-sm text-ink-muted font-semibold flex-shrink-0">7</span>
+<img class="w-10 h-10 rounded-full object-cover shadow-sm flex-shrink-0" data-alt="Portrait of Caleb Vance, a young teenage boy smiling with church choir uniform and friendly joyful expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABaBDlw3i56A0CvRMYv1pld9Ev2ATR9Jr8nB7U9ezuL4rgdawtRQ1IF9kzMPjha4dcqxlumZgMFJXZ3JAF5MgxwAl-bOs6bJKpRhLp6_asmyRxfEXx9uPw36P-Oo-IR2zcM2YuFOP8Y_yheX-b255Io8Q5KjOPjBHP87X0Tn4qfJjRJVjrzMYlda0f7NqPm8QK88VB8ZehiIwZir-SHCYOPQCGTmo5H1ScsSy9FeinE6S6DBLF1XWW"/>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold truncate">Caleb Vance</span>
+<span class="font-label-sm text-label-sm text-ink-muted truncate">Acolyte Scholar • GenNext</span>
+</div>
+</div>
+<div class="flex flex-col items-end flex-shrink-0">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">1,150 XP</span>
+<span class="font-label-sm text-label-sm text-ink-muted">11 Quizzes</span>
+</div>
+</div>
+<!-- Rank 8 -->
+<div class="bg-vellum-card rounded-xl p-space-sm shadow-sm flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<span class="w-6 text-center font-title-sm text-title-sm text-ink-muted font-semibold flex-shrink-0">8</span>
+<img class="w-10 h-10 rounded-full object-cover shadow-sm flex-shrink-0" data-alt="Portrait of Sister Hannah, a smiling Asian woman holding Sunday School literature in bright sunlit chapel" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZB-IL9b0vFm57YcmmkhgK42dqI9VRl8EucUmkMGFccIg6XqLC5r7XfugFax1bUVH5gxNh-IC_tNnfjnNrskMs-PLtV08EmPOb0xsy5XKTTNpfXqa5qVtg5ZXEmnbI9DqKhsvi43G-ET7BVDdVgSPYekHxGbQOQQYimShr4DzhPWv-3eFxHEYAwW-t_-AgUONiYGNb7q3k89PUgWfynXv4a8sQHyQ0y1NDwNmgZzowBgS23NLyI2ac"/>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold truncate">Sis. Hannah Cho</span>
+<span class="font-label-sm text-label-sm text-ink-muted truncate">Sunday School Teacher</span>
+</div>
+</div>
+<div class="flex flex-col items-end flex-shrink-0">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">980 XP</span>
+<span class="font-label-sm text-label-sm text-ink-muted">9 Quizzes</span>
+</div>
+</div>
+<!-- Rank 9 -->
+<div class="bg-vellum-card rounded-xl p-space-sm shadow-sm flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<span class="w-6 text-center font-title-sm text-title-sm text-ink-muted font-semibold flex-shrink-0">9</span>
+<img class="w-10 h-10 rounded-full object-cover shadow-sm flex-shrink-0" data-alt="Portrait of Mark Henderson, an architect in spectacles with gentle demeanor in church library reading Bible" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDI_In1rfwLJ1WDcMghvGtzF0CdXjT1Z0CPuDUJzrruor9rvNAPWmOhrVTGoDc4Ft1m_4ifbRU_Mz9pGw7jGjFFEMWHWyl1th01xm0DMIGuSTC8p9KA5NFlapXmsdlf5ESEI1s-mN-pzfF0SUwLM7D4Bpv0Mn3Ox-02BqH1ISUe9kgOkpjn1X0gY0QOVlAYEJCbnJI-0Ue1_8lkMWAt368vvImqawrHePEPveugkdNZBGwH1wLpb6n-"/>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold truncate">Mark Henderson</span>
+<span class="font-label-sm text-label-sm text-ink-muted truncate">Building Trustee</span>
+</div>
+</div>
+<div class="flex flex-col items-end flex-shrink-0">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">920 XP</span>
+<span class="font-label-sm text-label-sm text-ink-muted">8 Quizzes</span>
+</div>
+</div>
+<!-- Rank 10 -->
+<div class="bg-vellum-card rounded-xl p-space-sm shadow-sm flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<span class="w-6 text-center font-title-sm text-title-sm text-ink-muted font-semibold flex-shrink-0">10</span>
+<img class="w-10 h-10 rounded-full object-cover shadow-sm flex-shrink-0" data-alt="Portrait of Sister Rachel, a warm Brazilian woman with curly hair singing in church choir robe" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkKsTq4__4eX3P2LKRaQZGH8GI2NZ9-oU_YYwdVH-OYB6fl8up36WUHEWKrsjL2Snv5gKK_mbGH8IVPB8dftU_jUOMsXYubNDYQIPAez6VHLegDMGk1akLCcEnl4-XGo1zNWiy-8Rt-8tQPHfFRoEz10p7R_zS1Q-I9n5iKva2GJ556CfDgyAjZlUSI-eubhqrt4wr8BBOZTPQaOhp506w1VYSRGM6uViU8ZXfqLtptMiIIDDjVWB4"/>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold truncate">Sis. Rachel Lima</span>
+<span class="font-label-sm text-label-sm text-ink-muted truncate">Praise Team Member</span>
+</div>
+</div>
+<div class="flex flex-col items-end flex-shrink-0">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">860 XP</span>
+<span class="font-label-sm text-label-sm text-ink-muted">8 Quizzes</span>
+</div>
+</div>
+</div>
+</div>
+<!-- STICKY USER POSITION TRAY (Visible during Leaderboard scrolling) -->
+<div class="hidden px-margin pb-2 pt-1 sticky bottom-24 z-30 pointer-events-none" id="sticky-user-bar">
+<div class="pointer-events-auto bg-cathedral-evergreen/95 backdrop-blur-md text-surface-container-lowest rounded-xl p-space-sm shadow-lg flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-8 h-8 rounded-full bg-altar-gold text-cathedral-evergreen flex items-center justify-center font-bold text-title-sm flex-shrink-0">
+          #4
+        </div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-surface-container-lowest font-semibold truncate">Sarah Jenkins (You)</span>
+<span class="font-label-sm text-label-sm text-primary-fixed">960 XP to catch Deacon Samuel (#3)</span>
+</div>
+</div>
+<button class="py-1.5 px-3 rounded-lg bg-altar-gold text-cathedral-evergreen font-title-sm text-title-sm font-bold shadow-sm hover:bg-primary-fixed active:scale-95 transition-all flex items-center gap-1 flex-shrink-0" id="challenge-btn">
+<span class="material-symbols-outlined text-[16px]">bolt</span>
+<span>Play Quiz</span>
+</button>
+</div>
+</div>
+<!-- INTERACTIVE MODAL 1: Quiz Rules & Sacred Scoring Guide -->
+<div aria-labelledby="rules-modal-title" aria-modal="true" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex-col justify-end p-margin sm:items-center sm:justify-center transition-opacity" id="rules-modal" role="dialog">
+<div class="bg-vellum-card text-on-surface w-full max-w-md rounded-xl p-space-md shadow-2xl overflow-y-auto max-h-[85vh]">
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-primary-fixed/40 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">auto_stories</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-scripture-ink" id="rules-modal-title">Sanctuary Quiz Rules</h3>
+</div>
+<button class="w-8 h-8 rounded-full bg-surface-container text-ink-muted hover:text-on-surface flex items-center justify-center" id="close-rules-btn">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<div class="space-y-space-sm mb-space-md">
+<div class="bg-surface-container-low rounded-lg p-space-sm flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-altar-gold text-[22px] flex-shrink-0">verified</span>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">100 XP Per Correct Passage</span>
+<span class="font-body-md text-body-md text-ink-muted">Answer with accuracy. First attempts grant 100% XP; subsequent retakes reward 40% contemplation credit.</span>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-lg p-space-sm flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-sacred-maroon text-[22px] flex-shrink-0">local_fire_department</span>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">Daily Streak Multiplier</span>
+<span class="font-body-md text-body-md text-ink-muted">Maintain a 7+ day streak to unlock the 1.25x Grace Multiplier on all weekend Scripture challenges.</span>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-lg p-space-sm flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[22px] flex-shrink-0">military_tech</span>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">Weekly Sunday Reset</span>
+<span class="font-body-md text-body-md text-ink-muted">Rankings freeze Sunday at midnight. The Top 3 receive special mentions during the live Sunday stream broadcast!</span>
+</div>
+</div>
+</div>
+<button class="w-full py-3 rounded-lg bg-cathedral-evergreen text-surface-container-lowest font-title-sm text-title-sm font-semibold shadow-md active:scale-[0.98] transition-all" id="close-rules-cta">
+        I Understand • Begin Journey
+      </button>
+</div>
+</div>
+<!-- INTERACTIVE MODAL 2: Active Question Sheet Preview (Delight Experience) -->
+<div aria-labelledby="question-modal-title" aria-modal="true" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md hidden flex-col justify-end p-margin sm:items-center sm:justify-center" id="quiz-live-modal" role="dialog">
+<div class="bg-vellum-card text-on-surface w-full max-w-lg rounded-xl p-space-md shadow-2xl flex flex-col space-y-space-md">
+<!-- Top question status bar -->
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md uppercase tracking-wider text-altar-gold font-bold">Question 3 of 10</span>
+<div class="flex items-center gap-1 bg-surface-container-high px-2 py-0.5 rounded-full text-cathedral-evergreen font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[14px]">timer</span>
+<span id="quiz-timer">04:42</span>
+</div>
+<button class="text-ink-muted hover:text-on-surface" id="exit-quiz-btn">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Question Text with Liturgical typography -->
+<div class="bg-surface-container-low rounded-lg p-space-md">
+<span class="font-label-sm text-label-sm text-sacred-maroon font-semibold uppercase tracking-wider">Romans 12:2</span>
+<h4 class="font-headline-sm text-headline-sm text-scripture-ink mt-1" id="question-modal-title">
+          "Do not conform to the pattern of this world, but be transformed by the renewal of your ________."
+        </h4>
+</div>
+<!-- 4 Answer Options -->
+<div class="space-y-space-xs" id="quiz-options-group">
+<button class="quiz-option-btn w-full text-left p-3 rounded-lg bg-surface-container hover:bg-surface-container-high active:scale-[0.99] transition-all flex items-center justify-between" data-answer="spirit">
+<span class="font-body-md text-body-md text-on-surface font-medium">A. Spirit and strength</span>
+<span class="w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center font-label-sm text-label-sm font-bold text-ink-muted">A</span>
+</button>
+<button class="quiz-option-btn w-full text-left p-3 rounded-lg bg-surface-container hover:bg-surface-container-high active:scale-[0.99] transition-all flex items-center justify-between" data-answer="mind" data-correct="true">
+<span class="font-body-md text-body-md text-on-surface font-medium">B. Mind</span>
+<span class="w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center font-label-sm text-label-sm font-bold text-ink-muted">B</span>
+</button>
+<button class="quiz-option-btn w-full text-left p-3 rounded-lg bg-surface-container hover:bg-surface-container-high active:scale-[0.99] transition-all flex items-center justify-between" data-answer="heart">
+<span class="font-body-md text-body-md text-on-surface font-medium">C. Heart and soul</span>
+<span class="w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center font-label-sm text-label-sm font-bold text-ink-muted">C</span>
+</button>
+<button class="quiz-option-btn w-full text-left p-3 rounded-lg bg-surface-container hover:bg-surface-container-high active:scale-[0.99] transition-all flex items-center justify-between" data-answer="covenant">
+<span class="font-body-md text-body-md text-on-surface font-medium">D. Covenant temple</span>
+<span class="w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center font-label-sm text-label-sm font-bold text-ink-muted">D</span>
+</button>
+</div>
+<!-- Feedback Banner inside Modal -->
+<div class="hidden p-space-sm rounded-lg bg-secondary-container text-on-secondary-container items-center gap-2" id="quiz-feedback-box">
+<span class="material-symbols-outlined text-[20px] text-cathedral-evergreen">check_circle</span>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm font-bold text-cathedral-evergreen">Amen! +100 XP Earned</span>
+<span class="font-label-sm text-label-sm text-on-secondary-fixed-variant">"That you may prove what is that good and acceptable will of God."</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Tab Switching Micro-interaction
+  const tabDaily = document.getElementById('tab-btn-daily');
+  const tabLeaderboard = document.getElementById('tab-btn-leaderboard');
+  const viewDaily = document.getElementById('view-daily');
+  const viewLeaderboard = document.getElementById('view-leaderboard');
+  const stickyUserBar = document.getElementById('sticky-user-bar');
+
+  function setTab(isDaily) {
+    if (isDaily) {
+      tabDaily.classList.add('bg-cathedral-evergreen', 'text-surface-container-lowest', 'shadow-sm');
+      tabDaily.classList.remove('text-ink-muted');
+      tabDaily.setAttribute('aria-selected', 'true');
+
+      tabLeaderboard.classList.remove('bg-cathedral-evergreen', 'text-surface-container-lowest', 'shadow-sm');
+      tabLeaderboard.classList.add('text-ink-muted');
+      tabLeaderboard.setAttribute('aria-selected', 'false');
+
+      viewDaily.classList.remove('hidden');
+      viewDaily.classList.add('flex');
+      viewLeaderboard.classList.add('hidden');
+      viewLeaderboard.classList.remove('flex');
+      stickyUserBar.classList.add('hidden');
+    } else {
+      tabLeaderboard.classList.add('bg-cathedral-evergreen', 'text-surface-container-lowest', 'shadow-sm');
+      tabLeaderboard.classList.remove('text-ink-muted');
+      tabLeaderboard.setAttribute('aria-selected', 'true');
+
+      tabDaily.classList.remove('bg-cathedral-evergreen', 'text-surface-container-lowest', 'shadow-sm');
+      tabDaily.classList.add('text-ink-muted');
+      tabDaily.setAttribute('aria-selected', 'false');
+
+      viewLeaderboard.classList.remove('hidden');
+      viewLeaderboard.classList.add('flex');
+      viewDaily.classList.add('hidden');
+      viewDaily.classList.remove('flex');
+      stickyUserBar.classList.remove('hidden');
+    }
+  }
+
+  tabDaily.addEventListener('click', () => setTab(true));
+  tabLeaderboard.addEventListener('click', () => setTab(false));
+
+  // Modal Handlers: Quiz Rules
+  const openRulesBtn = document.getElementById('open-rules-btn');
+  const closeRulesBtn = document.getElementById('close-rules-btn');
+  const closeRulesCta = document.getElementById('close-rules-cta');
+  const rulesModal = document.getElementById('rules-modal');
+
+  function toggleRules(show) {
+    if (show) {
+      rulesModal.classList.remove('hidden');
+      rulesModal.classList.add('flex');
+    } else {
+      rulesModal.classList.add('hidden');
+      rulesModal.classList.remove('flex');
+    }
+  }
+
+  openRulesBtn.addEventListener('click', () => toggleRules(true));
+  closeRulesBtn.addEventListener('click', () => toggleRules(false));
+  closeRulesCta.addEventListener('click', () => toggleRules(false));
+
+  // Live Quiz Interactive Demo
+  const startQuizBtn = document.getElementById('start-quiz-btn');
+  const challengeBtn = document.getElementById('challenge-btn');
+  const quizLiveModal = document.getElementById('quiz-live-modal');
+  const exitQuizBtn = document.getElementById('exit-quiz-btn');
+  const quizOptions = document.querySelectorAll('.quiz-option-btn');
+  const quizFeedbackBox = document.getElementById('quiz-feedback-box');
+
+  function openQuiz() {
+    quizLiveModal.classList.remove('hidden');
+    quizLiveModal.classList.add('flex');
+  }
+
+  function closeQuiz() {
+    quizLiveModal.classList.add('hidden');
+    quizLiveModal.classList.remove('flex');
+    quizFeedbackBox.classList.add('hidden');
+    quizFeedbackBox.classList.remove('flex');
+    quizOptions.forEach(btn => {
+      btn.classList.remove('bg-secondary-container', 'text-on-secondary-container', 'bg-error-container', 'text-on-error-container');
+      btn.classList.add('bg-surface-container');
+    });
+  }
+
+  startQuizBtn.addEventListener('click', openQuiz);
+  challengeBtn.addEventListener('click', openQuiz);
+  exitQuizBtn.addEventListener('click', closeQuiz);
+
+  quizOptions.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const isCorrect = btn.getAttribute('data-correct') === 'true';
+      if (isCorrect) {
+        btn.classList.remove('bg-surface-container');
+        btn.classList.add('bg-secondary-container', 'text-on-secondary-container');
+        quizFeedbackBox.classList.remove('hidden');
+        quizFeedbackBox.classList.add('flex');
+      } else {
+        btn.classList.remove('bg-surface-container');
+        btn.classList.add('bg-error-container', 'text-on-error-container');
+      }
+    });
+  });
+</script></main><aside class="fixed bottom-16 inset-x-0 z-40 px-margin pb-space-xs pointer-events-none"><div class="pointer-events-auto w-full bg-cathedral-evergreen/95 backdrop-blur-xl text-surface-container-lowest rounded-xl p-space-sm shadow-[0_4px_20px_rgba(14,42,32,0.25)] ring-1 ring-altar-gold/25 flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0"><div class="w-9 h-9 rounded-lg bg-surface-container-highest/10 flex items-center justify-center text-altar-gold flex-shrink-0"><span class="material-symbols-outlined text-[20px]">radio</span></div><div class="flex flex-col min-w-0"><div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-altar-gold animate-pulse"></span><span class="font-label-sm text-label-sm text-altar-gold uppercase tracking-wider">On Air</span></div><span class="font-title-sm text-title-sm text-surface-container-lowest truncate">Zeno Gospel Stream Live</span></div></div><div class="flex items-center gap-space-sm flex-shrink-0"><div aria-hidden="true" class="flex items-end gap-[3px] h-6 px-1 flex-shrink-0"><div class="w-1 bg-altar-gold rounded-full wave-bar-1"></div><div class="w-1 bg-altar-gold rounded-full wave-bar-2"></div><div class="w-1 bg-altar-gold rounded-full wave-bar-3"></div><div class="w-1 bg-altar-gold rounded-full wave-bar-4"></div></div><button aria-label="Play or Pause Broadcast" class="w-10 h-10 rounded-full bg-altar-gold text-cathedral-evergreen flex items-center justify-center hover:bg-primary-fixed transition-colors active:scale-95"><span class="material-symbols-outlined text-[22px]">pause</span></button></div></div></aside><nav class="fixed bottom-0 inset-x-0 z-50 pb-safe bg-surface/95 backdrop-blur-xl shadow-[0_-2px_12px_rgba(14,42,32,0.05)]" data-active-classes="text-primary font-bold"><div class="flex justify-around items-center h-16 px-space-xs"><a class="flex flex-col items-center justify-center gap-0.5 w-16 h-12 text-ink-muted hover:text-on-surface transition-all" data-path="home-and-radio" href="#"><span class="material-symbols-outlined text-[22px]">church</span><span class="font-label-sm text-label-sm leading-tight">Home</span></a><a class="flex flex-col items-center justify-center gap-0.5 w-16 h-12 text-ink-muted hover:text-on-surface transition-all" data-path="programs-and-events" href="#"><span class="material-symbols-outlined text-[22px]">event</span><span class="font-label-sm text-label-sm leading-tight">Events</span></a><a aria-current="page" class="flex flex-col items-center justify-center gap-0.5 w-16 h-12 transition-all text-primary font-bold" data-path="bible-quiz" href="#"><span class="material-symbols-outlined text-[22px]">quiz</span><span class="font-label-sm text-label-sm leading-tight">Quiz</span></a><a class="flex flex-col items-center justify-center gap-0.5 w-16 h-12 text-ink-muted hover:text-on-surface transition-all" data-path="gallery" href="#"><span class="material-symbols-outlined text-[22px]">photo_library</span><span class="font-label-sm text-label-sm leading-tight">Gallery</span></a><a class="flex flex-col items-center justify-center gap-0.5 w-16 h-12 text-ink-muted hover:text-on-surface transition-all" data-path="profile-and-alerts" href="#"><span class="material-symbols-outlined text-[22px]">person</span><span class="font-label-sm text-label-sm leading-tight">Profile</span></a></div></nav></body></html>

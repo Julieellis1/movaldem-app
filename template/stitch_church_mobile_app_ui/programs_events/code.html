@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&amp;family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;background-color:#fbf9f4;color:#1b1c19;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}@keyframes soundwave{0%,100%{height:4px;}50%{height:16px;}}@keyframes soundwave-mid{0%,100%{height:8px;}50%{height:20px;}}@keyframes soundwave-tall{0%,100%{height:6px;}50%{height:22px;}}.wave-bar-1{animation:soundwave 1.1s ease-in-out infinite;}.wave-bar-2{animation:soundwave-tall 0.9s ease-in-out 0.2s infinite;}.wave-bar-3{animation:soundwave-mid 1.3s ease-in-out 0.4s infinite;}.wave-bar-4{animation:soundwave 1.0s ease-in-out 0.1s infinite;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-surface-variant": "#4e4637", "on-background": "#1b1c19", "on-tertiary": "#ffffff", "sacred-maroon": "#5B1E31", "ink-muted": "#636058", "on-tertiary-fixed": "#3c0519", "on-secondary": "#ffffff", "error-container": "#ffdad6", "surface-bright": "#fbf9f4", "primary-fixed": "#ffdea4", "surface-container-lowest": "#ffffff", "primary-container": "#c89b3c", "surface-container-low": "#f5f3ee", "on-primary-container": "#4b3500", "on-error": "#ffffff", "secondary-fixed": "#caeada", "on-primary-fixed": "#261900", "scripture-ink": "#1A1A18", "inverse-primary": "#f0bf5c", "error": "#ba1a1a", "tertiary-container": "#de899e", "inverse-on-surface": "#f2f1ec", "on-secondary-fixed-variant": "#314c41", "on-primary": "#ffffff", "tertiary-fixed-dim": "#ffb1c3", "vellum-card": "#FFFFFF", "surface-tint": "#7b5900", "tertiary": "#8f485b", "outline-variant": "#d2c5b1", "background": "#fbf9f4", "inverse-surface": "#30312e", "surface-variant": "#e4e2dd", "surface-container-high": "#eae8e3", "secondary-fixed-dim": "#afcdbe", "on-error-container": "#93000a", "altar-gold": "#C89B3C", "on-surface": "#1b1c19", "primary-fixed-dim": "#f0bf5c", "vellum-base": "#FBF9F5", "secondary": "#486458", "surface": "#fbf9f4", "tertiary-fixed": "#ffd9e0", "surface-dim": "#dbdad5", "primary": "#7b5900", "surface-container-highest": "#e4e2dd", "on-tertiary-fixed-variant": "#733144", "on-secondary-fixed": "#042017", "on-primary-fixed-variant": "#5d4200", "on-secondary-container": "#4e6a5e", "secondary-container": "#caeada", "cathedral-evergreen": "#0E2A20", "outline": "#807665", "on-tertiary-container": "#612336", "surface-container": "#f0eee9" }, borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, spacing: { "space-xs": "0.25rem", "margin": "1rem", "space-md": "1rem", "space-xl": "2.25rem", "space-lg": "1.5rem", "margin-tablet": "1.5rem", "space-sm": "0.5rem", "gutter": "1rem" }, fontFamily: { "label-sm": ["Plus Jakarta Sans"], "headline-lg": ["EB Garamond"], "body-lg": ["Plus Jakarta Sans"], "scripture-reading": ["EB Garamond"], "headline-sm": ["EB Garamond"], "label-md": ["Plus Jakarta Sans"], "title-md": ["Plus Jakarta Sans"], "headline-md": ["EB Garamond"], "display": ["EB Garamond"], "title-sm": ["Plus Jakarta Sans"], "body-md": ["Plus Jakarta Sans"] }, fontSize: { "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }], "headline-lg": ["30px", { "lineHeight": "38px", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "26px", "fontWeight": "400" }], "scripture-reading": ["21px", { "lineHeight": "34px", "letterSpacing": "0.01em", "fontWeight": "400" }], "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }], "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "600" }], "title-md": ["16px", { "lineHeight": "24px", "fontWeight": "600" }], "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }], "display": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.01em", "fontWeight": "500" }], "title-sm": ["14px", { "lineHeight": "20px", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "22px", "fontWeight": "400" }] } } } };</script></head><body class="bg-surface font-body-md text-body-md text-on-surface flex flex-col antialiased selection:bg-primary-fixed selection:text-on-primary-fixed"><header class="fixed top-0 inset-x-0 z-50 bg-surface/90 backdrop-blur-xl pt-safe shadow-[0_1px_8px_rgba(14,42,32,0.04)]"><div class="h-16 px-margin flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0"><img alt="Sanctuary Church Emblem" class="h-8 w-auto object-contain flex-shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyPSAe0IuqYtHt3Yck7gYJHqMfATwFDfED_TEJY6BtT58Th84LE3f6Uq6bT2yArxj2gYJGz-aWSlfh8dKl0N29uEUf7322ufEoGkGIqTzhwCe1lumLC4Z7HQN-umLmjEb1WQ4QPZE-GR_BYa8I4QKbb9Mzn3mtlJZ_4Gvrk0Xy97OtMjgsjqibSOFHkw9EmHRTPo8KOB9Shcx_aYv8dXc900V2-bzqmVbtbIlo93y5vN9YkMI9-SC8"/><div class="flex flex-col truncate"><span class="font-title-sm text-title-sm text-on-surface truncate leading-none">Sanctuary Church</span><span class="font-label-sm text-label-sm text-altar-gold truncate mt-0.5">Programs &amp; Events</span></div></div><div class="flex items-center gap-space-xs flex-shrink-0"><button aria-label="Notifications" class="relative w-11 h-11 flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[24px]">notifications</span><span class="absolute top-2 right-2 flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sacred-maroon opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-sacred-maroon"></span></span></button><button aria-label="User Profile" class="w-11 h-11 flex items-center justify-center p-0.5"><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-1 ring-altar-gold/30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmsnuqMhRZIyNzU1jRy4T2QwE1vYI916flXcV-88kuHNLCmG1hLqpvxwL5Wn8kkzlVaS-8Hm0lJUaSKkuAc4meyJZBKz8eR2oWYB-cP51dHz_kf4XvZhLY0kGOT8wiCku5L5rAIhXbzkScjGdsyEjK6PafCtn1nEZu_Pr8_1s942zVqxlP14txYeFIqFmmU-8cX0EiOchc98woxCig6HFnpEXKrhzoQ8auBrc7FN5NBywa6lR8IUqq"/></button></div></div></header><main class="flex flex-col relative w-full pt-16 pb-36 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<!-- Liturgical Seasonal Ribbon -->
+<div class="px-margin pt-space-sm pb-space-xs">
+<div class="bg-surface-container-low px-space-md py-space-xs rounded-full flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-altar-gold animate-ping"></span>
+<span class="font-label-sm text-label-sm text-altar-gold uppercase tracking-wider font-semibold">Ordinary Time • Week XII</span>
+</div>
+<span class="font-label-sm text-label-sm text-ink-muted">Feast of St. Luke Ahead</span>
+</div>
+</div>
+<!-- Segmented Switch Tab (Weekly Programs vs Special Events) -->
+<div class="px-margin py-space-sm">
+<div class="bg-surface-container-high p-1 rounded-xl flex items-center shadow-sm" role="tablist">
+<button aria-selected="true" class="flex-1 py-2 rounded-lg font-title-sm text-title-sm text-center transition-all bg-cathedral-evergreen text-surface-container-lowest shadow-sm flex items-center justify-center gap-1.5" id="tabWeeklyBtn" onclick="switchMainTab('weekly')" role="tab">
+<span class="material-symbols-outlined text-[18px]">calendar_view_week</span>
+<span>Weekly Gatherings</span>
+</button>
+<button aria-selected="false" class="flex-1 py-2 rounded-lg font-title-sm text-title-sm text-center transition-all text-ink-muted hover:text-on-surface flex items-center justify-center gap-1.5" id="tabSpecialBtn" onclick="switchMainTab('special')" role="tab">
+<span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+<span>Special Summits</span>
+</button>
+</div>
+</div>
+<!-- Filter Chips Bar -->
+<div class="px-margin py-space-xs">
+<div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1" id="filterChipsContainer">
+<button class="filter-chip px-3.5 py-1.5 rounded-lg font-label-md text-label-md bg-cathedral-evergreen text-surface-container-lowest shadow-sm flex-shrink-0 flex items-center gap-1" onclick="applyFilter('All', this)">
+<span>All Devotions</span>
+<span class="text-altar-gold text-[10px]">•</span>
+</button>
+<button class="filter-chip px-3.5 py-1.5 rounded-lg font-label-md text-label-md bg-surface-container-low text-ink-muted hover:bg-surface-container hover:text-on-surface transition-colors flex-shrink-0" onclick="applyFilter('Worship', this)">
+        Worship
+      </button>
+<button class="filter-chip px-3.5 py-1.5 rounded-lg font-label-md text-label-md bg-surface-container-low text-ink-muted hover:bg-surface-container hover:text-on-surface transition-colors flex-shrink-0" onclick="applyFilter('Prayer', this)">
+        Prayer &amp; Vigil
+      </button>
+<button class="filter-chip px-3.5 py-1.5 rounded-lg font-label-md text-label-md bg-surface-container-low text-ink-muted hover:bg-surface-container hover:text-on-surface transition-colors flex-shrink-0" onclick="applyFilter('Youth', this)">
+        Youth Ignite
+      </button>
+<button class="filter-chip px-3.5 py-1.5 rounded-lg font-label-md text-label-md bg-surface-container-low text-ink-muted hover:bg-surface-container hover:text-on-surface transition-colors flex-shrink-0" onclick="applyFilter('Outreach', this)">
+        Charity Drive
+      </button>
+</div>
+</div>
+<!-- Content Section: Weekly Programs View -->
+<div class="flex flex-col px-margin gap-space-md mt-space-xs" id="weeklyProgramsView">
+<!-- Header Subtitle with Scripture quote -->
+<div class="flex items-baseline justify-between pt-1">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Weekly Liturgical Life</h2>
+<p class="font-label-sm text-label-sm text-ink-muted mt-0.5">Where two or three gather in His name (Matt 18:20)</p>
+</div>
+<span class="font-label-sm text-label-sm text-altar-gold bg-primary-fixed/20 px-2 py-0.5 rounded">4 Gatherings</span>
+</div>
+<!-- Program 1: Sunday Morning Worship -->
+<article class="program-card bg-surface-container-lowest rounded-xl shadow-md p-space-md flex flex-col gap-space-sm relative overflow-hidden transition-all duration-200" data-category="Worship">
+<div class="absolute top-0 left-0 bottom-0 w-1.5 bg-altar-gold"></div>
+<!-- Top meta row -->
+<div class="flex items-start justify-between gap-2 pl-2">
+<div class="flex items-center gap-2">
+<div class="bg-surface-container px-2.5 py-1 rounded flex flex-col items-center justify-center min-w-[50px]">
+<span class="font-label-sm text-label-sm text-sacred-maroon font-bold uppercase tracking-wider">Sun</span>
+<span class="font-headline-sm text-headline-sm text-cathedral-evergreen leading-none">08</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-altar-gold font-bold uppercase tracking-wider">The Lord's Day</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface leading-tight">Sunday Morning Worship &amp; Word</h3>
+</div>
+</div>
+<!-- Notification Bell Toggle -->
+<button aria-label="Toggle Worship Reminder" class="reminder-toggle p-2 rounded-lg bg-surface-container-low text-ink-muted hover:text-primary transition-colors" onclick="toggleReminder(this, 'Sunday Worship')">
+<span class="material-symbols-outlined text-[20px]">notifications_none</span>
+</button>
+</div>
+<!-- Time and Venue details -->
+<div class="pl-2 flex flex-col gap-1.5 pt-1">
+<div class="flex items-center gap-2 text-ink-muted">
+<span class="material-symbols-outlined text-[16px] text-altar-gold">schedule</span>
+<span class="font-body-md text-body-md text-on-surface">First Service: <strong>8:00 AM</strong> • Second Service: <strong>10:30 AM</strong></span>
+</div>
+<div class="flex items-center gap-2 text-ink-muted">
+<span class="material-symbols-outlined text-[16px] text-altar-gold">temple_hindu</span>
+<span class="font-body-md text-body-md">Main Cathedral Sanctuary &amp; Global Broadcast</span>
+</div>
+<div class="flex items-center gap-2 text-ink-muted">
+<span class="material-symbols-outlined text-[16px] text-altar-gold">person</span>
+<span class="font-body-md text-body-md">Preacher: <span class="text-on-surface font-semibold">Bishop Matthew Aurelius</span></span>
+</div>
+</div>
+<!-- Devotional Focus Strip -->
+<div class="pl-2 py-2 px-3 rounded-lg bg-surface-container-low flex items-center justify-between text-ink-muted">
+<span class="font-label-sm text-label-sm italic text-on-surface-variant font-scripture-reading">Series: "Rooted in Sacred Grace"</span>
+<span class="font-label-sm text-label-sm font-semibold text-cathedral-evergreen">Ephesians 3:14-21</span>
+</div>
+<!-- Action buttons -->
+<div class="pl-2 pt-1 flex items-center gap-2">
+<button class="flex-1 py-2 px-3 rounded bg-cathedral-evergreen text-surface-container-lowest font-title-sm text-title-sm flex items-center justify-center gap-1.5 hover:bg-secondary active:scale-[0.98] transition-all" onclick="addToCalendar('Sunday Morning Worship', 'Every Sunday, 8:00 AM &amp; 10:30 AM')">
+<span class="material-symbols-outlined text-[18px] text-altar-gold">event_upcoming</span>
+<span>Add to Calendar</span>
+</button>
+<button class="py-2 px-3 rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-title-sm text-title-sm flex items-center justify-center gap-1 transition-colors" onclick="triggerShare('Sunday Service')" title="Invite a friend">
+<span class="material-symbols-outlined text-[18px]">share</span>
+<span class="sr-only">Invite</span>
+</button>
+</div>
+</article>
+<!-- Program 2: Midweek Bible Study -->
+<article class="program-card bg-surface-container-lowest rounded-xl shadow-md p-space-md flex flex-col gap-space-sm relative overflow-hidden transition-all duration-200" data-category="Worship">
+<div class="absolute top-0 left-0 bottom-0 w-1.5 bg-secondary"></div>
+<!-- Top meta row -->
+<div class="flex items-start justify-between gap-2 pl-2">
+<div class="flex items-center gap-2">
+<div class="bg-surface-container px-2.5 py-1 rounded flex flex-col items-center justify-center min-w-[50px]">
+<span class="font-label-sm text-label-sm text-secondary font-bold uppercase tracking-wider">Wed</span>
+<span class="font-headline-sm text-headline-sm text-on-surface leading-none">6:30</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-secondary font-bold uppercase tracking-wider">Exposition of Truth</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface leading-tight">Power in the Word Bible Study</h3>
+</div>
+</div>
+<button aria-label="Toggle Bible Study Reminder" class="reminder-toggle p-2 rounded-lg bg-surface-container-low text-ink-muted hover:text-primary transition-colors" onclick="toggleReminder(this, 'Midweek Bible Study')">
+<span class="material-symbols-outlined text-[20px]">notifications_none</span>
+</button>
+</div>
+<!-- Details -->
+<div class="pl-2 flex flex-col gap-1.5 pt-1">
+<div class="flex items-center gap-2 text-ink-muted">
+<span class="material-symbols-outlined text-[16px] text-secondary">schedule</span>
+<span class="font-body-md text-body-md text-on-surface">Every Wednesday • <strong>6:30 PM – 8:00 PM EST</strong></span>
+</div>
+<div class="flex items-center gap-2 text-ink-muted">
+<span class="material-symbols-outlined text-[16px] text-secondary">podium</span>
+<span class="font-body-md text-body-md">Teacher: Pastor Deborah Vance</span>
+</div>
+</div>
+<!-- Zoom / Stream Live Pill -->
+<div class="pl-2 flex items-center justify-between py-2 px-3 rounded-lg bg-secondary-container/40 text-on-secondary-container">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">videocam</span>
+<span class="font-label-md text-label-md font-semibold">Interactive Zoom &amp; YouTube Live</span>
+</div>
+<span class="font-label-sm text-label-sm bg-surface-container-lowest px-2 py-0.5 rounded text-cathedral-evergreen font-bold">ID: 844-019</span>
+</div>
+<div class="pl-2 pt-1 flex items-center gap-2">
+<a class="flex-1 py-2 px-3 rounded bg-primary-container text-on-primary-container font-title-sm text-title-sm flex items-center justify-center gap-1.5 hover:bg-altar-gold transition-colors text-center" href="#join-stream">
+<span class="material-symbols-outlined text-[18px]">link</span>
+<span>Access Stream Portal</span>
+</a>
+<button class="py-2 px-3 rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-title-sm text-title-sm flex items-center gap-1" onclick="addToCalendar('Power in the Word Bible Study', 'Wednesdays at 6:30 PM')">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+<span>Sync</span>
+</button>
+</div>
+</article>
+<!-- Program 3: Youth Ignite Fellowship -->
+<article class="program-card bg-surface-container-lowest rounded-xl shadow-md p-space-md flex flex-col gap-space-sm relative overflow-hidden transition-all duration-200" data-category="Youth">
+<div class="absolute top-0 left-0 bottom-0 w-1.5 bg-sacred-maroon"></div>
+<div class="flex items-start justify-between gap-2 pl-2">
+<div class="flex items-center gap-2">
+<div class="bg-surface-container px-2.5 py-1 rounded flex flex-col items-center justify-center min-w-[50px]">
+<span class="font-label-sm text-label-sm text-sacred-maroon font-bold uppercase tracking-wider">Fri</span>
+<span class="font-headline-sm text-headline-sm text-on-surface leading-none">7:00</span>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="font-label-sm text-label-sm text-sacred-maroon font-bold uppercase tracking-wider">Gen-Z &amp; Young Adults</span>
+<span class="bg-tertiary-container/30 text-sacred-maroon font-label-sm text-[10px] px-1.5 py-0.2 rounded">Ages 16-29</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface leading-tight">Youth Ignite Fellowship</h3>
+</div>
+</div>
+<button aria-label="Toggle Youth Reminder" class="reminder-toggle p-2 rounded-lg bg-surface-container-low text-ink-muted hover:text-sacred-maroon transition-colors" onclick="toggleReminder(this, 'Youth Ignite')">
+<span class="material-symbols-outlined text-[20px]">notifications_none</span>
+</button>
+</div>
+<div class="pl-2 flex flex-col gap-1.5 pt-1">
+<div class="flex items-center gap-2 text-ink-muted">
+<span class="material-symbols-outlined text-[16px] text-sacred-maroon">schedule</span>
+<span class="font-body-md text-body-md text-on-surface">Every Friday Night • <strong>7:00 PM – 9:30 PM</strong></span>
+</div>
+<div class="flex items-center gap-2 text-ink-muted">
+<span class="material-symbols-outlined text-[16px] text-sacred-maroon">location_on</span>
+<span class="font-body-md text-body-md">Fellowship Upper Hall • Refreshments served</span>
+</div>
+</div>
+<div class="pl-2 pt-1 flex items-center gap-2">
+<button class="flex-1 py-2 px-3 rounded bg-cathedral-evergreen text-surface-container-lowest font-title-sm text-title-sm flex items-center justify-center gap-1.5 hover:bg-secondary transition-all" onclick="addToCalendar('Youth Ignite Fellowship', 'Fridays at 7:00 PM')">
+<span class="material-symbols-outlined text-[18px] text-altar-gold">event_upcoming</span>
+<span>Add to Calendar</span>
+</button>
+<button class="py-2 px-3 rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-title-sm text-title-sm flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[18px]">group</span>
+<span>Join Chat</span>
+</button>
+</div>
+</article>
+<!-- Program 4: Dawn Prayer & Fasting Vigil -->
+<article class="program-card bg-surface-container-lowest rounded-xl shadow-md p-space-md flex flex-col gap-space-sm relative overflow-hidden transition-all duration-200" data-category="Prayer">
+<div class="absolute top-0 left-0 bottom-0 w-1.5 bg-altar-gold"></div>
+<div class="flex items-start justify-between gap-2 pl-2">
+<div class="flex items-center gap-2">
+<div class="bg-surface-container px-2.5 py-1 rounded flex flex-col items-center justify-center min-w-[50px]">
+<span class="font-label-sm text-label-sm text-altar-gold font-bold uppercase tracking-wider">Sat</span>
+<span class="font-headline-sm text-headline-sm text-on-surface leading-none">6:00</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-altar-gold font-bold uppercase tracking-wider">Early Morning Watch</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface leading-tight">Dawn Prayer &amp; Fasting Vigil</h3>
+</div>
+</div>
+<button aria-label="Toggle Prayer Vigil Reminder" class="reminder-toggle p-2 rounded-lg bg-surface-container-low text-ink-muted hover:text-primary transition-colors" onclick="toggleReminder(this, 'Dawn Prayer')">
+<span class="material-symbols-outlined text-[20px]">notifications_none</span>
+</button>
+</div>
+<div class="pl-2 flex flex-col gap-1.5 pt-1">
+<div class="flex items-center gap-2 text-ink-muted">
+<span class="material-symbols-outlined text-[16px] text-altar-gold">wb_twilight</span>
+<span class="font-body-md text-body-md text-on-surface">Saturdays • <strong>6:00 AM – 7:30 AM</strong></span>
+</div>
+<div class="flex items-center gap-2 text-ink-muted">
+<span class="material-symbols-outlined text-[16px] text-altar-gold">church</span>
+<span class="font-body-md text-body-md">Prayer Chapel &amp; Intercessor Hotline</span>
+</div>
+</div>
+<div class="pl-2 pt-1 flex items-center gap-2">
+<button class="flex-1 py-2 px-3 rounded bg-cathedral-evergreen text-surface-container-lowest font-title-sm text-title-sm flex items-center justify-center gap-1.5 hover:bg-secondary transition-all" onclick="addToCalendar('Dawn Prayer Vigil', 'Saturdays at 6:00 AM')">
+<span class="material-symbols-outlined text-[18px] text-altar-gold">alarm</span>
+<span>Set Saturday Alarm</span>
+</button>
+<button class="py-2 px-3 rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-title-sm text-title-sm flex items-center justify-center gap-1" title="Submit Prayer Request">
+<span class="material-symbols-outlined text-[18px]">edit_note</span>
+<span class="font-title-sm text-title-sm">Petition</span>
+</button>
+</div>
+</article>
+</div>
+<!-- Content Section: Upcoming Special Events -->
+<div class="flex flex-col px-margin gap-space-md mt-space-lg" id="specialEventsSection">
+<div class="flex items-center justify-between">
+<div>
+<span class="font-label-sm text-label-sm text-altar-gold uppercase tracking-wider font-semibold">Liturgical Gatherings</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">Upcoming Special Events</h2>
+</div>
+<span class="material-symbols-outlined text-altar-gold text-[24px]">verified</span>
+</div>
+<!-- Event 1: Faith & Revival Summit 2025 -->
+<article class="program-card bg-cathedral-evergreen text-surface-container-lowest rounded-xl shadow-xl p-space-md flex flex-col gap-space-sm relative overflow-hidden" data-category="Worship">
+<!-- Decorative gold gradient highlight -->
+<div class="absolute -right-8 -top-8 w-32 h-32 rounded-full bg-altar-gold/15 pointer-events-none blur-xl"></div>
+<!-- Date Ribbon & Status -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="bg-altar-gold text-cathedral-evergreen font-label-md text-label-md px-2.5 py-1 rounded font-bold uppercase tracking-wider">Nov 14 – 16</span>
+<span class="font-label-sm text-label-sm text-primary-fixed uppercase tracking-wider">3-Day Conference</span>
+</div>
+<span class="font-label-sm text-label-sm px-2.5 py-0.5 rounded-full bg-secondary-container/20 text-secondary-fixed flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-fixed"></span>
+<span>RSVP Active</span>
+</span>
+</div>
+<!-- Title & Theme -->
+<div class="pt-1">
+<h3 class="font-headline-lg text-headline-lg text-surface-bright leading-tight">Annual Faith &amp; Revival Summit 2025</h3>
+<p class="font-body-md text-body-md text-surface-container-high/80 mt-1">Theme: <em>"Awakening the Altar of Intercession &amp; Power"</em></p>
+</div>
+<!-- Guest Ministers Photo Stack -->
+<div class="bg-surface-container-lowest/10 p-space-sm rounded-lg flex items-center justify-between gap-2 mt-1">
+<div class="flex items-center gap-2">
+<div class="flex -space-x-2 overflow-hidden">
+<img alt="Minister 1" class="inline-block h-8 w-8 rounded-full ring-2 ring-cathedral-evergreen object-cover" data-alt="Portrait photo of a distinguished Christian pastor in ceremonial clerical collar smiling warmly under church sanctuary lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAw6bc-lzei-GixYWMOgpGaUS0EMUNg1Q3jVsGjItTtSKsR2dAdA7UEFoEb1Pc5bksSCOsaYNbm-HfLbcHxRCOOE5evfHijYIKPXLgyQYXbraiKZhqhgLtfIfM4FKaxmBBF0bsH88IQvvU4Cwryjlsz-q1D7ZK78xHmFNx7tlcE_OizFfSFh4FUcLrupERLS73hUCxh7AGZ77MkpHN3dcw5geIJkpsliQD_ZnPT56hWvauizA4kZiI0"/>
+<img alt="Minister 2" class="inline-block h-8 w-8 rounded-full ring-2 ring-cathedral-evergreen object-cover" data-alt="Close up photograph of a compassionate female gospel choir worship leader singing with microphonic stage setup in cathedral." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAA9RmGik_9P8fq82WaBR6vH2V-GsEWRhx_ccx00HHAUgA4srbe_MoZUTgi1ZofkqD-xqZwki_cjKl7xpDkDYPgFhDv1eE9gNhfhW5xZIjEy_lG3iGDeNXq3pDUoCo3tO-yIfrjTTX4Xo4_BzjxfxOFi8OeEiEgRDRSxKPUNWbPGMA5uQ05xNXd73iw6d5vzDnO5ktqTXGRzYy-1A1RKpXfmBDDKg_-h02xo3aLOwfcQSjuRGy0WMUt"/>
+<img alt="Minister 3" class="inline-block h-8 w-8 rounded-full ring-2 ring-cathedral-evergreen object-cover" data-alt="Portrait of an esteemed guest theologian and author in dark clerical cassock holding open sacred scriptures in study room." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDaQgm1NFN4iSyxtUQIVl9wH1450YtY8Paxj1GWdFxWyU8hzVNmOsP0BdaenlS4neSQvAGbwMcDpBF_MDkpDfQhUjCDYWjjgBKvXhyIRqDYKtllA1aaFcNisArzAIIzyVZ8k3Cc_w9Gn4b09KAxBmjZzS1WE5APQFb_2ztzcKiu0PrePt22SkBR-13Z2pkgAZw5UTA1Rps2LVMjca2GR6fTW8ljrSEfNQmZ0ekGvA35MCqE6iBFb73F"/>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-surface-bright truncate leading-tight">3 Guest Ministers</span>
+<span class="font-label-sm text-label-sm text-surface-container-high/70 truncate">Bishop Lawson, Dr. Ruth, &amp; Rev. Thorne</span>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-altar-gold font-bold flex-shrink-0">Main Arena</span>
+</div>
+<!-- Registration stats & CTA -->
+<div class="pt-2 flex flex-col gap-2">
+<div class="flex justify-between items-center text-surface-container-high font-label-sm text-label-sm">
+<span>Seating Capacity: 85% Full</span>
+<span class="text-primary-fixed font-bold">120 Seats Remaining</span>
+</div>
+<div class="w-full bg-surface-container-lowest/20 h-1.5 rounded-full overflow-hidden">
+<div class="bg-altar-gold h-full rounded-full" style="width: 85%"></div>
+</div>
+<div class="flex items-center gap-2 pt-1">
+<button class="flex-1 py-2.5 px-4 rounded bg-altar-gold text-cathedral-evergreen font-title-sm text-title-sm font-bold flex items-center justify-center gap-1.5 shadow-md hover:bg-primary-fixed active:scale-[0.98] transition-all" id="rsvpSummitBtn" onclick="registerSummitModal()">
+<span class="material-symbols-outlined text-[18px]">confirmation_number</span>
+<span id="rsvpBtnText">Reserve Complimentary Seat</span>
+</button>
+<button class="p-2.5 rounded bg-surface-container-lowest/15 text-primary-fixed hover:bg-surface-container-lowest/25 transition-colors" onclick="toggleReminder(this, 'Revival Summit')" title="Summit Notifications">
+<span class="material-symbols-outlined text-[20px]">notification_add</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Event 2: Community Outreach & Charity Drive -->
+<article class="program-card bg-surface-container-lowest rounded-xl shadow-md p-space-md flex flex-col gap-space-sm relative overflow-hidden" data-category="Outreach">
+<div class="absolute top-0 left-0 bottom-0 w-1.5 bg-sacred-maroon"></div>
+<div class="flex items-center justify-between pl-2">
+<div class="flex items-center gap-2">
+<span class="bg-sacred-maroon text-on-tertiary font-label-md text-label-md px-2.5 py-1 rounded font-bold uppercase tracking-wider">Dec 06</span>
+<span class="font-label-sm text-label-sm text-sacred-maroon font-bold uppercase tracking-wider">Seasonal Benevolence</span>
+</div>
+<span class="font-label-sm text-label-sm bg-surface-container px-2 py-0.5 rounded text-ink-muted">Metro District</span>
+</div>
+<div class="pl-2 pt-1">
+<h3 class="font-headline-md text-headline-md text-on-surface leading-tight">Winter Harvest Outreach &amp; Food Drive</h3>
+<p class="font-body-md text-body-md text-ink-muted mt-1">Providing food hampers, warm blankets, and prayer packets to 1,200 urban shelter families.</p>
+</div>
+<!-- Campaign Progress Bar -->
+<div class="pl-2 flex flex-col gap-1.5 py-1">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface font-semibold">Hamper Kits Assembled</span>
+<span class="font-label-sm text-label-sm text-altar-gold font-bold">780 / 1,200 (65%)</span>
+</div>
+<div class="w-full bg-surface-container-high h-2.5 rounded-full overflow-hidden p-0.5">
+<div class="bg-secondary h-full rounded-full transition-all duration-500" id="charityBar" style="width: 65%"></div>
+</div>
+</div>
+<!-- Volunteer Action Row -->
+<div class="pl-2 pt-2 flex items-center gap-2">
+<button class="flex-1 py-2 px-3 rounded bg-cathedral-evergreen text-surface-container-lowest font-title-sm text-title-sm flex items-center justify-center gap-1.5 hover:bg-secondary active:scale-[0.98] transition-all" onclick="volunteerSignUp(this)">
+<span class="material-symbols-outlined text-[18px] text-altar-gold">volunteer_activism</span>
+<span class="btn-label">Volunteer as Packer</span>
+</button>
+<button class="py-2 px-3 rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-title-sm text-title-sm flex items-center justify-center gap-1.5 transition-colors" onclick="donatePledge(this)">
+<span class="material-symbols-outlined text-[18px] text-sacred-maroon">favorite</span>
+<span>Pledge Kit ($25)</span>
+</button>
+</div>
+</article>
+</div>
+<!-- Toast / Confirmation Notification HUD -->
+<div class="fixed top-20 inset-x-margin z-50 pointer-events-none opacity-0 transform -translate-y-2 transition-all duration-300 flex justify-center" id="liturgicalToast">
+<div class="bg-cathedral-evergreen text-surface-container-lowest shadow-xl px-4 py-2.5 rounded-full flex items-center gap-2 pointer-events-auto">
+<span class="material-symbols-outlined text-altar-gold text-[20px]" id="toastIcon">check_circle</span>
+<span class="font-label-md text-label-md" id="toastMessage">Reminder scheduled in prayer diary</span>
+</div>
+</div>
+</div>
+<script>
+  // Segmented Switch logic
+  function switchMainTab(type) {
+    const weeklyBtn = document.getElementById('tabWeeklyBtn');
+    const specialBtn = document.getElementById('tabSpecialBtn');
+    const weeklySec = document.getElementById('weeklyProgramsView');
+    const specialSec = document.getElementById('specialEventsSection');
+
+    if (type === 'weekly') {
+      weeklyBtn.className = "flex-1 py-2 rounded-lg font-title-sm text-title-sm text-center transition-all bg-cathedral-evergreen text-surface-container-lowest shadow-sm flex items-center justify-center gap-1.5";
+      specialBtn.className = "flex-1 py-2 rounded-lg font-title-sm text-title-sm text-center transition-all text-ink-muted hover:text-on-surface flex items-center justify-center gap-1.5";
+      weeklySec.style.display = 'flex';
+      specialSec.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } else {
+      specialBtn.className = "flex-1 py-2 rounded-lg font-title-sm text-title-sm text-center transition-all bg-cathedral-evergreen text-surface-container-lowest shadow-sm flex items-center justify-center gap-1.5";
+      weeklyBtn.className = "flex-1 py-2 rounded-lg font-title-sm text-title-sm text-center transition-all text-ink-muted hover:text-on-surface flex items-center justify-center gap-1.5";
+      specialSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  // Filter Chips Logic
+  function applyFilter(category, buttonElement) {
+    const chips = document.querySelectorAll('.filter-chip');
+    chips.forEach(c => {
+      c.className = "filter-chip px-3.5 py-1.5 rounded-lg font-label-md text-label-md bg-surface-container-low text-ink-muted hover:bg-surface-container hover:text-on-surface transition-colors flex-shrink-0";
+    });
+    buttonElement.className = "filter-chip px-3.5 py-1.5 rounded-lg font-label-md text-label-md bg-cathedral-evergreen text-surface-container-lowest shadow-sm flex-shrink-0 flex items-center gap-1";
+
+    const cards = document.querySelectorAll('.program-card');
+    cards.forEach(card => {
+      const cardCat = card.getAttribute('data-category');
+      if (category === 'All' || cardCat === category) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    showToast(`Filtering for: ${category}`);
+  }
+
+  // Toggle Push Reminder Bell
+  function toggleReminder(button, programName) {
+    const icon = button.querySelector('.material-symbols-outlined');
+    const isScheduled = icon.innerText === 'notifications_active';
+
+    if (isScheduled) {
+      icon.innerText = 'notifications_none';
+      button.classList.remove('bg-altar-gold/20', 'text-altar-gold');
+      button.classList.add('bg-surface-container-low', 'text-ink-muted');
+      showToast(`Reminder removed: ${programName}`);
+    } else {
+      icon.innerText = 'notifications_active';
+      button.classList.remove('bg-surface-container-low', 'text-ink-muted');
+      button.classList.add('bg-altar-gold/20', 'text-altar-gold');
+      showToast(`15m Reminder active for ${programName}`);
+    }
+  }
+
+  // Calendar Integration micro-interaction
+  function addToCalendar(title, time) {
+    showToast(`Exported "${title}" to Calendar`);
+  }
+
+  // RSVP Summit registration micro-action
+  function registerSummitModal() {
+    const btn = document.getElementById('rsvpSummitBtn');
+    const text = document.getElementById('rsvpBtnText');
+    if (text.innerText.includes('Reserved')) {
+      text.innerText = 'Reserve Complimentary Seat';
+      btn.classList.remove('bg-secondary-container', 'text-cathedral-evergreen');
+      btn.classList.add('bg-altar-gold', 'text-cathedral-evergreen');
+      showToast('Registration cancelled');
+    } else {
+      text.innerText = 'Pass Reserved! (Pass #8892)';
+      btn.classList.remove('bg-altar-gold');
+      btn.classList.add('bg-secondary-container', 'text-cathedral-evergreen');
+      showToast('Registration confirmed for Summit 2025');
+    }
+  }
+
+  // Volunteer sign-up action
+  function volunteerSignUp(btn) {
+    const label = btn.querySelector('.btn-label');
+    if (label.innerText.includes('Registered')) {
+      label.innerText = 'Volunteer as Packer';
+      showToast('Shift reservation cancelled');
+    } else {
+      label.innerText = 'Registered for Shift (Dec 6)';
+      showToast('Thank you for offering your hands!');
+    }
+  }
+
+  // Donate kit pledge micro-interaction
+  function donatePledge(btn) {
+    const bar = document.getElementById('charityBar');
+    bar.style.width = '66%';
+    showToast('Pledge of $25 recorded in giving ledger');
+  }
+
+  // Share micro-interaction
+  function triggerShare(eventName) {
+    if (navigator.share) {
+      navigator.share({
+        title: 'Sanctuary Church Gathering',
+        text: `Join me at ${eventName} at Sanctuary Church!`,
+        url: window.location.href,
+      }).catch(() => {});
+    } else {
+      showToast('Invitation link copied to clipboard');
+    }
+  }
+
+  // General Toast HUD
+  function showToast(msg) {
+    const toast = document.getElementById('liturgicalToast');
+    const label = document.getElementById('toastMessage');
+    label.innerText = msg;
+    toast.classList.remove('opacity-0', '-translate-y-2');
+    toast.classList.add('opacity-100', 'translate-y-0');
+
+    setTimeout(() => {
+      toast.classList.remove('opacity-100', 'translate-y-0');
+      toast.classList.add('opacity-0', '-translate-y-2');
+    }, 2800);
+  }
+</script></main><aside class="fixed bottom-16 inset-x-0 z-40 px-margin pb-space-xs pointer-events-none"><div class="pointer-events-auto w-full bg-cathedral-evergreen/95 backdrop-blur-xl text-surface-container-lowest rounded-xl p-space-sm shadow-[0_4px_20px_rgba(14,42,32,0.25)] ring-1 ring-altar-gold/25 flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0"><div class="w-9 h-9 rounded-lg bg-surface-container-highest/10 flex items-center justify-center text-altar-gold flex-shrink-0"><span class="material-symbols-outlined text-[20px]">radio</span></div><div class="flex flex-col min-w-0"><div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-altar-gold animate-pulse"></span><span class="font-label-sm text-label-sm text-altar-gold uppercase tracking-wider">On Air</span></div><span class="font-title-sm text-title-sm text-surface-container-lowest truncate">Zeno Gospel Stream Live</span></div></div><div class="flex items-center gap-space-sm flex-shrink-0"><div aria-hidden="true" class="flex items-end gap-[3px] h-6 px-1 flex-shrink-0"><div class="w-1 bg-altar-gold rounded-full wave-bar-1"></div><div class="w-1 bg-altar-gold rounded-full wave-bar-2"></div><div class="w-1 bg-altar-gold rounded-full wave-bar-3"></div><div class="w-1 bg-altar-gold rounded-full wave-bar-4"></div></div><button aria-label="Play or Pause Broadcast" class="w-10 h-10 rounded-full bg-altar-gold text-cathedral-evergreen flex items-center justify-center hover:bg-primary-fixed transition-colors active:scale-95"><span class="material-symbols-outlined text-[22px]">pause</span></button></div></div></aside><nav class="fixed bottom-0 inset-x-0 z-50 pb-safe bg-surface/95 backdrop-blur-xl shadow-[0_-2px_12px_rgba(14,42,32,0.05)]" data-active-classes="text-primary font-bold"><div class="flex justify-around items-center h-16 px-space-xs"><a class="flex flex-col items-center justify-center gap-0.5 w-16 h-12 text-ink-muted hover:text-on-surface transition-all" data-path="home-and-radio" href="#"><span class="material-symbols-outlined text-[22px]">church</span><span class="font-label-sm text-label-sm leading-tight">Home</span></a><a class="flex flex-col items-center justify-center gap-0.5 w-16 h-12 text-ink-muted hover:text-on-surface transition-all" data-path="programs-and-events" href="#"><span class="material-symbols-outlined text-[22px]">event</span><span class="font-label-sm text-label-sm leading-tight">Events</span></a><a class="flex flex-col items-center justify-center gap-0.5 w-16 h-12 text-ink-muted hover:text-on-surface transition-all" data-path="bible-quiz" href="#"><span class="material-symbols-outlined text-[22px]">quiz</span><span class="font-label-sm text-label-sm leading-tight">Quiz</span></a><a class="flex flex-col items-center justify-center gap-0.5 w-16 h-12 text-ink-muted hover:text-on-surface transition-all" data-path="gallery" href="#"><span class="material-symbols-outlined text-[22px]">photo_library</span><span class="font-label-sm text-label-sm leading-tight">Gallery</span></a><a class="flex flex-col items-center justify-center gap-0.5 w-16 h-12 text-ink-muted hover:text-on-surface transition-all" data-path="profile-and-alerts" href="#"><span class="material-symbols-outlined text-[22px]">person</span><span class="font-label-sm text-label-sm leading-tight">Profile</span></a></div></nav></body></html>

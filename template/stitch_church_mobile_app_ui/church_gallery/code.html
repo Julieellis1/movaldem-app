@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&amp;family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;background-color:#fbf9f4;color:#1b1c19;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}@keyframes soundwave{0%,100%{height:4px;}50%{height:16px;}}@keyframes soundwave-mid{0%,100%{height:8px;}50%{height:20px;}}@keyframes soundwave-tall{0%,100%{height:6px;}50%{height:22px;}}.wave-bar-1{animation:soundwave 1.1s ease-in-out infinite;}.wave-bar-2{animation:soundwave-tall 0.9s ease-in-out 0.2s infinite;}.wave-bar-3{animation:soundwave-mid 1.3s ease-in-out 0.4s infinite;}.wave-bar-4{animation:soundwave 1.0s ease-in-out 0.1s infinite;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-surface-variant": "#4e4637", "on-background": "#1b1c19", "on-tertiary": "#ffffff", "sacred-maroon": "#5B1E31", "ink-muted": "#636058", "on-tertiary-fixed": "#3c0519", "on-secondary": "#ffffff", "error-container": "#ffdad6", "surface-bright": "#fbf9f4", "primary-fixed": "#ffdea4", "surface-container-lowest": "#ffffff", "primary-container": "#c89b3c", "surface-container-low": "#f5f3ee", "on-primary-container": "#4b3500", "on-error": "#ffffff", "secondary-fixed": "#caeada", "on-primary-fixed": "#261900", "scripture-ink": "#1A1A18", "inverse-primary": "#f0bf5c", "error": "#ba1a1a", "tertiary-container": "#de899e", "inverse-on-surface": "#f2f1ec", "on-secondary-fixed-variant": "#314c41", "on-primary": "#ffffff", "tertiary-fixed-dim": "#ffb1c3", "vellum-card": "#FFFFFF", "surface-tint": "#7b5900", "tertiary": "#8f485b", "outline-variant": "#d2c5b1", "background": "#fbf9f4", "inverse-surface": "#30312e", "surface-variant": "#e4e2dd", "surface-container-high": "#eae8e3", "secondary-fixed-dim": "#afcdbe", "on-error-container": "#93000a", "altar-gold": "#C89B3C", "on-surface": "#1b1c19", "primary-fixed-dim": "#f0bf5c", "vellum-base": "#FBF9F5", "secondary": "#486458", "surface": "#fbf9f4", "tertiary-fixed": "#ffd9e0", "surface-dim": "#dbdad5", "primary": "#7b5900", "surface-container-highest": "#e4e2dd", "on-tertiary-fixed-variant": "#733144", "on-secondary-fixed": "#042017", "on-primary-fixed-variant": "#5d4200", "on-secondary-container": "#4e6a5e", "secondary-container": "#caeada", "cathedral-evergreen": "#0E2A20", "outline": "#807665", "on-tertiary-container": "#612336", "surface-container": "#f0eee9" }, borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, spacing: { "space-xs": "0.25rem", "margin": "1rem", "space-md": "1rem", "space-xl": "2.25rem", "space-lg": "1.5rem", "margin-tablet": "1.5rem", "space-sm": "0.5rem", "gutter": "1rem" }, fontFamily: { "label-sm": ["Plus Jakarta Sans"], "headline-lg": ["EB Garamond"], "body-lg": ["Plus Jakarta Sans"], "scripture-reading": ["EB Garamond"], "headline-sm": ["EB Garamond"], "label-md": ["Plus Jakarta Sans"], "title-md": ["Plus Jakarta Sans"], "headline-md": ["EB Garamond"], "display": ["EB Garamond"], "title-sm": ["Plus Jakarta Sans"], "body-md": ["Plus Jakarta Sans"] }, fontSize: { "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }], "headline-lg": ["30px", { "lineHeight": "38px", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "26px", "fontWeight": "400" }], "scripture-reading": ["21px", { "lineHeight": "34px", "letterSpacing": "0.01em", "fontWeight": "400" }], "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }], "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "600" }], "title-md": ["16px", { "lineHeight": "24px", "fontWeight": "600" }], "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }], "display": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.01em", "fontWeight": "500" }], "title-sm": ["14px", { "lineHeight": "20px", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "22px", "fontWeight": "400" }] } } } };</script></head><body class="bg-surface font-body-md text-body-md text-on-surface flex flex-col antialiased selection:bg-primary-fixed selection:text-on-primary-fixed"><header class="fixed top-0 inset-x-0 z-50 bg-surface/90 backdrop-blur-xl pt-safe shadow-[0_1px_8px_rgba(14,42,32,0.04)]"><div class="h-16 px-margin flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0"><img alt="Sanctuary Church Emblem" class="h-8 w-auto object-contain flex-shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyPSAe0IuqYtHt3Yck7gYJHqMfATwFDfED_TEJY6BtT58Th84LE3f6Uq6bT2yArxj2gYJGz-aWSlfh8dKl0N29uEUf7322ufEoGkGIqTzhwCe1lumLC4Z7HQN-umLmjEb1WQ4QPZE-GR_BYa8I4QKbb9Mzn3mtlJZ_4Gvrk0Xy97OtMjgsjqibSOFHkw9EmHRTPo8KOB9Shcx_aYv8dXc900V2-bzqmVbtbIlo93y5vN9YkMI9-SC8"/><div class="flex flex-col truncate"><span class="font-title-sm text-title-sm text-on-surface truncate leading-none">Sanctuary Church</span><span class="font-label-sm text-label-sm text-altar-gold truncate mt-0.5">Gallery</span></div></div><div class="flex items-center gap-space-xs flex-shrink-0"><button aria-label="Notifications" class="relative w-11 h-11 flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[24px]">notifications</span><span class="absolute top-2 right-2 flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sacred-maroon opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-sacred-maroon"></span></span></button><button aria-label="User Profile" class="w-11 h-11 flex items-center justify-center p-0.5"><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-1 ring-altar-gold/30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmsnuqMhRZIyNzU1jRy4T2QwE1vYI916flXcV-88kuHNLCmG1hLqpvxwL5Wn8kkzlVaS-8Hm0lJUaSKkuAc4meyJZBKz8eR2oWYB-cP51dHz_kf4XvZhLY0kGOT8wiCku5L5rAIhXbzkScjGdsyEjK6PafCtn1nEZu_Pr8_1s942zVqxlP14txYeFIqFmmU-8cX0EiOchc98woxCig6HFnpEXKrhzoQ8auBrc7FN5NBywa6lR8IUqq"/></button></div></div></header><main class="flex flex-col relative w-full pt-16 pb-36 bg-surface min-h-screen"><div class="flex flex-col w-full pb-8">
+<div class="px-margin pt-space-sm pb-space-xs flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md uppercase tracking-wider text-altar-gold">Sanctuary Fellowship</span>
+<h1 class="font-headline-md text-headline-md text-cathedral-evergreen">Memories &amp; Moments</h1>
+</div>
+<button aria-label="Submit Photo to Media Team" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-altar-gold text-cathedral-evergreen shadow-sm active:scale-95 transition-transform" id="upload-cta-btn">
+<span class="material-symbols-outlined text-[18px]">add_photo_alternate</span>
+<span class="font-title-sm text-title-sm">Share Photo</span>
+</button>
+</div>
+<div class="px-margin my-space-sm">
+<div class="flex bg-surface-container-high p-1 rounded-xl">
+<button class="flex-1 py-1.5 flex items-center justify-center gap-1.5 rounded-lg bg-surface-container-lowest text-cathedral-evergreen shadow-sm transition-all" id="tab-photos" onclick="switchMediaType('photos')">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">photo_library</span>
+<span class="font-title-sm text-title-sm">Photos</span>
+</button>
+<button class="flex-1 py-1.5 flex items-center justify-center gap-1.5 rounded-lg text-ink-muted transition-all" id="tab-videos" onclick="switchMediaType('videos')">
+<span class="material-symbols-outlined text-[18px]">video_library</span>
+<span class="font-title-sm text-title-sm">Sermon Clips</span>
+<span class="px-1.5 py-0.5 rounded-full bg-sacred-maroon text-on-tertiary text-label-sm font-label-sm">4 New</span>
+</button>
+</div>
+</div>
+<div class="px-margin my-space-xs">
+<div class="relative w-full rounded-xl overflow-hidden shadow-md bg-cathedral-evergreen text-surface-container-lowest">
+<div class="relative h-56 w-full bg-cover bg-center" data-alt="Joyous Easter Resurrection church celebration service in a sunlit sanctuary with high vaulted wooden cathedral ceilings, stained glass colorful light refractions, congregation raising hands in reverent worship with white floral arrangements and warm altar candlelight." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCO1_BHObAe_GrMH4MA6ruwiHXD8YnVFENHw_vkoF615lpMBSxLc42dN4NJYh16eO_nT-Bk8RU902m5fvzo2RcHDBUDGVBizRyc1C7HK7GQICx3NSBCYpILwSdxo-JmUK6PSezMmdsx0E1yLycZxzAxOToaqusuqrkYpFybmgUwO-a0y8tUeftIV3y_yTiNsvUPb2vC6EvB7jH19Apf6BldUTCibU0H2Z_HrwysfPuM56ReIuCxaczm')">
+<div class="absolute inset-0 bg-gradient-to-t from-cathedral-evergreen via-cathedral-evergreen/40 to-transparent"></div>
+<div class="absolute top-3 left-3 flex items-center gap-2">
+<span class="px-2.5 py-1 rounded-full bg-altar-gold text-cathedral-evergreen font-label-sm text-label-sm font-bold tracking-wide uppercase flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">auto_awesome</span> Featured Album
+          </span>
+<span class="px-2.5 py-1 rounded-full bg-surface-container-lowest/25 backdrop-blur-md text-surface-container-lowest font-label-sm text-label-sm">
+            24 Photos
+          </span>
+</div>
+<div class="absolute bottom-3 inset-x-3 flex items-end justify-between">
+<div class="flex flex-col max-w-[80%]">
+<span class="font-label-sm text-label-sm text-primary-fixed uppercase tracking-wider">April 2024 • Sanctuary Hall</span>
+<h2 class="font-headline-sm text-headline-sm text-surface-container-lowest leading-tight">Easter Resurrection Celebration Highlights</h2>
+<p class="font-body-md text-body-md text-surface-container-high/90 line-clamp-1 mt-0.5">Capturing the dawn vigil, baptism praise choir, and community banquet.</p>
+</div>
+<button aria-label="Open Album Gallery" class="w-10 h-10 rounded-full bg-surface-container-lowest/30 backdrop-blur-md flex items-center justify-center text-surface-container-lowest hover:bg-altar-gold hover:text-cathedral-evergreen transition-colors flex-shrink-0" onclick="openLightbox('Easter Resurrection Celebration', 'Sanctuary Main Altar', 'April 2024')">
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<div class="px-3 py-2 bg-cathedral-evergreen/95 flex items-center justify-between">
+<div class="flex items-center -space-x-1.5 overflow-hidden">
+<div class="w-6 h-6 rounded-full bg-secondary-container text-cathedral-evergreen flex items-center justify-center font-label-sm text-label-sm">EL</div>
+<div class="w-6 h-6 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center font-label-sm text-label-sm">MT</div>
+<div class="w-6 h-6 rounded-full bg-tertiary-fixed text-on-tertiary-fixed flex items-center justify-center font-label-sm text-label-sm">SK</div>
+<span class="text-label-sm font-label-sm text-altar-gold pl-2">Curated by Media Ministry</span>
+</div>
+<span class="font-label-sm text-label-sm text-surface-container-high">342 views</span>
+</div>
+</div>
+</div>
+<div class="py-space-sm overflow-x-auto no-scrollbar">
+<div class="flex items-center gap-2 px-margin whitespace-nowrap" id="filter-container">
+<button class="filter-pill px-3 py-1.5 rounded-lg bg-cathedral-evergreen text-altar-gold font-title-sm text-title-sm shadow-sm" onclick="filterGallery(this, 'all')">
+        All Photos
+      </button>
+<button class="filter-pill px-3 py-1.5 rounded-lg bg-surface-container-high text-ink-muted font-title-sm text-title-sm hover:text-on-surface" onclick="filterGallery(this, 'sunday')">
+        Sunday Services
+      </button>
+<button class="filter-pill px-3 py-1.5 rounded-lg bg-surface-container-high text-ink-muted font-title-sm text-title-sm hover:text-on-surface" onclick="filterGallery(this, 'baptism')">
+        Baptism &amp; Dedications
+      </button>
+<button class="filter-pill px-3 py-1.5 rounded-lg bg-surface-container-high text-ink-muted font-title-sm text-title-sm hover:text-on-surface" onclick="filterGallery(this, 'youth')">
+        Youth Camp 2024
+      </button>
+<button class="filter-pill px-3 py-1.5 rounded-lg bg-surface-container-high text-ink-muted font-title-sm text-title-sm hover:text-on-surface" onclick="filterGallery(this, 'outreach')">
+        Community Outreach
+      </button>
+</div>
+</div>
+<div class="px-margin grid grid-cols-2 gap-3 mt-1" id="photos-section">
+<div class="flex flex-col gap-3">
+<div class="gallery-card group relative bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm transition-all hover:shadow-md" data-category="sunday">
+<div class="relative aspect-[3/4] w-full overflow-hidden bg-cover bg-center cursor-pointer" data-alt="Church worship team vocalists and instrumentalists singing emotionally under gold and amber stage lights, hands lifted, grand cathedral architecture backdrop with warm reverence." onclick="openLightbox('Choir Worship Ministry', 'Sunday Morning Praise', '128 Likes')" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA87_tfMY4iMt9lDaKGsbfDygzWAZQ-tAZcO_ZRTsPzJJQfKVePUGh3TNEwElcwXDUi9dt4t--BphXnfk8MFs66PRwIFD6m_oR9z1ReqyBhPiOI49bOHbhRYJz5sPkwVuzij-QTqT6XxZTio7lKaLVTjwANLsdmKWJc2_khbL8-qIVOWWUGoGetVW0rOarTZ9ghIZLZ1-YfYkB0EZ3GJ2Jo4YFEHSfM6_h3oSUV-NHXVSv0w1yn9sds')">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<span class="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-cathedral-evergreen/80 backdrop-blur-md text-altar-gold font-label-sm text-label-sm">
+            Worship
+          </span>
+<div class="absolute bottom-2 left-2 right-2">
+<span class="font-headline-sm text-headline-sm text-surface-container-lowest block leading-tight">Living Praise</span>
+<span class="font-label-sm text-label-sm text-surface-container-high/80">Choir &amp; Orchestra</span>
+</div>
+</div>
+<div class="p-2.5 flex items-center justify-between bg-surface-container-lowest">
+<button class="like-btn flex items-center gap-1 text-ink-muted hover:text-sacred-maroon transition-colors" onclick="toggleLike(this, 142)">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+<span class="font-label-sm text-label-sm like-count">142</span>
+</button>
+<div class="flex items-center gap-1">
+<button class="p-1 rounded-lg text-ink-muted hover:text-cathedral-evergreen transition-colors" onclick="showToast('Downloading image...')" title="Download">
+<span class="material-symbols-outlined text-[18px]">download</span>
+</button>
+<button class="p-1 rounded-lg text-ink-muted hover:text-cathedral-evergreen transition-colors" onclick="showToast('Share link copied')" title="Share">
+<span class="material-symbols-outlined text-[18px]">share</span>
+</button>
+</div>
+</div>
+</div>
+<div class="gallery-card group relative bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm transition-all hover:shadow-md" data-category="outreach">
+<div class="relative aspect-[4/3] w-full overflow-hidden bg-cover bg-center cursor-pointer" data-alt="Church volunteers in matching forest green aprons serving warm food boxes to families in sunny open community park pavilion, warm compassionate smiles and community fellowship." onclick="openLightbox('Loaves &amp; Fishes Outreach', 'Downtown Park Drive', '98 Likes')" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCg3b7aUHADKoSQe88oArI41VQyiLWf66mw2IHq7Cj72isOq0Z-G7nSJ7wi7WC9rO0vqEx7Igt0b3ibwzLkV4agFgMS1CRK24tSJB4p8IdgXbM7OsJEOsn6qGNlSxLv-jdMuBpD7I-dHZaCskLY09OrFDiUK-4NUfwEm_IXlHNuNq0UXrhXQFXSk6TOHEp5DR5SkuvgEaYdpA89o5hc6o2b3FkTDFJ-6E2inYH5oLuieLd9cQv4w0gv')">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<span class="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-secondary text-surface-container-lowest font-label-sm text-label-sm">
+            Outreach
+          </span>
+<div class="absolute bottom-2 left-2 right-2">
+<span class="font-title-sm text-title-sm text-surface-container-lowest block leading-tight">Food Share</span>
+<span class="font-label-sm text-label-sm text-surface-container-high/80">500 Families Served</span>
+</div>
+</div>
+<div class="p-2.5 flex items-center justify-between bg-surface-container-lowest">
+<button class="like-btn flex items-center gap-1 text-ink-muted hover:text-sacred-maroon transition-colors" onclick="toggleLike(this, 98)">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+<span class="font-label-sm text-label-sm like-count">98</span>
+</button>
+<div class="flex items-center gap-1">
+<button class="p-1 rounded-lg text-ink-muted hover:text-cathedral-evergreen transition-colors" onclick="showToast('Downloading image...')" title="Download">
+<span class="material-symbols-outlined text-[18px]">download</span>
+</button>
+<button class="p-1 rounded-lg text-ink-muted hover:text-cathedral-evergreen transition-colors" onclick="showToast('Share link copied')" title="Share">
+<span class="material-symbols-outlined text-[18px]">share</span>
+</button>
+</div>
+</div>
+</div>
+<div class="gallery-card group relative bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm transition-all hover:shadow-md" data-category="baptism">
+<div class="relative aspect-[3/4] w-full overflow-hidden bg-cover bg-center cursor-pointer" data-alt="Serene baptismal pool inside historic chapel, candidate emerging with joyful smile, pastor clad in white robe praying hands over their head, surrounded by clear water ripples and soft morning window light." onclick="openLightbox('New Life in Christ', 'Easter Vigil Baptism', '215 Likes')" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBGy4Md62oZuomn3_Rd9CBKqp8rELKmwMgY6-OsSdyTcSsBoTDDK_tE8j8uD5zzjNLaHliYk5c1Ek2peMatwda8TqgtS4RL27MapgRL_u5XYsGJf6jjr1cz8yc1adlmpIs_oW4CCu7oyFm2GfHtsogLIoKePrryyD_80ufmI60evkIC--LH5vMAblUndGoftCCXKqMlPnAe6J9N6VdkPvUKifu2dY6169lBp0Wu1GtIeGzPHk_AVA2S')">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<span class="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-sacred-maroon text-surface-container-lowest font-label-sm text-label-sm">
+            Baptism
+          </span>
+<div class="absolute bottom-2 left-2 right-2">
+<span class="font-headline-sm text-headline-sm text-surface-container-lowest block leading-tight">Reborn in Faith</span>
+<span class="font-label-sm text-label-sm text-surface-container-high/80">Easter Baptismal Pool</span>
+</div>
+</div>
+<div class="p-2.5 flex items-center justify-between bg-surface-container-lowest">
+<button class="like-btn flex items-center gap-1 text-ink-muted hover:text-sacred-maroon transition-colors" onclick="toggleLike(this, 215)">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+<span class="font-label-sm text-label-sm like-count">215</span>
+</button>
+<div class="flex items-center gap-1">
+<button class="p-1 rounded-lg text-ink-muted hover:text-cathedral-evergreen transition-colors" onclick="showToast('Downloading image...')" title="Download">
+<span class="material-symbols-outlined text-[18px]">download</span>
+</button>
+<button class="p-1 rounded-lg text-ink-muted hover:text-cathedral-evergreen transition-colors" onclick="showToast('Share link copied')" title="Share">
+<span class="material-symbols-outlined text-[18px]">share</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-3">
+<div class="gallery-card group relative bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm transition-all hover:shadow-md" data-category="sunday">
+<div class="relative aspect-square w-full overflow-hidden bg-cover bg-center cursor-pointer" data-alt="Senior pastor standing at ornate carved wood pulpit delivering sermon, open Bible on velvet lectern cushion, warm ray of heavenly sunbeams filtering through cathedral stained glass window." onclick="openLightbox('Word of Hope', 'Pastor Thomas Sermon', '183 Likes')" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAiyceFyJ057kupUzU5bTVeNWkqF7G4Qj4ToQJygNgPFmPNDRrRilrzEae1IkN_DSoQuQTYCrnm0Zj8SAoz4tFDoGoh-FiseKhEpOXUuNpQ4skKvbaH6W3zIYdsxedYwqbNKfMAPGB_HFJAfwc7tZ-cfnhDGn5yKqOefjWl9JqJRwHqGG1ENKQIDj2ps4rImz7uxqLyN0hvSDEz-fD_uTcCSXT-YPsFfyZKE9fwf-JwCwRve55LjaIs')">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<span class="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-cathedral-evergreen/80 backdrop-blur-md text-altar-gold font-label-sm text-label-sm">
+            Sermon
+          </span>
+<div class="absolute bottom-2 left-2 right-2">
+<span class="font-title-sm text-title-sm text-surface-container-lowest block leading-tight">Grace Abounding</span>
+<span class="font-label-sm text-label-sm text-surface-container-high/80">Pastor Thomas</span>
+</div>
+</div>
+<div class="p-2.5 flex items-center justify-between bg-surface-container-lowest">
+<button class="like-btn flex items-center gap-1 text-ink-muted hover:text-sacred-maroon transition-colors" onclick="toggleLike(this, 183)">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+<span class="font-label-sm text-label-sm like-count">183</span>
+</button>
+<div class="flex items-center gap-1">
+<button class="p-1 rounded-lg text-ink-muted hover:text-cathedral-evergreen transition-colors" onclick="showToast('Downloading image...')" title="Download">
+<span class="material-symbols-outlined text-[18px]">download</span>
+</button>
+<button class="p-1 rounded-lg text-ink-muted hover:text-cathedral-evergreen transition-colors" onclick="showToast('Share link copied')" title="Share">
+<span class="material-symbols-outlined text-[18px]">share</span>
+</button>
+</div>
+</div>
+</div>
+<div class="gallery-card group relative bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm transition-all hover:shadow-md" data-category="youth">
+<div class="relative aspect-[3/4] w-full overflow-hidden bg-cover bg-center cursor-pointer" data-alt="Lively group of multiracial youth church camp attendees smiling together around a campfire near pines, wearing rustic casual camp shirts, holding acoustic guitars and singing warmly at dusk." onclick="openLightbox('Ignite Youth Camp 2024', 'Camp Timberline Pines', '167 Likes')" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuADKMSUedz2JfZIe1cna1XIJRiINVAHt1IJqfWNJqf6kKycQMubsTbw-rIfG7GjpER5tvbKluqPbXAvhGocSUycMUVVfMPLdX8qNUONWwqmdG9amdG-Itqx3EEosVHDnoT61b_31j6ejolWLy7eWtd2t_Pad1-vHUSKUsTynhImv38u0tr1d9BXP_dURAtTSrbAmO_D-hZfn5P7vPmug1kjtIzmHkwUgINmJeYChDzUoL85Ntw8Ilcj')">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<span class="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-primary text-surface-container-lowest font-label-sm text-label-sm">
+            Camp
+          </span>
+<div class="absolute bottom-2 left-2 right-2">
+<span class="font-headline-sm text-headline-sm text-surface-container-lowest block leading-tight">Camp Ignite</span>
+<span class="font-label-sm text-label-sm text-surface-container-high/80">Pines Retreat Center</span>
+</div>
+</div>
+<div class="p-2.5 flex items-center justify-between bg-surface-container-lowest">
+<button class="like-btn flex items-center gap-1 text-ink-muted hover:text-sacred-maroon transition-colors" onclick="toggleLike(this, 167)">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+<span class="font-label-sm text-label-sm like-count">167</span>
+</button>
+<div class="flex items-center gap-1">
+<button class="p-1 rounded-lg text-ink-muted hover:text-cathedral-evergreen transition-colors" onclick="showToast('Downloading image...')" title="Download">
+<span class="material-symbols-outlined text-[18px]">download</span>
+</button>
+<button class="p-1 rounded-lg text-ink-muted hover:text-cathedral-evergreen transition-colors" onclick="showToast('Share link copied')" title="Share">
+<span class="material-symbols-outlined text-[18px]">share</span>
+</button>
+</div>
+</div>
+</div>
+<div class="gallery-card group relative bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm transition-all hover:shadow-md" data-category="sunday">
+<div class="relative aspect-[4/3] w-full overflow-hidden bg-cover bg-center cursor-pointer" data-alt="Darkened church sanctuary illuminated solely by hundreds of small glowing handheld candles during Christmas Eve candlelight service, peaceful devotional expressions on faces, holy sacred ambiance." onclick="openLightbox('Candlelight Christmas Vigil', 'Silent Night Service', '312 Likes')" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCln3B6XkJGu7H6tcvlb40CneukS8Eyuo4Fk5KwnXyqUfi71rVBFIdk1D2efxlmcs5ONhB-Xcn9pWcqGjlqvCRVZYV20N_IjPCt4Vyrqm9FzAITe8E7T3pAV8iZ_k_lELMoNOlrQgW0-ySmR-IdZIJUbXpX-D7Z7PJ8Voxt6Dnepc0BAK4G3skU2X6V_ci7bRdeqD1KLTq1xWdbLV7P0Ft37N1h-udJk7lYmQyLmV0PDcaUZLowSCUy')">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<span class="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-cathedral-evergreen/80 backdrop-blur-md text-altar-gold font-label-sm text-label-sm">
+            Vigil
+          </span>
+<div class="absolute bottom-2 left-2 right-2">
+<span class="font-title-sm text-title-sm text-surface-container-lowest block leading-tight">Silent Night</span>
+<span class="font-label-sm text-label-sm text-surface-container-high/80">Candlelight Vigil</span>
+</div>
+</div>
+<div class="p-2.5 flex items-center justify-between bg-surface-container-lowest">
+<button class="like-btn flex items-center gap-1 text-ink-muted hover:text-sacred-maroon transition-colors" onclick="toggleLike(this, 312)">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+<span class="font-label-sm text-label-sm like-count">312</span>
+</button>
+<div class="flex items-center gap-1">
+<button class="p-1 rounded-lg text-ink-muted hover:text-cathedral-evergreen transition-colors" onclick="showToast('Downloading image...')" title="Download">
+<span class="material-symbols-outlined text-[18px]">download</span>
+</button>
+<button class="p-1 rounded-lg text-ink-muted hover:text-cathedral-evergreen transition-colors" onclick="showToast('Share link copied')" title="Share">
+<span class="material-symbols-outlined text-[18px]">share</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="hidden px-margin flex flex-col gap-3 mt-1" id="videos-section">
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm">
+<div class="relative aspect-video w-full bg-cover bg-center cursor-pointer" data-alt="Dramatic church sanctuary stage with cinematic warm rim lighting on pastor explaining scripture passage with open hands, modern high-definition cinematic church video frame." onclick="openLightbox('Walking By Faith Message', 'Sunday 10:30 AM Service', 'Video Clip • 04:15')" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAtzty1FfofFrg0LzoCEZmoMsKVujsE3wjbESsumVINDdCYOSx7tzsN4DzXhmGMeSsrAlN7mVAnY2qyaLnEoW1WnVkRr5AmdbLK8YWKG6XcknogYuVwETHxSM6T__JjUtkIoPAfK84i5APqY0ESRC0c6uGjzZaVkcwuRfZCwjtZhsNLk7pIp1HVrOpYltLvgYXVrrI4WYX1aZbFx2SNfM2j4ZTrKg_wR4ZUBFsSqlzSpjzfku8Hr_uE')">
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center">
+<div class="w-12 h-12 rounded-full bg-altar-gold text-cathedral-evergreen flex items-center justify-center shadow-lg active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+</div>
+<span class="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-black/75 text-surface-container-lowest font-label-sm text-label-sm">04:15</span>
+</div>
+<div class="p-3">
+<span class="font-label-sm text-label-sm text-altar-gold uppercase tracking-wider">Series: Radical Trust • Ep. 4</span>
+<h3 class="font-headline-sm text-headline-sm text-cathedral-evergreen">Walking by Faith in Uncertain Times</h3>
+<p class="font-body-md text-body-md text-ink-muted mt-1">Key sermon moment from Pastor Thomas on trusting the divine plan through seasons of transition.</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm">
+<div class="relative aspect-video w-full bg-cover bg-center cursor-pointer" data-alt="Worship pastor leading acoustic acoustic hymn with congregation softly singing in warm glowing church hall, warm gold ambient backlight, cinematic church broadcast snapshot." onclick="openLightbox('Great Is Thy Faithfulness', 'Evening Acoustic Communion', 'Video Clip • 03:42')" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBinQD4LtjN0pq_mFsb1Mv0VRJkyj9M2nVdEfuSVt5TYsLtTA7P3ggxdwAvtYcWmEaXdN0T8cwcl6cPYypdF1-aTB9haRbj8QuymAoHFxI0-FyRGbY_FknblafC_nN9hr18Le9PZPu4m6Gpu3cVUfZYEPX-OXjo3ddoxU26RTFrsPLV9l2ie0JC3bwZKYBBLcwpW-ZVaUx4djIpOgTc6UvbjL1HaYq-xG_UY8YJN-4M70m-cKPGi-p3')">
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center">
+<div class="w-12 h-12 rounded-full bg-altar-gold text-cathedral-evergreen flex items-center justify-center shadow-lg active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+</div>
+<span class="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-black/75 text-surface-container-lowest font-label-sm text-label-sm">03:42</span>
+</div>
+<div class="p-3">
+<span class="font-label-sm text-label-sm text-altar-gold uppercase tracking-wider">Acoustic Communion Night</span>
+<h3 class="font-headline-sm text-headline-sm text-cathedral-evergreen">Great Is Thy Faithfulness (Live)</h3>
+<p class="font-body-md text-body-md text-ink-muted mt-1">Intimate acoustic prayer session captured during last Wednesday evening service.</p>
+</div>
+</div>
+</div>
+<div class="hidden px-margin py-12 flex flex-col items-center justify-center text-center" id="empty-state">
+<div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center text-ink-muted mb-3">
+<span class="material-symbols-outlined text-[32px]">photo_library</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">No moments found</h3>
+<p class="font-body-md text-body-md text-ink-muted mt-1 max-w-xs">Be the first to share photos from this church ministry or event.</p>
+<button class="mt-4 px-4 py-2 rounded-lg bg-altar-gold text-cathedral-evergreen font-title-sm text-title-sm" onclick="filterGallery(document.querySelector('.filter-pill'), 'all')">
+      View All Photos
+    </button>
+</div>
+<div class="px-margin mt-6">
+<div class="p-4 rounded-xl bg-surface-container-low shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-cathedral-evergreen text-altar-gold flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[22px]">cloud_upload</span>
+</div>
+<div class="flex flex-col">
+<span class="font-title-sm text-title-sm text-cathedral-evergreen">Photographed Sunday?</span>
+<span class="font-body-md text-body-md text-ink-muted">Contribute captures to the sanctuary archive.</span>
+</div>
+</div>
+<button class="px-3 py-1.5 rounded-lg bg-cathedral-evergreen text-surface-container-lowest font-title-sm text-title-sm hover:bg-cathedral-evergreen/90 active:scale-95 transition-all flex-shrink-0" onclick="openUploadModal()">
+        Upload
+      </button>
+</div>
+</div>
+<div class="fixed inset-0 z-50 bg-black/95 backdrop-blur-md hidden flex flex-col justify-between p-4" id="lightbox-modal">
+<div class="flex items-center justify-between pt-safe">
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-surface-container-lowest" id="lb-title">Photo Title</span>
+<span class="font-label-sm text-label-sm text-altar-gold" id="lb-subtitle">Event Name</span>
+</div>
+<button class="w-10 h-10 rounded-full bg-surface-container-highest/20 text-surface-container-lowest flex items-center justify-center" onclick="closeLightbox()">
+<span class="material-symbols-outlined text-[24px]">close</span>
+</button>
+</div>
+<div class="relative flex-1 flex items-center justify-center py-4">
+<div class="w-full max-h-[60vh] aspect-[4/3] rounded-xl bg-cover bg-center shadow-2xl relative overflow-hidden" data-alt="Enlarged detailed church sanctuary photography view showing joyful congregants worshiping in warm light." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDkJTaur5mSfsGjAo5I8-ERuM_0V00pt5dLFbdpmt00y4Fm4ckIyQDIEy6Np_cppzDMvYjBFCJlwvzyH-t90CU4d-WF46-OsjC0rBaXSR_yJJoiKg61dTXlUz8jQ_Q8-yyLPRWcnA2WcrAkv0dAAuVnCv7Mm_zqcTpMw29Nuh2jnAKAT7rumQdr4lRP37CS_CNVSBjHv5Izm_GJ9c7eBoDypiOu2XBcQvmIFDYCitNVUhEx-76pqfEg')">
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+<div class="absolute bottom-3 left-3 right-3 flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-surface-container-lowest" id="lb-meta">High Resolution Master</span>
+<span class="px-2 py-0.5 rounded bg-cathedral-evergreen text-altar-gold font-label-sm text-label-sm">Verified</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-around pb-safe pt-2 bg-surface-container-lowest/10 rounded-xl backdrop-blur-md">
+<button class="flex flex-col items-center gap-1 text-surface-container-lowest hover:text-altar-gold transition-colors" onclick="showToast('Added to your sanctuary favorites!')">
+<span class="material-symbols-outlined text-[22px]">favorite</span>
+<span class="font-label-sm text-label-sm">Favorite</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-surface-container-lowest hover:text-altar-gold transition-colors" onclick="showToast('High resolution file downloading...')">
+<span class="material-symbols-outlined text-[22px]">download</span>
+<span class="font-label-sm text-label-sm">Save HD</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-surface-container-lowest hover:text-altar-gold transition-colors" onclick="showToast('Link copied to clipboard')">
+<span class="material-symbols-outlined text-[22px]">share</span>
+<span class="font-label-sm text-label-sm">Share</span>
+</button>
+</div>
+</div>
+<div class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-end justify-center p-0" id="upload-modal">
+<div class="w-full bg-surface-container-lowest rounded-t-2xl p-margin flex flex-col gap-4 max-h-[85vh] overflow-y-auto">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<h3 class="font-headline-sm text-headline-sm text-cathedral-evergreen">Submit Media</h3>
+<span class="font-label-sm text-label-sm text-ink-muted">Photos and videos will be reviewed by Sanctuary Media</span>
+</div>
+<button class="w-8 h-8 rounded-full bg-surface-container-high text-on-surface flex items-center justify-center" onclick="closeUploadModal()">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<div class="p-6 rounded-xl bg-surface-container-low flex flex-col items-center justify-center text-center cursor-pointer hover:bg-surface-container transition-colors" onclick="document.getElementById('file-input').click()">
+<input accept="image/*,video/*" class="hidden" id="file-input" onchange="handleFileSelect(this)" type="file"/>
+<div class="w-12 h-12 rounded-full bg-primary-container/20 text-altar-gold flex items-center justify-center mb-2">
+<span class="material-symbols-outlined text-[28px]">add_a_photo</span>
+</div>
+<span class="font-title-sm text-title-sm text-on-surface" id="upload-prompt-text">Tap to select photos or videos</span>
+<span class="font-label-sm text-label-sm text-ink-muted mt-1">PNG, JPG, HEIC, MP4 up to 50MB</span>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-label-sm uppercase tracking-wider text-ink-muted">Event / Ministry Category</label>
+<select class="w-full p-2.5 rounded-lg bg-surface-container-low text-on-surface font-body-md text-body-md focus:outline-none">
+<option>Sunday Service Praise</option>
+<option>Baptism &amp; Dedication</option>
+<option>Youth Camp / Fellowship</option>
+<option>Community Outreach</option>
+<option>Small Groups &amp; Prayer Vigil</option>
+</select>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-label-sm uppercase tracking-wider text-ink-muted">Brief Caption or Scripture Note</label>
+<textarea class="w-full p-2.5 rounded-lg bg-surface-container-low text-on-surface font-body-md text-body-md focus:outline-none resize-none" placeholder="e.g. Sunday prayer moment during closing altar call..." rows="2"></textarea>
+</div>
+<button class="w-full py-3 rounded-lg bg-altar-gold text-cathedral-evergreen font-title-sm text-title-sm font-bold shadow-sm active:scale-95 transition-transform" onclick="submitUpload()">
+        Submit to Media Ministry
+      </button>
+</div>
+</div>
+<div class="fixed bottom-28 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-cathedral-evergreen text-surface-container-lowest font-body-md text-body-md shadow-lg opacity-0 transition-opacity pointer-events-none flex items-center gap-2" id="toast">
+<span class="material-symbols-outlined text-[16px] text-altar-gold">check_circle</span>
+<span id="toast-text">Message</span>
+</div>
+</div>
+<script>
+  function switchMediaType(type) {
+    const photosTab = document.getElementById('tab-photos');
+    const videosTab = document.getElementById('tab-videos');
+    const photosSection = document.getElementById('photos-section');
+    const videosSection = document.getElementById('videos-section');
+    const emptyState = document.getElementById('empty-state');
+    
+    emptyState.classList.add('hidden');
+
+    if (type === 'photos') {
+      photosTab.className = 'flex-1 py-1.5 flex items-center justify-center gap-1.5 rounded-lg bg-surface-container-lowest text-cathedral-evergreen shadow-sm transition-all';
+      videosTab.className = 'flex-1 py-1.5 flex items-center justify-center gap-1.5 rounded-lg text-ink-muted transition-all';
+      photosSection.classList.remove('hidden');
+      videosSection.classList.add('hidden');
+    } else {
+      videosTab.className = 'flex-1 py-1.5 flex items-center justify-center gap-1.5 rounded-lg bg-surface-container-lowest text-cathedral-evergreen shadow-sm transition-all';
+      photosTab.className = 'flex-1 py-1.5 flex items-center justify-center gap-1.5 rounded-lg text-ink-muted transition-all';
+      photosSection.classList.add('hidden');
+      videosSection.classList.remove('hidden');
+    }
+  }
+
+  function filterGallery(btn, category) {
+    const pills = document.querySelectorAll('.filter-pill');
+    pills.forEach(p => {
+      p.className = 'filter-pill px-3 py-1.5 rounded-lg bg-surface-container-high text-ink-muted font-title-sm text-title-sm hover:text-on-surface';
+    });
+    btn.className = 'filter-pill px-3 py-1.5 rounded-lg bg-cathedral-evergreen text-altar-gold font-title-sm text-title-sm shadow-sm';
+
+    switchMediaType('photos');
+
+    const cards = document.querySelectorAll('.gallery-card');
+    let visibleCount = 0;
+    cards.forEach(card => {
+      if (category === 'all' || card.dataset.category === category) {
+        card.style.display = 'block';
+        visibleCount++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    const empty = document.getElementById('empty-state');
+    if (visibleCount === 0) {
+      empty.classList.remove('hidden');
+    } else {
+      empty.classList.add('hidden');
+    }
+  }
+
+  function toggleLike(btn, initialCount) {
+    const icon = btn.querySelector('.material-symbols-outlined');
+    const countSpan = btn.querySelector('.like-count');
+    const isLiked = btn.dataset.liked === 'true';
+
+    if (!isLiked) {
+      btn.dataset.liked = 'true';
+      icon.style.fontVariationSettings = "'FILL' 1";
+      btn.classList.add('text-sacred-maroon');
+      btn.classList.remove('text-ink-muted');
+      countSpan.innerText = initialCount + 1;
+      showToast('Loved this moment!');
+    } else {
+      btn.dataset.liked = 'false';
+      icon.style.fontVariationSettings = "'FILL' 0";
+      btn.classList.remove('text-sacred-maroon');
+      btn.classList.add('text-ink-muted');
+      countSpan.innerText = initialCount;
+    }
+  }
+
+  function openLightbox(title, subtitle, meta) {
+    document.getElementById('lb-title').innerText = title;
+    document.getElementById('lb-subtitle').innerText = subtitle;
+    document.getElementById('lb-meta').innerText = meta;
+    document.getElementById('lightbox-modal').classList.remove('hidden');
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox-modal').classList.add('hidden');
+  }
+
+  function openUploadModal() {
+    document.getElementById('upload-modal').classList.remove('hidden');
+  }
+
+  function closeUploadModal() {
+    document.getElementById('upload-modal').classList.add('hidden');
+  }
+
+  document.getElementById('upload-cta-btn').addEventListener('click', openUploadModal);
+
+  function handleFileSelect(input) {
+    if (input.files && input.files[0]) {
+      document.getElementById('upload-prompt-text').innerText = 'Selected: ' + input.files[0].name;
+    }
+  }
+
+  function submitUpload() {
+    closeUploadModal();
+    showToast('Photo uploaded! Media team will review shortly.');
+  }
+
+  let toastTimeout;
+  function showToast(message) {
+    const toast = document.getElementById('toast');
+    const text = document.getElementById('toast-text');
+    text.innerText = message;
+    toast.classList.remove('opacity-0');
+    toast.classList.add('opacity-100');
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => {
+      toast.classList.remove('opacity-100');
+      toast.classList.add('opacity-0');
+    }, 2400);
+  }
+</script></main><aside class="fixed bottom-16 inset-x-0 z-40 px-margin pb-space-xs pointer-events-none"><div class="pointer-events-auto w-full bg-cathedral-evergreen/95 backdrop-blur-xl text-surface-container-lowest rounded-xl p-space-sm shadow-[0_4px_20px_rgba(14,42,32,0.25)] ring-1 ring-altar-gold/25 flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0"><div class="w-9 h-9 rounded-lg bg-surface-container-highest/10 flex items-center justify-center text-altar-gold flex-shrink-0"><span class="material-symbols-outlined text-[20px]">radio</span></div><div class="flex flex-col min-w-0"><div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-altar-gold animate-pulse"></span><span class="font-label-sm text-label-sm text-altar-gold uppercase tracking-wider">On Air</span></div><span class="font-title-sm text-title-sm text-surface-container-lowest truncate">Zeno Gospel Stream Live</span></div></div><div class="flex items-center gap-space-sm flex-shrink-0"><div aria-hidden="true" class="flex items-end gap-[3px] h-6 px-1 flex-shrink-0"><div class="w-1 bg-altar-gold rounded-full wave-bar-1"></div><div class="w-1 bg-altar-gold rounded-full wave-bar-2"></div><div class="w-1 bg-altar-gold rounded-full wave-bar-3"></div><div class="w-1 bg-altar-gold rounded-full wave-bar-4"></div></div><button aria-label="Play or Pause Broadcast" class="w-10 h-10 rounded-full bg-altar-gold text-cathedral-evergreen flex items-center justify-center hover:bg-primary-fixed transition-colors active:scale-95"><span class="material-symbols-outlined text-[22px]">pause</span></button></div></div></aside><nav class="fixed bottom-0 inset-x-0 z-50 pb-safe bg-surface/95 backdrop-blur-xl shadow-[0_-2px_12px_rgba(14,42,32,0.05)]" data-active-classes="text-primary font-bold"><div class="flex justify-around items-center h-16 px-space-xs"><a class="flex flex-col items-center justify-center gap-0.5 w-16 h-12 text-ink-muted hover:text-on-surface transition-all" data-path="home-and-radio" href="#"><span class="material-symbols-outlined text-[22px]">church</span><span class="font-label-sm text-label-sm leading-tight">Home</span></a><a class="flex flex-col items-center justify-center gap-0.5 w-16 h-12 text-ink-muted hover:text-on-surface transition-all" data-path="programs-and-events" href="#"><span class="material-symbols-outlined text-[22px]">event</span><span class="font-label-sm text-label-sm leading-tight">Events</span></a><a class="flex flex-col items-center justify-center gap-0.5 w-16 h-12 text-ink-muted hover:text-on-surface transition-all" data-path="bible-quiz" href="#"><span class="material-symbols-outlined text-[22px]">quiz</span><span class="font-label-sm text-label-sm leading-tight">Quiz</span></a><a aria-current="page" class="flex flex-col items-center justify-center gap-0.5 w-16 h-12 transition-all text-primary font-bold" data-path="gallery" href="#"><span class="material-symbols-outlined text-[22px]">photo_library</span><span class="font-label-sm text-label-sm leading-tight">Gallery</span></a><a class="flex flex-col items-center justify-center gap-0.5 w-16 h-12 text-ink-muted hover:text-on-surface transition-all" data-path="profile-and-alerts" href="#"><span class="material-symbols-outlined text-[22px]">person</span><span class="font-label-sm text-label-sm leading-tight">Profile</span></a></div></nav></body></html>
