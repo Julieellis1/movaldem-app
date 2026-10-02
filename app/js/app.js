@@ -84,15 +84,36 @@
     tick(); cdTimer = setInterval(tick, 1000);
   }
 
-  /* ---------------- quiz engine ---------------- */
+  /* ---------------- quiz engine ----------------
+     Live mode: questions come from the server WITHOUT answers; the member's
+     picks are collected as {question_id: option_index} and graded server-side
+     on submit. Mock mode keeps the old local-graded demo flow. */
   function startQuiz() {
-    const qs = [...data.quiz.questions].sort(() => Math.random() - 0.5);
-    quizState = { questions: qs, idx: 0, score: 0, picked: null };
+    let qs, live;
+    if (CFG.USE_MOCK) {
+      qs = [...data.quiz.questions].sort(() => Math.random() - 0.5);
+      live = false;
+    } else {
+      qs = data.quiz.liveQuestions || [];
+      live = true;
+    }
+    quizState = { questions: qs, idx: 0, score: 0, picked: null, answers: {}, live };
+    quizSecs = 5 * 60;
+    if (!qs.length) {
+      // Nothing to play (already attempted today) — back to the lobby.
+      location.hash = "#/quiz";
+      return;
+    }
     location.hash = "#/quiz/play";
   }
   function renderQuizPlay() {
-    const q = quizState.questions[quizState.idx];
-    screen.innerHTML = S.quizPlay(q, quizState.idx, quizState.questions.length, quizState.picked);
+    const raw = quizState.questions[quizState.idx];
+    // Normalize live (server) questions to the screen's shape; live items
+    // carry no answer — grading happens server-side on submit.
+    const q = quizState.live
+      ? { q: raw.text, opts: raw.options, ref: raw.ref, answer: undefined }
+      : raw;
+    screen.innerHTML = S.quizPlay(q, quizState.idx, quizState.questions.length, quizState.picked, quizState.live);
     screen.scrollTop = 0;
     clearInterval(quizTimer);
     const clock = () => {
@@ -108,7 +129,11 @@
     if (quizState.picked !== null) return;
     quizState.picked = i;
     const q = quizState.questions[quizState.idx];
-    if (i === q.answer) quizState.score++;
+    if (quizState.live) {
+      quizState.answers[q.id] = i; // graded server-side on submit
+    } else if (i === q.answer) {
+      quizState.score++;
+    }
     renderQuizPlay();
     // re-show feedback without restarting the timer visuals abruptly
     const next = document.getElementById("q-next");
@@ -121,13 +146,24 @@
   }
   async function finishQuiz() {
     clearInterval(quizTimer);
-    const total = quizState.questions.length, score = quizState.score;
-    let res = { xp: score * 100, streak: (data.quiz.me.streak || 0) + 1 };
-    try { res = await Api.submitQuiz(score, total); } catch {}
-    data.quiz.me.streak = res.streak || data.quiz.me.streak;
-    data.quiz.me.xp += res.xp || 0;
+    const wasLive = quizState.live;
+    const total = quizState.questions.length;
+    let result;
+    if (wasLive) {
+      try {
+        result = await Api.submitQuiz(quizState.answers);
+      } catch (e) {
+        result = { score: 0, correct_count: 0, total, streak_day: 0, review: [], error: true };
+      }
+      data.quiz.me.streak = result.streak_day || data.quiz.me.streak;
+      data.quiz.attempted = true;
+    } else {
+      const score = quizState.score;
+      result = { score, correct_count: score, total, streak_day: (data.quiz.me.streak || 0) + 1, review: [] };
+      data.quiz.me.streak = result.streak_day;
+    }
     quizState = null;
-    screen.innerHTML = S.quizResult(score, total, res.xp || 0, data.quiz.me.streak);
+    screen.innerHTML = S.quizResult(result);
     screen.scrollTop = 0;
     bindStatic();
   }
@@ -253,7 +289,7 @@
       e.preventDefault();
       const f = new FormData(e.target);
       try {
-        await Api.register(f.get("name").trim(), f.get("email").trim(), f.get("password"));
+        await Api.register(f.get("name").trim(), f.get("email").trim(), f.get("password"), (f.get("phone") || "").trim());
         toast("Welcome to the Movaldem family!");
         location.hash = "#/home";
       } catch (err) { screen.innerHTML = S.register(err.message); }

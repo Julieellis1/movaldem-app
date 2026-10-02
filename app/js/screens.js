@@ -104,9 +104,9 @@
         <div class="radio-top">
           <div>
             <span class="live-badge"><span class="dot"></span>LIVE</span>
-            <span style="font-size:.68rem;color:rgba(242,241,236,.7);margin-left:.4rem">128kbps HD Audio</span>
+            <span style="font-size:.68rem;color:rgba(242,241,236,.7);margin-left:.4rem">192kbps HD Audio</span>
           </div>
-          <div style="margin-left:auto;font-size:.68rem;color:var(--gold)">&#128266; Zeno.fm Relay</div>
+          <div style="margin-left:auto;font-size:.68rem;color:var(--gold)">&#128266; Movaldem Radio</div>
         </div>
         <div style="padding:0 1rem">
           <div class="radio-meta">
@@ -242,16 +242,17 @@
   function quiz(data, tab = "daily") {
     const me = data.quiz.me, q = data.quiz.quest;
     const isDaily = tab === "daily";
+    const rankLabel = me.rank ? "#" + me.rank : "—";
     return `
     ${appbar("Movaldem", "Bible Quiz")}
     <div class="card dark" style="margin-top:.6rem"><div class="me-card">
       <div class="avatar">${esc(me.name[0] || "M")}</div>
       <div class="who"><b>${esc(me.name)} <span class="material-symbols-outlined">verified</span></b><small>Word Disciple &bull; Covenant Circle</small></div>
-      <span class="live-badge" style="background:var(--gold);color:#fff">#${me.rank}</span>
+      <span class="live-badge" style="background:var(--gold);color:#fff">${rankLabel}</span>
     </div><div class="stat3">
-      <div class="stat"><b>#${me.rank}</b><span>Global Rank</span></div>
-      <div class="stat"><b>${me.xp.toLocaleString()}</b><span>Weekly XP</span></div>
-      <div class="stat"><b>${me.streak} Days</b><span>Holy Streak</span></div>
+      <div class="stat"><b>${rankLabel}</b><span>Global Rank</span></div>
+      <div class="stat"><b>${(me.xp || 0).toLocaleString()}</b><span>Weekly XP</span></div>
+      <div class="stat"><b>${me.streak || 0} Days</b><span>Holy Streak</span></div>
     </div></div>
 
     <div class="tabs">
@@ -260,6 +261,7 @@
     </div>
 
     ${isDaily ? `
+    ${q ? `
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem">
         <span class="eyebrow">&#9679; Today's Holy Scripture Quest</span>
@@ -274,7 +276,13 @@
       </div>
       <button class="btn btn-gold" data-nav="quiz/play"><span class="material-symbols-outlined">play_arrow</span>Start Quiz Now</button>
       <p style="text-align:center;font-size:.72rem;color:var(--gold-deep);font-weight:700;margin-top:.5rem">Up to +${(q.questions * q.xpPerQ).toLocaleString()} XP</p>
-    </div>
+    </div>` : `
+    <div class="card" style="text-align:center;padding:2rem 1.2rem">
+      <span class="material-symbols-outlined" style="font-size:40px;color:var(--gold-deep)">check_circle</span>
+      <h2 class="h-display" style="font-size:1.4rem;margin:.6rem 0 .3rem">Quest Complete</h2>
+      <p class="sub">You've finished today's challenge. Come back tomorrow for a fresh set of ten.</p>
+      <button class="btn btn-dark" data-quiz-tabgo="board" style="margin-top:.8rem"><span class="material-symbols-outlined">leaderboard</span>View Leaderboard</button>
+    </div>`}
     <div class="section"><div class="card" style="display:flex;gap:.8rem;align-items:center">
       <div class="avatar" style="background:linear-gradient(135deg,var(--maroon),#8f485b)"><span class="material-symbols-outlined">local_fire_department</span></div>
       <div style="flex:1"><b style="font-size:.88rem">Streak Milestone: ${me.streak}/10 Days</b>
@@ -306,8 +314,9 @@
     <p class="sub" style="text-align:center;margin-top:.8rem">Answer daily quests to climb the ranks and earn the Sacred Scholar badge.</p>`}`;
   }
 
-  function quizPlay(q, idx, total, picked) {
+  function quizPlay(q, idx, total, picked, live) {
     const letters = ["A", "B", "C", "D"];
+    const locked = picked !== null && picked !== undefined;
     return `
     <div class="appbar">
       <button class="icon-btn" data-nav="quiz" aria-label="Quit quiz"><span class="material-symbols-outlined">close</span></button>
@@ -316,31 +325,38 @@
     </div>
     <div class="q-progress"><i style="width:${(idx / total) * 100}%"></i></div>
     <div class="card q-card">
-      <span class="eyebrow">Choose the right answer</span>
+      <span class="eyebrow">${live ? "Answer carefully — graded when you finish" : "Choose the right answer"}</span>
       <h2>${esc(q.q)}</h2>
       ${q.opts.map((o, i) => {
         let cls = "";
-        if (picked !== null && picked !== undefined) {
-          if (i === q.answer) cls = "correct";
-          else if (i === picked) cls = "wrong";
+        if (locked) {
+          if (!live && i === q.answer) cls = "correct";
+          else if (i === picked) cls = live ? "selected" : "wrong";
         }
-        return `<button class="opt ${cls}" data-pick="${i}" ${picked !== null && picked !== undefined ? "disabled" : ""}>
+        return `<button class="opt ${cls}" data-pick="${i}" ${locked ? "disabled" : ""}>
           <span class="key">${letters[i]}</span><span>${esc(o)}</span></button>`;
       }).join("")}
-      ${picked !== null && picked !== undefined ? `<p class="q-ref">&#10003; ${esc(q.ref)}</p>` : ""}
+      ${locked && !live ? `<p class="q-ref">&#10003; ${esc(q.ref)}</p>` : ""}
+      ${locked && live ? `<p class="q-ref">Answer locked in.</p>` : ""}
     </div>
     <div style="height:.8rem"></div>
-    ${picked !== null && picked !== undefined
+    ${locked
       ? `<button class="btn btn-gold" id="q-next">${idx + 1 < total ? "Next Question" : "See Results"}<span class="material-symbols-outlined">arrow_forward</span></button>`
-      : `<p class="sub" style="text-align:center">+100 XP per correct answer</p>`}`;
+      : `<p class="sub" style="text-align:center">${live ? "Graded server-side when you finish" : "+100 XP per correct answer"}</p>`}`;
   }
 
-  function quizResult(score, total, xp, streak) {
-    const pct = Math.round((score / total) * 100);
+  function quizResult(r) {
+    const score = r.correct_count ?? r.score ?? 0;
+    const total = r.total || 10;
+    const xp = r.score ?? 0;
+    const streak = r.streak_day ?? 0;
+    const pct = total ? Math.round((score / total) * 100) : 0;
+    const letters = ["A", "B", "C", "D"];
     return `
     <div class="appbar">
       <div class="brand"><div><b>Quiz Complete</b><small>Daily Challenge</small></div></div>
     </div>
+    ${r.error ? `<div class="card" style="margin-top:.6rem"><p class="sub" style="text-align:center">Could not reach the server to grade your answers. Your picks were saved on this device — try again when you're online.</p></div>` : ""}
     <div class="card verse-card" style="margin-top:.6rem">
       <div class="avatar" style="margin:0 auto .6rem;background:linear-gradient(135deg,var(--gold),var(--gold-deep));width:72px;height:72px">
         <span class="material-symbols-outlined" style="font-size:34px">emoji_events</span>
@@ -357,7 +373,24 @@
         <button class="btn btn-dark" data-quiz-tabgo="board"><span class="material-symbols-outlined">leaderboard</span>Leaderboard</button>
         <button class="btn btn-gold" data-nav="home">Done</button>
       </div>
-    </div>`;
+    </div>
+    ${(r.review && r.review.length) ? `
+    <div class="section"><div class="section-head"><h2 class="h-head">Review Your Answers</h2></div>
+      ${r.review.map((q, i) => `
+      <div class="card" style="margin-bottom:.6rem">
+        <p style="font-size:.85rem;font-weight:700;margin:0 0 .5rem">${i + 1}. ${esc(q.text)}</p>
+        ${q.options.map((o, oi) => {
+          const isPick = oi === q.picked, isCorr = oi === q.correct;
+          const cls = isCorr ? "correct" : (isPick ? "wrong" : "");
+          return `<div class="opt ${cls}" style="cursor:default;margin-bottom:.4rem">
+            <span class="key">${letters[oi] || ""}</span><span>${esc(o)}</span>
+            ${isCorr ? `<span class="material-symbols-outlined" style="margin-left:auto;color:#2e7d4f">check_circle</span>` : ""}
+          </div>`;
+        }).join("")}
+        ${q.ref ? `<p class="q-ref">${esc(q.ref)}</p>` : ""}
+        ${q.note ? `<p class="sub" style="font-size:.78rem">${esc(q.note)}</p>` : ""}
+      </div>`).join("")}
+    </div>` : ""}`;
   }
 
   /* ---------------- Gallery ---------------- */

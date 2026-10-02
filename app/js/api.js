@@ -89,10 +89,34 @@
   }
   function authHeaders() {
     const s = Api.session();
-    if (s && s.appPassword) {
-      return { Authorization: "Basic " + btoa(s.username + ":" + s.appPassword) };
+    if (s && s.token) {
+      return { Authorization: "Bearer " + s.token };
     }
     return {};
+  }
+  function stripTags(html) {
+    return String(html || "").replace(/<[^>]+>/g, "").trim();
+  }
+  // "2026-10-02T09:00:00" -> "2h ago"
+  function timeAgo(iso) {
+    const t = new Date(iso).getTime();
+    if (!t) return "";
+    const mins = Math.max(0, Math.round((Date.now() - t) / 60000));
+    if (mins < 1) return "just now";
+    if (mins < 60) return mins + "m ago";
+    const hrs = Math.round(mins / 60);
+    if (hrs < 24) return hrs + "h ago";
+    const days = Math.round(hrs / 24);
+    return days + "d ago";
+  }
+  // "2026-10-02 18:00:00" -> { date: "2026-10-02", time: "6:00 PM" }
+  function splitDateTime(dt) {
+    const m = String(dt || "").match(/^(\d{4}-\d{2}-\d{2})[T ](\d{2}):(\d{2})/);
+    if (!m) return { date: "", time: "" };
+    let h = parseInt(m[2], 10);
+    const ap = h >= 12 ? "PM" : "AM";
+    h = h % 12 || 12;
+    return { date: m[1], time: h + ":" + m[3] + " " + ap };
   }
 
   /* ---------------- Public API ---------------- */
@@ -112,20 +136,20 @@
         const s = { name: email.split("@")[0].replace(/[._]/g, " "), email, username: email };
         this.saveSession(s); return s;
       }
-      // Live: validate via Application Password against wp/v2/users/me.
-      const me = await wp("/wp/v2/users/me", { headers: { Authorization: "Basic " + btoa(email + ":" + password) } });
-      const s = { name: me.name, email, username: email, appPassword: password, wpId: me.id };
+      // Live: bearer-token session from movaldem-core.
+      const r = await wp("/movaldem/v1/login", { method: "POST", body: JSON.stringify({ email, password }) });
+      const s = { name: r.name, email: r.email, username: email, token: r.token, wpId: r.id };
       this.saveSession(s); return s;
     },
-    async register(name, email, password) {
+    async register(name, email, password, phone) {
       if (!name || !email || !password) throw new Error("Please fill in all fields.");
       if (CFG.USE_MOCK) {
         const s = { name, email, username: email };
         this.saveSession(s); return s;
       }
-      // Live: custom endpoint to be added in movaldem-core (WP blocks public registration by default).
-      const r = await wp("/movaldem/v1/register", { method: "POST", body: JSON.stringify({ name, email, password }) });
-      const s = { name: r.name, email, username: email, appPassword: r.app_password, wpId: r.id };
+      // Live: creates the WP member account, returns a bearer token.
+      const r = await wp("/movaldem/v1/register", { method: "POST", body: JSON.stringify({ name, email, password, phone }) });
+      const s = { name: r.name, email: r.email, username: email, token: r.token, wpId: r.id };
       this.saveSession(s); return s;
     },
     logout() { this.clearSession(); },
@@ -137,44 +161,81 @@
     },
     async programs() {
       if (CFG.USE_MOCK) return MOCK.programs;
-      const list = await wp("/wp/v2/program?per_page=20&_fields=id,title,excerpt,meta");
-      return list.map((p) => ({ id: p.id, title: p.title.rendered, desc: (p.excerpt.rendered || "").replace(/<[^>]+>/g, ""), day: p.meta?.day || "", time: p.meta?.time || "", venue: p.meta?.venue || "", tag: "Program" }));
+      const list = await wp("/wp/v2/program?per_page=20&_fields=id,title,excerpt,app_meta");
+      return list.map((p) => ({ id: p.id, title: stripTags(p.title.rendered), desc: stripTags(p.excerpt.rendered), day: p.app_meta?.meeting_day || "", time: p.app_meta?.meeting_time || "", venue: p.app_meta?.venue || "", tag: "Program" }));
     },
     async events() {
       if (CFG.USE_MOCK) return MOCK.events;
-      const list = await wp("/wp/v2/event?per_page=20&_fields=id,title,excerpt,meta");
-      return list.map((e) => ({ id: e.id, title: e.title.rendered, desc: (e.excerpt.rendered || "").replace(/<[^>]+>/g, ""), date: e.meta?.date || "", time: e.meta?.time || "", venue: e.meta?.venue || "", tag: "Event", seats: e.meta?.seats ?? null }));
+      const list = await wp("/wp/v2/event?per_page=20&_fields=id,title,excerpt,app_meta");
+      return list.map((e) => {
+        const { date, time } = splitDateTime(e.app_meta?.start_datetime || "");
+        return { id: e.id, title: stripTags(e.title.rendered), desc: stripTags(e.excerpt.rendered), date, time, venue: e.app_meta?.venue || "", tag: "Event", seats: null };
+      });
     },
     async gallery() {
       if (CFG.USE_MOCK) return MOCK.gallery;
-      const albums = await wp("/wp/v2/gallery_album?per_page=20").catch(() => []);
-      return { albums: albums.map((a) => ({ id: a.id, title: a.title.rendered, meta: "", photos: 0, tag: "Album" })), photos: [] };
+      const albums = await wp("/wp/v2/gallery_album?per_page=20&_fields=id,title,app_meta,photos,photo_count").catch(() => []);
+      const list = albums.map((a) => ({
+        id: a.id, title: stripTags(a.title.rendered),
+        meta: a.app_meta?.event_date || "", photos: a.photo_count || 0,
+        cover: (a.photos && a.photos[0] && a.photos[0].thumb) || "", tag: "Album",
+      }));
+      const photos = [];
+      albums.forEach((a) => (a.photos || []).forEach((ph) => photos.push({
+        id: ph.id, album: stripTags(a.title.rendered), title: ph.caption || stripTags(a.title.rendered),
+        sub: "", thumb: ph.thumb, url: ph.url, tag: "Album",
+      })));
+      return { albums: list, photos };
     },
 
     /* --- quiz --- */
     async quizHome() {
       if (CFG.USE_MOCK) return MOCK.quiz;
-      const [quest, board, cats] = await Promise.all([
-        wp("/movaldem/v1/quiz/today", { headers: authHeaders() }).catch(() => null),
-        wp("/movaldem/v1/quiz/leaderboard").catch(() => []),
+      const headers = authHeaders();
+      const [today, board, cats] = await Promise.all([
+        wp("/movaldem/v1/quiz/today", { headers }).catch(() => null),
+        wp("/movaldem/v1/quiz/leaderboard").catch(() => null),
         wp("/movaldem/v1/quiz/categories").catch(() => []),
       ]);
+      const session = this.session();
+      const meName = session?.name || "Member";
+      const meId = session?.wpId || 0;
+      const entries = (board?.entries || []).map((e) => ({ name: e.name, xp: e.points, streak: e.streak || 0, me: meId && e.user_id === meId }));
       return {
-        me: MOCK.quiz.me, quest: quest || MOCK.quiz.quest,
-        categories: cats.length ? cats : MOCK.quiz.categories,
-        leaderboard: board.length ? board : MOCK.quiz.leaderboard,
-        questions: MOCK.quiz.questions,
+        me: {
+          name: meName,
+          rank: board?.my_rank || null,
+          xp: entries.length ? entries[0].xp : 0,
+          weeklyXp: entries.length ? entries[0].xp : 0,
+          streak: 0,
+        },
+        quest: today && !today.attempted ? {
+          title: "Today's Holy Scripture Quest",
+          desc: "Ten questions from the Word — graded the moment you finish.",
+          questions: today.total || 10,
+          minutes: 5,
+          xpPerQ: 10,
+        } : null,
+        attempted: !!(today && today.attempted),
+        liveQuestions: today && !today.attempted ? today.questions : [],
+        categories: (cats || []).map((c) => ({ id: c.id, name: c.name, sub: c.name, quizzes: c.questions, xpMax: c.questions * 10 })),
+        leaderboard: entries,
       };
     },
-    async submitQuiz(score, total) {
-      if (CFG.USE_MOCK) return { xp: score * 100, streak: MOCK.quiz.me.streak + 1 };
-      return wp("/movaldem/v1/quiz/submit", { method: "POST", headers: authHeaders(), body: JSON.stringify({ score, total }) });
+    async submitQuiz(answers) {
+      if (CFG.USE_MOCK) {
+        const score = Object.keys(answers || {}).length;
+        return { score, correct_count: score, total: 10, streak_day: (MOCK.quiz.me.streak || 0) + 1, review: [] };
+      }
+      // Server-graded: answers = {question_id: selected_option_index}.
+      return wp("/movaldem/v1/quiz/submit", { method: "POST", headers: authHeaders(), body: JSON.stringify({ answers }) });
     },
 
     /* --- push --- */
     async notifications() {
       if (CFG.USE_MOCK) return MOCK.notifications;
-      return wp("/movaldem/v1/notifications", { headers: authHeaders() }).catch(() => []);
+      const list = await wp("/movaldem/v1/notifications", { headers: authHeaders() }).catch(() => []);
+      return list.map((n) => ({ id: n.id, title: n.title, time: timeAgo(n.date), unread: false }));
     },
     async registerDevice(token) {
       try { localStorage.setItem(LS_DEVICE, token); } catch {}
