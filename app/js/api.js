@@ -84,7 +84,14 @@
       headers: { "Content-Type": "application/json", ...(opts.headers || {}) },
       ...opts,
     });
-    if (!res.ok) throw new Error("Request failed: " + res.status);
+    if (!res.ok) {
+      let msg = "Request failed: " + res.status;
+      try {
+        const body = await res.json();
+        if (body && body.message) msg = body.message;
+      } catch {}
+      throw new Error(msg);
+    }
     return res.json();
   }
   function authHeaders() {
