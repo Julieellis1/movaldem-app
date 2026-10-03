@@ -2,7 +2,7 @@
  * Flip USE_MOCK to false once the WordPress REST endpoints below are live,
  * then the app talks to the same database as the website. */
 window.MOVALDEM_CONFIG = {
-  USE_MOCK: true,
+  USE_MOCK: false,
 
   // WordPress site the app shares its database with.
   // Staging while the real domain cutover is pending.
