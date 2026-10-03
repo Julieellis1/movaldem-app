@@ -23,7 +23,17 @@
   }
 
   /* ---------------- Auth ---------------- */
+  /* Brand splash (clinic-style): logo fades/pops in, then the church's
+     full name types itself out. app.js advances when typing finishes. */
   function splash() {
+    return `
+    <div class="splash-wrap">
+      <img class="splash-logo" src="assets/logo.png" alt="Movaldem logo"/>
+      <p class="splash-name"><span id="splash-typed"></span><span class="splash-cursor">&#9612;</span></p>
+    </div>`;
+  }
+
+  function welcome() {
     return `
     <div class="auth-wrap"><div class="auth-card">
       <img src="assets/logo.png" alt="Movaldem logo"/>
@@ -487,5 +497,5 @@
     </div>`;
   }
 
-  window.Screens = { splash, login, register, home, events, quiz, quizPlay, quizResult, gallery, notifications, profile };
+  window.Screens = { splash, welcome, login, register, home, events, quiz, quizPlay, quizResult, gallery, notifications, profile };
 })();

@@ -239,8 +239,18 @@ body{
 .g-foot button{background:none;border:0;color:var(--muted);display:flex;align-items:center;gap:.25rem;cursor:pointer;font-size:.72rem}
 
 /* ---------- auth ---------- */
-.auth-wrap{min-height:100dvh;display:flex;flex-direction:column;justify-content:center;padding:2rem 1.5rem;
+.auth-wrap{min-height:100dvh;margin:0 -1rem;display:flex;flex-direction:column;justify-content:center;padding:2rem 1.5rem;
   background:radial-gradient(120% 60% at 50% 0%,#123528 0%,var(--evergreen-deep) 55%,#081711 100%)}
+/* Brand splash: full-bleed, logo pops in, name types out (see playSplash in app.js) */
+.splash-wrap{min-height:100dvh;margin:0 -1rem;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:2.5rem 2rem;background:radial-gradient(120% 60% at 50% 0%,#123528 0%,var(--evergreen-deep) 55%,#081711 100%)}
+.splash-logo{width:124px;height:124px;object-fit:contain;opacity:0;transform:scale(.4);
+  animation:splash-pop .7s cubic-bezier(.2,.9,.3,1.35) .15s forwards}
+@keyframes splash-pop{to{opacity:1;transform:scale(1)}}
+.splash-name{margin-top:1.7rem;max-width:290px;min-height:3.4em;text-align:center;line-height:1.7;
+  font-family:var(--font-display);font-size:1.02rem;letter-spacing:.1em;color:var(--gold)}
+.splash-cursor{display:inline-block;width:.6em;animation:splash-blink 1s steps(1) infinite}
+@keyframes splash-blink{50%{opacity:0}}
 .auth-card{text-align:center;color:#F2F1EC}
 .auth-card img{width:84px;height:84px;object-fit:contain;margin-bottom:.8rem}
 .auth-card h1{font-family:var(--font-display);font-size:1.9rem;font-weight:600}

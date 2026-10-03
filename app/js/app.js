@@ -11,6 +11,8 @@
   let data = null;           // { verse, programs, events, quiz, gallery, notifications }
   let quizState = null;      // { questions, idx, score, picked }
   let quizTimer = null;
+  let splashShown = false;
+  let splashTimers = [];
   let quizSecs = 0;          // whole-quiz countdown (not per question)
 
   /* ---------------- toast ---------------- */
@@ -169,7 +171,7 @@
   }
 
   /* ---------------- router ---------------- */
-  const AUTH_ROUTES = ["splash", "login", "register"];
+  const AUTH_ROUTES = ["splash", "welcome", "login", "register"];
   function currentRoute() {
     const h = location.hash.replace(/^#\/?/, "") || "splash";
     return h;
@@ -183,10 +185,16 @@
     if (session && AUTH_ROUTES.includes(route)) { location.hash = "#/home"; return; }
 
     clearInterval(quizTimer);
+    splashTimers.forEach((t) => { clearTimeout(t); clearInterval(t); });
+    splashTimers = [];
     tabbar.classList.add("hidden");
 
+    if (route === "splash") {
+      screen.innerHTML = S.splash();
+      screen.scrollTop = 0; playSplash(); return;
+    }
     if (AUTH_ROUTES.includes(route)) {
-      screen.innerHTML = route === "login" ? S.login() : route === "register" ? S.register() : S.splash();
+      screen.innerHTML = route === "login" ? S.login() : route === "register" ? S.register() : S.welcome();
       screen.scrollTop = 0; bindStatic(); return;
     }
 
@@ -295,6 +303,33 @@
       } catch (err) { screen.innerHTML = S.register(err.message); }
     }
   });
+
+  /* ---------------- brand splash (clinic-style) ---------------- */
+  /* Logo pops in via CSS; the church name types out here. Advances to
+     welcome (or home when already logged in). Never traps the user:
+     failsafe timer + skip if already shown this session. */
+  function playSplash() {
+    const go = () => { location.hash = Api.session() ? "#/home" : "#/welcome"; };
+    if (splashShown) { go(); return; }
+    splashShown = true;
+    const name = C.CHURCH_FULL_NAME;
+    splashTimers.push(setTimeout(go, 6000)); // failsafe
+    splashTimers.push(setTimeout(() => {
+      let i = 0;
+      const tick = setInterval(() => {
+        const el = document.getElementById("splash-typed");
+        if (!el) { clearInterval(tick); return; }
+        el.textContent = name.slice(0, ++i);
+        if (i >= name.length) {
+          clearInterval(tick);
+          const cur = document.querySelector(".splash-cursor");
+          if (cur) cur.style.display = "none";
+          splashTimers.push(setTimeout(go, 650));
+        }
+      }, 45);
+      splashTimers.push(tick);
+    }, 750));
+  }
 
   /* ---------------- push scaffold ---------------- */
   async function initPush() {
