@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "304521903281",
+    "project_id": "movaldem-church",
+    "storage_bucket": "movaldem-church.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:304521903281:android:2b9fb9b7f2d9dc8aecf690",
+        "android_client_info": {
+          "package_name": "org.movaldem.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAG9jfW4Yk7p71yf3zQvgISUbsa3-gT9-Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

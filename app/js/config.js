@@ -19,7 +19,7 @@ window.MOVALDEM_CONFIG = {
   // Firebase (for instant push alerts). The church creates a Firebase
   // project, adds google-services.json at android/app/, and pastes the
   // server key into the movaldem-core push settings in WP Admin.
-  PUSH_ENABLED: false,
+  PUSH_ENABLED: true,
 
   APP_NAME: "Movaldem",
   CHURCH_FULL_NAME: "Mountain of Victory at the Last Day Evangelical Ministry",
