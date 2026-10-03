@@ -82,6 +82,11 @@ body{
 .btn-gold:active{filter:brightness(.94)}
 .btn-dark{background:var(--evergreen);color:var(--gold)}
 .btn-ghost{background:transparent;border:1px solid rgba(200,155,60,.5);color:var(--gold-deep)}
+.btn:disabled{opacity:.75;cursor:wait}
+.btn-spin{display:inline-block;width:1em;height:1em;border-radius:50%;
+  border:2px solid rgba(255,255,255,.45);border-top-color:#fff;
+  animation:btn-spin .7s linear infinite;vertical-align:-.15em}
+@keyframes btn-spin{to{transform:rotate(360deg)}}
 .btn-row{display:flex;gap:.6rem}
 .btn-row .btn{width:auto;flex:1}
 

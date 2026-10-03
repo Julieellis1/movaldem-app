@@ -80,19 +80,29 @@
 
   /* ---------------- WordPress REST client (live mode) ---------------- */
   async function wp(path, opts = {}) {
-    const res = await fetch(CFG.WP_JSON + path, {
-      headers: { "Content-Type": "application/json", ...(opts.headers || {}) },
-      ...opts,
-    });
-    if (!res.ok) {
-      let msg = "Request failed: " + res.status;
-      try {
-        const body = await res.json();
-        if (body && body.message) msg = body.message;
-      } catch {}
-      throw new Error(msg);
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 30000);
+    try {
+      const res = await fetch(CFG.WP_JSON + path, {
+        headers: { "Content-Type": "application/json", ...(opts.headers || {}) },
+        signal: ctrl.signal,
+        ...opts,
+      });
+      if (!res.ok) {
+        let msg = "Request failed: " + res.status;
+        try {
+          const body = await res.json();
+          if (body && body.message) msg = body.message;
+        } catch {}
+        throw new Error(msg);
+      }
+      return res.json();
+    } catch (err) {
+      if (err && err.name === "AbortError") throw new Error("Request timed out. Check your connection and try again.");
+      throw err;
+    } finally {
+      clearTimeout(timer);
     }
-    return res.json();
   }
   function authHeaders() {
     const s = Api.session();

@@ -285,8 +285,18 @@
   });
 
   document.addEventListener("submit", async (e) => {
+    const setBusy = (form, label) => {
+      const btn = form.querySelector('[type="submit"]');
+      if (btn && !btn.disabled) {
+        btn.disabled = true;
+        btn.dataset.label = btn.innerHTML;
+        btn.innerHTML = '<span class="btn-spin"></span> ' + label;
+      }
+      return btn;
+    };
     if (e.target.id === "login-form") {
       e.preventDefault();
+      setBusy(e.target, "Signing in…");
       const f = new FormData(e.target);
       try {
         await Api.login(f.get("email").trim(), f.get("password"));
@@ -295,6 +305,7 @@
     }
     if (e.target.id === "register-form") {
       e.preventDefault();
+      setBusy(e.target, "Creating account…");
       const f = new FormData(e.target);
       try {
         await Api.register(f.get("name").trim(), f.get("email").trim(), f.get("password"), (f.get("phone") || "").trim());
