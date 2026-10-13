@@ -211,6 +211,10 @@
       screen.scrollTop = 0; bindStatic(); return;
     }
 
+    // Show a loading shell immediately: the previous screen (e.g. the
+    // sign-in form with its spinner) must not linger while data loads.
+    screen.innerHTML = S.loading();
+    screen.scrollTop = 0;
     let loaded;
     try {
       loaded = await loadData();

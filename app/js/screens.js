@@ -497,6 +497,19 @@
     </div>`;
   }
 
+  /* Shown instantly while the home data loads, so the sign-in button
+     never looks stuck after a successful login. */
+  function loading() {
+    return `
+    <div class="auth-wrap">
+      <div class="auth-card" style="text-align:center">
+        <img src="assets/logo.png" alt="Movaldem logo" class="auth-logo" onerror="this.style.display='none'"/>
+        <p style="margin-top:1.2rem"><span class="btn-spin" style="width:1.6em;height:1.6em;border-width:3px"></span></p>
+        <p class="sub">Loading your content…</p>
+      </div>
+    </div>`;
+  }
+
   /* Shown when the home data fails to load (offline, server hiccup).
      Never a blank screen: the user gets a message and a retry button. */
   function loadError(message) {
@@ -512,5 +525,5 @@
     </div>`;
   }
 
-  window.Screens = { splash, welcome, login, register, loadError, home, events, quiz, quizPlay, quizResult, gallery, notifications, profile };
+  window.Screens = { splash, welcome, login, register, loading, loadError, home, events, quiz, quizPlay, quizResult, gallery, notifications, profile };
 })();
