@@ -497,5 +497,20 @@
     </div>`;
   }
 
-  window.Screens = { splash, welcome, login, register, home, events, quiz, quizPlay, quizResult, gallery, notifications, profile };
+  /* Shown when the home data fails to load (offline, server hiccup).
+     Never a blank screen: the user gets a message and a retry button. */
+  function loadError(message) {
+    return `
+    <div class="auth-wrap">
+      <div class="auth-card" style="text-align:center">
+        <img src="assets/logo.png" alt="Movaldem logo" class="auth-logo" onerror="this.style.display='none'"/>
+        <h2 style="margin:.8rem 0 .3rem">Couldn't load your content</h2>
+        <p class="sub">${esc(message || "Check your connection and try again.")}</p>
+        <button class="btn btn-gold" data-retry-load style="margin-top:1rem"><span class="material-symbols-outlined">refresh</span>Try Again</button>
+        <button class="btn btn-ghost" id="logout-btn" style="margin-top:.6rem"><span class="material-symbols-outlined">logout</span>Sign Out</button>
+      </div>
+    </div>`;
+  }
+
+  window.Screens = { splash, welcome, login, register, loadError, home, events, quiz, quizPlay, quizResult, gallery, notifications, profile };
 })();

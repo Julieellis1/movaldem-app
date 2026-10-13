@@ -26,9 +26,22 @@
   /* ---------------- data ---------------- */
   async function loadData() {
     if (data) return data;
-    const [verse, programs, events, quizHome, gallery, notifications] = await Promise.all([
-      Api.verse(), Api.programs(), Api.events(), Api.quizHome(), Api.gallery(), Api.notifications(),
-    ]);
+    let verse, programs, events, quizHome, gallery, notifications;
+    try {
+      [verse, programs, events, quizHome, gallery, notifications] = await Promise.all([
+        Api.verse(), Api.programs(), Api.events(), Api.quizHome(), Api.gallery(), Api.notifications(),
+      ]);
+    } catch (err) {
+      if (err && err.status === 401) {
+        // Token is dead (expired, or replaced by a login on another device).
+        // Drop it and send the user to login instead of a blank screen.
+        data = null;
+        Api.clearSession();
+        if (currentRoute() !== "login") location.hash = "#/login";
+        return null;
+      }
+      throw err;
+    }
     data = { verse, programs, events, quiz: quizHome, gallery, notifications };
     return data;
   }
@@ -198,7 +211,19 @@
       screen.scrollTop = 0; bindStatic(); return;
     }
 
-    await loadData();
+    let loaded;
+    try {
+      loaded = await loadData();
+    } catch (err) {
+      screen.innerHTML = S.loadError(err && err.message);
+      screen.scrollTop = 0;
+      return;
+    }
+    if (!loaded) return; // 401 path: dead session cleared, login redirect already queued
+    renderAuthed(route);
+  }
+
+  function renderAuthed(route) {
     const [base, arg] = route.split("/");
 
     if (base === "quiz" && arg === "play") {
@@ -270,6 +295,7 @@
 
     if (e.target.closest("#radio-play") || e.target.closest("#mp-toggle")) { toggleRadio(); return; }
     if (e.target.closest("#mp-close")) { stopRadio(); return; }
+    if (e.target.closest("[data-retry-load]")) { data = null; render(); return; }
     if (e.target.closest("#logout-btn")) { Api.logout(); location.hash = "#/splash"; return; }
     const psw = e.target.closest("[data-push-toggle]");
     if (psw) {

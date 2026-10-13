@@ -94,7 +94,9 @@
           const body = await res.json();
           if (body && body.message) msg = body.message;
         } catch {}
-        throw new Error(msg);
+        const err = new Error(msg);
+        err.status = res.status;
+        throw err;
       }
       return res.json();
     } catch (err) {
