@@ -181,27 +181,27 @@
     async programs() {
       if (CFG.USE_MOCK) return MOCK.programs;
       const list = await wp("/wp/v2/program?per_page=20&_fields=id,title,excerpt,app_meta");
-      return list.map((p) => ({ id: p.id, title: stripTags(p.title.rendered), desc: stripTags(p.excerpt.rendered), day: p.app_meta?.meeting_day || "", time: p.app_meta?.meeting_time || "", venue: p.app_meta?.venue || "", tag: "Program" }));
+      return list.map((p) => ({ id: p.id, title: stripTags(p.title?.rendered || ""), desc: stripTags(p.excerpt?.rendered || ""), day: p.app_meta?.meeting_day || "", time: p.app_meta?.meeting_time || "", venue: p.app_meta?.venue || "", tag: "Program" }));
     },
     async events() {
       if (CFG.USE_MOCK) return MOCK.events;
       const list = await wp("/wp/v2/event?per_page=20&_fields=id,title,excerpt,app_meta");
       return list.map((e) => {
         const { date, time } = splitDateTime(e.app_meta?.start_datetime || "");
-        return { id: e.id, title: stripTags(e.title.rendered), desc: stripTags(e.excerpt.rendered), date, time, venue: e.app_meta?.venue || "", tag: "Event", seats: null };
+        return { id: e.id, title: stripTags(e.title?.rendered || ""), desc: stripTags(e.excerpt?.rendered || ""), date, time, venue: e.app_meta?.venue || "", tag: "Event", seats: null };
       });
     },
     async gallery() {
       if (CFG.USE_MOCK) return MOCK.gallery;
       const albums = await wp("/wp/v2/gallery_album?per_page=20&_fields=id,title,app_meta,photos,photo_count").catch(() => []);
       const list = albums.map((a) => ({
-        id: a.id, title: stripTags(a.title.rendered),
+        id: a.id, title: stripTags(a.title?.rendered || ""),
         meta: a.app_meta?.event_date || "", photos: a.photo_count || 0,
         cover: (a.photos && a.photos[0] && a.photos[0].thumb) || "", tag: "Album",
       }));
       const photos = [];
       albums.forEach((a) => (a.photos || []).forEach((ph) => photos.push({
-        id: ph.id, album: stripTags(a.title.rendered), title: ph.caption || stripTags(a.title.rendered),
+        id: ph.id, album: stripTags(a.title?.rendered || ""), title: ph.caption || stripTags(a.title?.rendered || ""),
         sub: "", thumb: ph.thumb, url: ph.url, tag: "Album",
       })));
       return { albums: list, photos };
