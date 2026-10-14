@@ -277,8 +277,17 @@
       if (CFG.USE_MOCK || !CFG.PUSH_ENABLED) return { ok: true, mock: true };
       return wp("/movaldem/v1/devices", { method: "POST", headers: authHeaders(), body: JSON.stringify({ token, platform: "android" }) }).catch(() => ({ ok: false }));
     },
-    /* Re-send the cached FCM token now that a session exists (first launch
-       registers the token before login, when the server rejects it). */
+    /* Full announcement content for the detail view (public WP endpoint). */
+    async notificationDetail(id, list) {
+      const fallback = (list || []).find((n) => String(n.id) === String(id));
+      try {
+        const p = await wp("/wp/v2/announcement/" + encodeURIComponent(id)).catch(() => null);
+        if (p && p.content && p.content.rendered) {
+          return { id, title: (p.title && p.title.rendered) || (fallback && fallback.title) || "Announcement", time: fallback ? fallback.time : "", html: p.content.rendered };
+        }
+      } catch {}
+      return fallback ? { id, title: fallback.title, time: fallback.time, html: "<p>" + String(fallback.title).replace(/</g, "&lt;") + "</p>" } : null;
+    },
     async syncDevice() {
       let token = null;
       try { token = localStorage.getItem(LS_DEVICE); } catch {}

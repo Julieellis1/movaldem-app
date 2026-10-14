@@ -540,12 +540,28 @@
     </div>
     <div class="section" style="margin-top:.4rem">
       ${list.map((n) => `
-      <div class="notif ${n.unread ? "" : "read"}">
+      <div class="notif ${n.unread ? "" : "read"}" data-notif="${n.id}" role="button" tabindex="0">
         <span class="material-symbols-outlined">${n.unread ? "campaign" : "notifications"}</span>
         <div><b style="font-size:.84rem">${esc(n.title)}</b><small>${esc(n.time)}</small></div>
+        <span class="material-symbols-outlined" style="margin-left:auto;font-size:18px;color:var(--faint)">chevron_right</span>
       </div>`).join("")}
     </div>
     <p class="sub" style="text-align:center;margin-top:.6rem">Turn on push alerts in Profile to never miss a service or announcement.</p>`;
+  }
+
+  /* ---------------- Notification detail ---------------- */
+  function notifDetail(n) {
+    return `
+    <div class="appbar">
+      <button class="icon-btn" data-nav="notifications" aria-label="Back"><span class="material-symbols-outlined">arrow_back</span></button>
+      <div class="brand"><div><b>Announcement</b><small>${esc(n.time || "")}</small></div></div>
+    </div>
+    <div class="section" style="margin-top:.4rem">
+      <div class="card" style="padding:1rem 1.1rem">
+        <b style="font-size:1rem;display:block;margin-bottom:.5rem">${esc(n.title)}</b>
+        <div class="notif-body" style="font-size:.9rem;line-height:1.55;color:var(--ink)">${n.html || ""}</div>
+      </div>
+    </div>`;
   }
 
   /* ---------------- Profile ---------------- */
@@ -600,5 +616,5 @@
     </div>`;
   }
 
-  window.Screens = { splash, welcome, login, registerRole, registerForm, loading, loadError, notifyScreen, DEPARTMENTS, home, events, quiz, quizPlay, quizResult, gallery, notifications, profile };
+  window.Screens = { splash, welcome, login, registerRole, registerForm, loading, loadError, notifyScreen, DEPARTMENTS, home, events, quiz, quizPlay, quizResult, gallery, notifications, notifDetail, profile };
 })();

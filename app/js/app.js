@@ -233,7 +233,7 @@
     }
     if (!loaded) return; // 401 path: dead session cleared, login redirect already queued
     try {
-      renderAuthed(route, session);
+      await renderAuthed(route, session);
     } catch (err) {
       // Never freeze on the loading screen: surface render bugs as a retry screen.
       screen.innerHTML = S.loadError(err && err.message);
@@ -241,7 +241,7 @@
     }
   }
 
-  function renderAuthed(route, session) {
+  async function renderAuthed(route, session) {
     const [base, arg] = route.split("/");
 
     if (base === "quiz" && arg === "play") {
@@ -253,6 +253,11 @@
     else if (base === "events") screen.innerHTML = S.events(data, arg === "special" ? "special" : "programs");
     else if (base === "quiz") screen.innerHTML = S.quiz(data, arg === "board" ? "board" : "daily");
     else if (base === "gallery") screen.innerHTML = S.gallery(data, arg === "clips" ? "clips" : "photos");
+    else if (base === "notifications" && arg) {
+      const detail = await Api.notificationDetail(arg, data.notifications);
+      if (detail) { Api.markNotifsSeen([detail.id]); screen.innerHTML = S.notifDetail(detail); }
+      else { location.hash = "#/notifications"; return; }
+    }
     else if (base === "notifications") { Api.markNotifsSeen((data.notifications || []).map((n) => n.id)); screen.innerHTML = S.notifications(data.notifications); }
     else if (base === "profile") screen.innerHTML = S.profile(session);
     else if (base === "admin" && arg === "notify") {
@@ -317,6 +322,9 @@
       if (row) row.style.display = aud.value === "departments" ? "" : "none";
       return;
     }
+
+    const nn = e.target.closest("[data-notif]");
+    if (nn) { location.hash = "#/notifications/" + nn.dataset.notif; return; }
 
     const t = e.target.closest("[data-toast]");
     if (t) { toast(t.dataset.toast); return; }
@@ -439,7 +447,46 @@
     }, 750));
   }
 
-  /* ---------------- push scaffold ---------------- */
+  /* ---------------- confirm dialog ---------------- */
+  function confirmDialog(title, message, okLabel) {
+    return new Promise((resolve) => {
+      const wrap = document.createElement("div");
+      wrap.className = "confirm-wrap";
+      wrap.innerHTML = `
+        <div class="confirm-card">
+          <b>${title}</b>
+          <p>${message}</p>
+          <div class="confirm-actions">
+            <button class="btn btn-ghost" data-no>Cancel</button>
+            <button class="btn btn-dark" data-yes>${okLabel || "Yes"}</button>
+          </div>
+        </div>`;
+      const done = (val) => { wrap.remove(); resolve(val); };
+      wrap.querySelector("[data-yes]").onclick = () => done(true);
+      wrap.querySelector("[data-no]").onclick = () => done(false);
+      wrap.addEventListener("click", (e) => { if (e.target === wrap) done(false); });
+      document.body.appendChild(wrap);
+    });
+  }
+
+  /* ---------------- hardware back button ---------------- */
+  function initBackButton() {
+    try {
+      const AppPlugin = window.Capacitor?.Plugins?.App;
+      if (!AppPlugin) return;
+      AppPlugin.addListener("backButton", async () => {
+        const route = (location.hash || "#/splash").replace(/^#\//, "");
+        const base = route.split("/")[0];
+        // On home (or auth screens): ask before exiting. Anywhere else: go home first.
+        if (base === "home" || base === "splash" || base === "welcome" || base === "login" || base === "register") {
+          const yes = await confirmDialog("Exit app?", "Do you want to exit the app?", "Exit");
+          if (yes) AppPlugin.exitApp();
+        } else {
+          location.hash = "#/home";
+        }
+      });
+    } catch { /* not a native shell */ }
+  }
   async function initPush() {
     try {
       if (window.Capacitor?.Plugins?.PushNotifications && C.PUSH_ENABLED) {
@@ -447,6 +494,17 @@
         const perm = await PushNotifications.requestPermissions();
         if (perm.receive === "granted") {
           await PushNotifications.register();
+          // Dedicated channel with the Movaldem voice alert sound.
+          try {
+            await PushNotifications.createChannel({
+              id: "movaldem_alerts",
+              name: "Movaldem Alerts",
+              description: "Church announcements and instant alerts",
+              sound: "movaldem_alert",
+              importance: 5,
+              vibration: true,
+            });
+          } catch {}
           PushNotifications.addListener("registration", (tok) => Api.registerDevice(tok.value));
           PushNotifications.addListener("pushNotificationReceived", (n) => {
             data?.notifications.unshift({ id: Date.now(), title: n.title + " — " + n.body, time: "now", unread: true });
@@ -459,6 +517,7 @@
 
   window.addEventListener("hashchange", render);
   initPush();
+  initBackButton();
   // If a session already exists at startup, make sure the cached FCM token
   // is registered (covers users who never log out and back in).
   try { if (Api.session()) Api.syncDevice().catch(() => {}); } catch {}
