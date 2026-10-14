@@ -253,7 +253,7 @@
     else if (base === "events") screen.innerHTML = S.events(data, arg === "special" ? "special" : "programs");
     else if (base === "quiz") screen.innerHTML = S.quiz(data, arg === "board" ? "board" : "daily");
     else if (base === "gallery") screen.innerHTML = S.gallery(data, arg === "clips" ? "clips" : "photos");
-    else if (base === "notifications") screen.innerHTML = S.notifications(data.notifications);
+    else if (base === "notifications") { Api.markNotifsSeen((data.notifications || []).map((n) => n.id)); screen.innerHTML = S.notifications(data.notifications); }
     else if (base === "profile") screen.innerHTML = S.profile(session);
     else if (base === "admin" && arg === "notify") {
       if (!session.isAdmin) { location.hash = "#/home"; return; }
@@ -377,6 +377,7 @@
       const f = new FormData(e.target);
       try {
         await Api.login(f.get("email").trim(), f.get("password"));
+        Api.syncDevice().catch(() => {});
         location.hash = "#/home";
       } catch (err) { screen.innerHTML = S.login(err.message); }
     }
@@ -390,6 +391,7 @@
         if (role === "worker" && !depts.length) throw new Error("Please select at least one department.");
         await Api.register(f.get("name").trim(), f.get("email").trim(), f.get("password"), (f.get("phone") || "").trim(), role, depts);
         regRole = null;
+        Api.syncDevice().catch(() => {});
         toast("Welcome to the Movaldem family!");
         location.hash = "#/home";
       } catch (err) { screen.innerHTML = S.registerForm(role, err.message, depts); screen.scrollTop = 0; }

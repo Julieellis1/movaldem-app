@@ -253,15 +253,37 @@
     },
 
     /* --- push --- */
+    seenNotifKey: "movaldem.notif_seen",
+    seenNotifs() {
+      try { return JSON.parse(localStorage.getItem(this.seenNotifKey) || "{}"); } catch { return {}; }
+    },
     async notifications() {
       if (CFG.USE_MOCK) return MOCK.notifications;
       const list = await wp("/movaldem/v1/notifications", { headers: authHeaders() }).catch(() => []);
-      return list.map((n) => ({ id: n.id, title: n.title, time: timeAgo(n.date), unread: false }));
+      const seen = this.seenNotifs();
+      return list.map((n) => ({ id: n.id, title: n.title, time: timeAgo(n.date), unread: !seen[n.id] }));
+    },
+    async markNotifsSeen(ids) {
+      try {
+        const seen = this.seenNotifs();
+        (ids || []).forEach((id) => { seen[id] = 1; });
+        const keys = Object.keys(seen);
+        if (keys.length > 300) keys.slice(0, keys.length - 300).forEach((k) => delete seen[k]);
+        localStorage.setItem(this.seenNotifKey, JSON.stringify(seen));
+      } catch {}
     },
     async registerDevice(token) {
       try { localStorage.setItem(LS_DEVICE, token); } catch {}
       if (CFG.USE_MOCK || !CFG.PUSH_ENABLED) return { ok: true, mock: true };
       return wp("/movaldem/v1/devices", { method: "POST", headers: authHeaders(), body: JSON.stringify({ token, platform: "android" }) }).catch(() => ({ ok: false }));
+    },
+    /* Re-send the cached FCM token now that a session exists (first launch
+       registers the token before login, when the server rejects it). */
+    async syncDevice() {
+      let token = null;
+      try { token = localStorage.getItem(LS_DEVICE); } catch {}
+      if (!token) return { ok: false, noToken: true };
+      return this.registerDevice(token);
     },
 
     /* --- admin: targeted push notifications --- */
