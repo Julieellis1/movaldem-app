@@ -253,6 +253,17 @@
     },
 
     /* --- push --- */
+    pushDiagKey: "movaldem.push_diag",
+    getPushDiag() {
+      try { return JSON.parse(localStorage.getItem(this.pushDiagKey) || "{}"); } catch { return {}; }
+    },
+    setPushDiag(patch) {
+      try {
+        const d = this.getPushDiag();
+        Object.assign(d, patch, { at: new Date().toISOString() });
+        localStorage.setItem(this.pushDiagKey, JSON.stringify(d));
+      } catch {}
+    },
     seenNotifKey: "movaldem.notif_seen",
     seenNotifs() {
       try { return JSON.parse(localStorage.getItem(this.seenNotifKey) || "{}"); } catch { return {}; }
@@ -274,8 +285,12 @@
     },
     async registerDevice(token) {
       try { localStorage.setItem(LS_DEVICE, token); } catch {}
-      if (CFG.USE_MOCK || !CFG.PUSH_ENABLED) return { ok: true, mock: true };
-      return wp("/movaldem/v1/devices", { method: "POST", headers: authHeaders(), body: JSON.stringify({ token, platform: "android" }) }).catch(() => ({ ok: false }));
+      this.setPushDiag({ token: token ? String(token).slice(0, 16) + "…" : null });
+      if (CFG.USE_MOCK || !CFG.PUSH_ENABLED) { this.setPushDiag({ lastRegister: "mock-ok" }); return { ok: true, mock: true }; }
+      const res = await wp("/movaldem/v1/devices", { method: "POST", headers: authHeaders(), body: JSON.stringify({ token, platform: "android" }) }).catch((e) => ({ ok: false, error: String((e && e.message) || e) }));
+      const detail = res && res.ok ? "ok" : ("failed: " + String((res && (res.error || res.message)) || JSON.stringify(res)).slice(0, 140));
+      this.setPushDiag({ lastRegister: detail });
+      return res;
     },
     /* Full announcement content for the detail view (public WP endpoint). */
     async notificationDetail(id, list) {

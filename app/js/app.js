@@ -259,7 +259,7 @@
       else { location.hash = "#/notifications"; return; }
     }
     else if (base === "notifications") { Api.markNotifsSeen((data.notifications || []).map((n) => n.id)); screen.innerHTML = S.notifications(data.notifications); }
-    else if (base === "profile") screen.innerHTML = S.profile(session);
+    else if (base === "profile") screen.innerHTML = S.profile(session, Api.getPushDiag());
     else if (base === "admin" && arg === "notify") {
       if (!session.isAdmin) { location.hash = "#/home"; return; }
       screen.innerHTML = S.notifyScreen();
@@ -303,7 +303,7 @@
     });
   }
 
-  document.addEventListener("click", (e) => {
+  document.addEventListener("click", async (e) => {
     const nav = e.target.closest("[data-nav]");
     if (nav) { location.hash = "#/" + nav.dataset.nav; return; }
 
@@ -361,6 +361,23 @@
       const sw = document.getElementById("push-switch");
       const on = sw.classList.toggle("on");
       toast(on ? "Instant alerts turned on" : "Instant alerts turned off");
+      return;
+    }
+    const prt = e.target.closest("[data-push-retry]");
+    if (prt) {
+      toast("Registering for push…");
+      try {
+        const PN = window.Capacitor?.Plugins?.PushNotifications;
+        if (PN) {
+          const perm = await PN.requestPermissions();
+          Api.setPushDiag({ permission: perm.receive });
+          if (perm.receive === "granted") await PN.register();
+        } else {
+          Api.setPushDiag({ permission: "no-capacitor-plugin" });
+        }
+      } catch (err) { Api.setPushDiag({ permission: "error: " + String((err && err.message) || err).slice(0, 80) }); }
+      await Api.syncDevice().catch(() => {});
+      render();
       return;
     }
   });
@@ -492,6 +509,7 @@
       if (window.Capacitor?.Plugins?.PushNotifications && C.PUSH_ENABLED) {
         const { PushNotifications } = window.Capacitor.Plugins;
         const perm = await PushNotifications.requestPermissions();
+        Api.setPushDiag({ permission: perm.receive });
         if (perm.receive === "granted") {
           await PushNotifications.register();
           // Dedicated channel with the Movaldem voice alert sound.
