@@ -64,14 +64,60 @@
     </div></div>`;
   }
 
-  function register(err = "") {
+  /* ---------------- Role-based registration ---------------- */
+  const DEPARTMENTS = [
+    { slug: "ministers", label: "Ministers" },
+    { slug: "media", label: "Media" },
+    { slug: "choir", label: "Choir" },
+    { slug: "ushering", label: "Ushering" },
+    { slug: "prayer", label: "Prayer" },
+    { slug: "evangelism", label: "Evangelism" },
+  ];
+  const ROLE_LABELS = { member: "Member", worker: "Worker", visitor: "Visitor" };
+
+  /* Step 1: who are you joining as? */
+  function registerRole(err = "") {
     return `
     <div class="auth-wrap"><div class="auth-card" style="text-align:left">
       <div style="text-align:center"><img src="assets/logo.png" alt="Movaldem logo"/>
       <h1>Join the Family</h1>
-      <p class="full">CREATE YOUR ACCOUNT</p></div>
+      <p class="full">STEP 1 OF 2 — WHO ARE YOU?</p></div>
       ${err ? `<div class="auth-err">${esc(err)}</div>` : ""}
-      <form id="register-form">
+      <div class="role-cards">
+        <button type="button" class="role-card" data-reg-role="member">
+          <span class="material-symbols-outlined">person</span>
+          <b>Member</b><small>I attend Movaldem</small>
+        </button>
+        <button type="button" class="role-card" data-reg-role="worker">
+          <span class="material-symbols-outlined">volunteer_activism</span>
+          <b>Worker</b><small>I serve in a department</small>
+        </button>
+        <button type="button" class="role-card" data-reg-role="visitor">
+          <span class="material-symbols-outlined">waving_hand</span>
+          <b>Visitor</b><small>I'm just visiting</small>
+        </button>
+      </div>
+      <p class="auth-alt" style="text-align:center">Already a member? <a data-nav="login" style="cursor:pointer">Sign in</a></p>
+    </div></div>`;
+  }
+
+  /* Step 2: departments (workers) + account details. */
+  function registerForm(role, err = "", selectedDepts = []) {
+    const isWorker = role === "worker";
+    return `
+    <div class="auth-wrap"><div class="auth-card" style="text-align:left">
+      <div style="text-align:center"><img src="assets/logo.png" alt="Movaldem logo"/>
+      <h1>Join the Family</h1>
+      <p class="full">STEP 2 OF 2 — YOUR DETAILS</p></div>
+      ${err ? `<div class="auth-err">${esc(err)}</div>` : ""}
+      <div class="role-pill">Joining as <b>${esc(ROLE_LABELS[role] || "Member")}</b> <a data-nav="register" style="cursor:pointer">change</a></div>
+      <form id="register-form" data-role="${esc(role)}">
+        ${isWorker ? `
+        <div class="field"><label>Your department(s) <span class="lbl-hint">tap all that apply</span></label>
+          <div class="chip-row">
+            ${DEPARTMENTS.map((d) => `<button type="button" class="chip${selectedDepts.includes(d.slug) ? " on" : ""}" data-dept="${d.slug}">${d.label}</button>`).join("")}
+          </div>
+        </div>` : ""}
         <div class="field"><label>Full Name</label><input name="name" type="text" placeholder="Your full name" required/></div>
         <div class="field"><label>Email</label><input name="email" type="email" placeholder="you@example.com" required/></div>
         <div class="field"><label>Phone</label><input name="phone" type="tel" placeholder="+234 ..." /></div>
@@ -79,6 +125,34 @@
         <button class="btn btn-gold" type="submit">Create Account</button>
       </form>
       <p class="auth-alt" style="text-align:center">Already a member? <a data-nav="login" style="cursor:pointer">Sign in</a></p>
+    </div></div>`;
+  }
+
+  /* ---------------- Admin: targeted push composer ---------------- */
+  function notifyScreen(err = "", done = "") {
+    return `
+    <div class="page-head">
+      <button class="icon-btn" data-nav="profile" aria-label="Back"><span class="material-symbols-outlined">arrow_back</span></button>
+      <div><h1>Send Notification</h1><p class="sub">Instant push to members</p></div>
+    </div>
+    <div class="section"><div class="card">
+      ${err ? `<div class="auth-err">${esc(err)}</div>` : ""}
+      ${done ? `<div class="auth-ok">${esc(done)}</div>` : ""}
+      <form id="notify-form">
+        <div class="field"><label>Title</label><input name="title" type="text" placeholder="e.g. Choir rehearsal moved" required maxlength="120"/></div>
+        <div class="field"><label>Message</label><textarea name="message" rows="3" placeholder="Write your message…" required maxlength="400"></textarea></div>
+        <div class="field"><label>Send to</label>
+          <div class="aud-row">
+            <label class="aud"><input type="radio" name="audience" value="all" checked/> Everyone</label>
+            <label class="aud"><input type="radio" name="audience" value="workers"/> All workers</label>
+            <label class="aud"><input type="radio" name="audience" value="departments"/> Departments</label>
+          </div>
+          <div class="chip-row" id="notify-depts" style="display:none;margin-top:.6rem">
+            ${DEPARTMENTS.map((d) => `<button type="button" class="chip" data-dept="${d.slug}">${d.label}</button>`).join("")}
+          </div>
+        </div>
+        <button class="btn btn-gold" type="submit"><span class="material-symbols-outlined">send</span> Send Now</button>
+      </form>
     </div></div>`;
   }
 
@@ -484,6 +558,7 @@
       <div class="who"><b>${name}</b><small>${esc(session?.email || "")}</small></div>
     </div></div>
     <div class="section"><div class="prof-menu card" style="padding:0;overflow:hidden">
+      ${session?.isAdmin ? `<button class="pm-item" data-nav="admin/notify"><span class="material-symbols-outlined">campaign</span>Send Notification<span class="material-symbols-outlined go">chevron_right</span></button>` : ""}
       <button class="pm-item" data-toast="Profile editing coming soon"><span class="material-symbols-outlined">edit</span>Edit Profile<span class="material-symbols-outlined go">chevron_right</span></button>
       <button class="pm-item" data-push-toggle><span class="material-symbols-outlined">notifications_active</span>Instant Alerts<span class="switch on" id="push-switch"></span></button>
       <button class="pm-item" data-toast="Daily verse reminder on"><span class="material-symbols-outlined">wb_sunny</span>Daily Verse Reminder<span class="switch on"></span></button>
@@ -525,5 +600,5 @@
     </div>`;
   }
 
-  window.Screens = { splash, welcome, login, register, loading, loadError, home, events, quiz, quizPlay, quizResult, gallery, notifications, profile };
+  window.Screens = { splash, welcome, login, registerRole, registerForm, loading, loadError, notifyScreen, DEPARTMENTS, home, events, quiz, quizPlay, quizResult, gallery, notifications, profile };
 })();

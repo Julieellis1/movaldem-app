@@ -271,6 +271,46 @@ body{
 .auth-alt a{color:var(--gold);font-weight:700;text-decoration:none}
 .auth-err{background:rgba(186,26,26,.18);border:1px solid rgba(186,26,26,.5);color:#ffd9d9;
   font-size:.8rem;padding:.6rem .8rem;border-radius:var(--r-sm);margin-bottom:.8rem;text-align:left}
+.auth-ok{background:rgba(46,125,50,.18);border:1px solid rgba(46,125,50,.55);color:#d7f0d8;
+  font-size:.85rem;padding:.7rem .9rem;border-radius:var(--r-sm);margin-bottom:.8rem}
+
+/* ---------- role-based registration ---------- */
+.role-cards{display:flex;flex-direction:column;gap:.7rem;margin-bottom:.4rem}
+.role-card{display:flex;align-items:center;gap:.9rem;background:rgba(255,255,255,.06);
+  border:1px solid rgba(201,162,39,.35);border-radius:var(--r-md);padding:.9rem 1rem;
+  color:#F2F1EC;cursor:pointer;text-align:left;font-family:var(--font-ui);width:100%}
+.role-card:active{background:rgba(201,162,39,.18)}
+.role-card .material-symbols-outlined{font-size:1.7rem;color:var(--gold)}
+.role-card b{display:block;font-size:.95rem}
+.role-card small{color:rgba(242,241,236,.65);font-size:.78rem}
+.role-pill{display:flex;align-items:center;justify-content:space-between;background:rgba(201,162,39,.14);
+  border:1px solid rgba(201,162,39,.4);border-radius:999px;padding:.45rem .9rem;
+  font-size:.8rem;color:#F2F1EC;margin-bottom:1rem}
+.role-pill a{color:var(--gold);font-weight:700;text-decoration:none;font-size:.78rem}
+.lbl-hint{font-weight:400;opacity:.65;font-size:.75rem}
+.chip-row{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.35rem}
+.chip{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.22);color:#F2F1EC;
+  border-radius:999px;padding:.45rem .95rem;font-size:.8rem;font-weight:600;cursor:pointer;
+  font-family:var(--font-ui)}
+.chip.on{background:var(--gold);border-color:var(--gold);color:#1a1a1a}
+
+/* ---------- admin notification composer ---------- */
+.page-head{display:flex;align-items:center;gap:.8rem;padding:1rem 1rem .4rem}
+.page-head h1{font-family:var(--font-display);font-size:1.4rem;margin:0}
+.page-head .sub{margin:.1rem 0 0;font-size:.78rem;opacity:.65}
+.aud-row{display:flex;flex-direction:column;gap:.45rem;margin-top:.35rem}
+.aud{display:flex;align-items:center;gap:.6rem;font-size:.88rem;font-weight:600;cursor:pointer}
+.aud input{accent-color:var(--gold);width:1.05rem;height:1.05rem}
+.card .chip{background:rgba(0,0,0,.05);border-color:rgba(0,0,0,.16);color:var(--ink)}
+.card .chip.on{background:var(--gold);border-color:var(--gold);color:#1a1a1a}
+/* fields sit on dark auth backgrounds by default; inside a light card they need dark text */
+.card .field label{color:rgba(26,26,26,.62)}
+.card .field input,.card .field textarea{background:#fff;border:1px solid rgba(0,0,0,.16);color:var(--ink);width:100%;border-radius:var(--r-sm);padding:.8rem .9rem;font-size:.92rem;font-family:var(--font-ui)}
+.card .field input{height:50px;padding:0 .9rem}
+.card .field input[type="radio"],.card .field input[type="checkbox"]{width:1.05rem;height:1.05rem;padding:0;background:none;border:none;flex:none}
+.card .field input::placeholder,.card .field textarea::placeholder{color:rgba(26,26,26,.38)}
+.card .field textarea{resize:vertical;min-height:84px}
+.card .aud{color:var(--ink)}
 
 /* ---------- profile ---------- */
 .prof-menu{margin-top:.4rem}

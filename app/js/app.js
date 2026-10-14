@@ -185,17 +185,21 @@
 
   /* ---------------- router ---------------- */
   const AUTH_ROUTES = ["splash", "welcome", "login", "register"];
+  let regRole = null; // role picked on step 1 of registration
   function currentRoute() {
     const h = location.hash.replace(/^#\/?/, "") || "splash";
     return h;
+  }
+  function isAuthRoute(route) {
+    return AUTH_ROUTES.includes(route) || route.startsWith("register/");
   }
 
   async function render() {
     const route = currentRoute();
     const session = Api.session();
 
-    if (!session && !AUTH_ROUTES.includes(route)) { location.hash = "#/splash"; return; }
-    if (session && AUTH_ROUTES.includes(route)) { location.hash = "#/home"; return; }
+    if (!session && !isAuthRoute(route)) { location.hash = "#/splash"; return; }
+    if (session && isAuthRoute(route)) { location.hash = "#/home"; return; }
 
     clearInterval(quizTimer);
     splashTimers.forEach((t) => { clearTimeout(t); clearInterval(t); });
@@ -206,8 +210,12 @@
       screen.innerHTML = S.splash();
       screen.scrollTop = 0; playSplash(); return;
     }
-    if (AUTH_ROUTES.includes(route)) {
-      screen.innerHTML = route === "login" ? S.login() : route === "register" ? S.register() : S.welcome();
+    if (route === "login" || route === "welcome" || route === "register" || route === "register/form") {
+      if (route === "register/form" && !regRole) { location.hash = "#/register"; return; }
+      screen.innerHTML = route === "login" ? S.login()
+        : route === "register" ? S.registerRole()
+        : route === "register/form" ? S.registerForm(regRole)
+        : S.welcome();
       screen.scrollTop = 0; bindStatic(); return;
     }
 
@@ -247,6 +255,10 @@
     else if (base === "gallery") screen.innerHTML = S.gallery(data, arg === "clips" ? "clips" : "photos");
     else if (base === "notifications") screen.innerHTML = S.notifications(data.notifications);
     else if (base === "profile") screen.innerHTML = S.profile(session);
+    else if (base === "admin" && arg === "notify") {
+      if (!session.isAdmin) { location.hash = "#/home"; return; }
+      screen.innerHTML = S.notifyScreen();
+    }
     else { location.hash = "#/home"; return; }
 
     screen.scrollTop = 0;
@@ -289,6 +301,22 @@
   document.addEventListener("click", (e) => {
     const nav = e.target.closest("[data-nav]");
     if (nav) { location.hash = "#/" + nav.dataset.nav; return; }
+
+    // Registration step 1: pick a role, then go to the details form.
+    const roleBtn = e.target.closest("[data-reg-role]");
+    if (roleBtn) { regRole = roleBtn.dataset.regRole; location.hash = "#/register/form"; return; }
+
+    // Department chips (multi-select).
+    const chip = e.target.closest("[data-dept]");
+    if (chip) { chip.classList.toggle("on"); return; }
+
+    // Admin composer: reveal department chips only for that audience.
+    const aud = e.target.closest('input[name="audience"]');
+    if (aud) {
+      const row = document.getElementById("notify-depts");
+      if (row) row.style.display = aud.value === "departments" ? "" : "none";
+      return;
+    }
 
     const t = e.target.closest("[data-toast]");
     if (t) { toast(t.dataset.toast); return; }
@@ -356,11 +384,29 @@
       e.preventDefault();
       setBusy(e.target, "Creating account…");
       const f = new FormData(e.target);
+      const role = e.target.dataset.role || "member";
+      const depts = [...e.target.querySelectorAll(".chip.on")].map((c) => c.dataset.dept);
       try {
-        await Api.register(f.get("name").trim(), f.get("email").trim(), f.get("password"), (f.get("phone") || "").trim());
+        if (role === "worker" && !depts.length) throw new Error("Please select at least one department.");
+        await Api.register(f.get("name").trim(), f.get("email").trim(), f.get("password"), (f.get("phone") || "").trim(), role, depts);
+        regRole = null;
         toast("Welcome to the Movaldem family!");
         location.hash = "#/home";
-      } catch (err) { screen.innerHTML = S.register(err.message); }
+      } catch (err) { screen.innerHTML = S.registerForm(role, err.message, depts); screen.scrollTop = 0; }
+    }
+    if (e.target.id === "notify-form") {
+      e.preventDefault();
+      setBusy(e.target, "Sending…");
+      const f = new FormData(e.target);
+      try {
+        const audience = f.get("audience") || "all";
+        const depts = [...e.target.querySelectorAll(".chip.on")].map((c) => c.dataset.dept);
+        if (audience === "departments" && !depts.length) throw new Error("Pick at least one department.");
+        const r = await Api.sendNotification({ title: (f.get("title") || "").trim(), message: (f.get("message") || "").trim(), audience, departments: depts });
+        screen.innerHTML = S.notifyScreen("", r.sent === 1 ? "Sent to 1 device." : `Sent to ${r.sent} devices.`);
+        screen.scrollTop = 0;
+        toast("Notification sent");
+      } catch (err) { screen.innerHTML = S.notifyScreen(err.message); screen.scrollTop = 0; }
     }
   });
 

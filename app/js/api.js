@@ -157,18 +157,20 @@
       }
       // Live: bearer-token session from movaldem-core.
       const r = await wp("/movaldem/v1/login", { method: "POST", body: JSON.stringify({ email, password }) });
-      const s = { name: r.name, email: r.email, username: email, token: r.token, wpId: r.id };
+      const s = { name: r.name, email: r.email, username: email, token: r.token, wpId: r.id, memberType: r.member_type || "member", departments: r.departments || [], isAdmin: !!r.is_admin };
       this.saveSession(s); return s;
     },
-    async register(name, email, password, phone) {
+    async register(name, email, password, phone, memberType, departments) {
       if (!name || !email || !password) throw new Error("Please fill in all fields.");
+      memberType = ["member", "worker", "visitor"].includes(memberType) ? memberType : "member";
+      departments = Array.isArray(departments) ? departments : [];
       if (CFG.USE_MOCK) {
-        const s = { name, email, username: email };
+        const s = { name, email, username: email, memberType, departments, isAdmin: false };
         this.saveSession(s); return s;
       }
       // Live: creates the WP member account, returns a bearer token.
-      const r = await wp("/movaldem/v1/register", { method: "POST", body: JSON.stringify({ name, email, password, phone }) });
-      const s = { name: r.name, email: r.email, username: email, token: r.token, wpId: r.id };
+      const r = await wp("/movaldem/v1/register", { method: "POST", body: JSON.stringify({ name, email, password, phone, member_type: memberType, departments }) });
+      const s = { name: r.name, email: r.email, username: email, token: r.token, wpId: r.id, memberType: r.member_type || "member", departments: r.departments || [], isAdmin: !!r.is_admin };
       this.saveSession(s); return s;
     },
     logout() { this.clearSession(); },
@@ -260,6 +262,16 @@
       try { localStorage.setItem(LS_DEVICE, token); } catch {}
       if (CFG.USE_MOCK || !CFG.PUSH_ENABLED) return { ok: true, mock: true };
       return wp("/movaldem/v1/devices", { method: "POST", headers: authHeaders(), body: JSON.stringify({ token, platform: "android" }) }).catch(() => ({ ok: false }));
+    },
+
+    /* --- admin: targeted push notifications --- */
+    async sendNotification({ title, message, audience, departments }) {
+      if (CFG.USE_MOCK) return { ok: true, mock: true, sent: 0, failed: 0 };
+      return wp("/movaldem/v1/notifications/send", {
+        method: "POST",
+        headers: authHeaders(),
+        body: JSON.stringify({ title, message, audience, departments: departments || [] }),
+      });
     },
   };
 
