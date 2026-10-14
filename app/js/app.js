@@ -459,6 +459,9 @@
 
   window.addEventListener("hashchange", render);
   initPush();
+  // If a session already exists at startup, make sure the cached FCM token
+  // is registered (covers users who never log out and back in).
+  try { if (Api.session()) Api.syncDevice().catch(() => {}); } catch {}
   // Preview helper: ?preview=1 seeds a demo session (screenshots, demos).
   if (location.search.includes("preview=1") && !Api.session()) {
     Api.saveSession({ name: "Sarah Member", email: "sarah@example.com", username: "sarah@example.com" });
