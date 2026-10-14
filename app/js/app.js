@@ -224,10 +224,16 @@
       return;
     }
     if (!loaded) return; // 401 path: dead session cleared, login redirect already queued
-    renderAuthed(route);
+    try {
+      renderAuthed(route, session);
+    } catch (err) {
+      // Never freeze on the loading screen: surface render bugs as a retry screen.
+      screen.innerHTML = S.loadError(err && err.message);
+      screen.scrollTop = 0;
+    }
   }
 
-  function renderAuthed(route) {
+  function renderAuthed(route, session) {
     const [base, arg] = route.split("/");
 
     if (base === "quiz" && arg === "play") {
