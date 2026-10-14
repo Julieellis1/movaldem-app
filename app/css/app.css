@@ -367,5 +367,14 @@ body{
 .confirm-actions{display:flex;gap:.6rem}
 .confirm-actions .btn{flex:1}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* pull-to-refresh indicator */
+#ptr-ind{position:fixed;top:calc(var(--safe-t, 0px) + 10px);left:50%;z-index:55;
+  width:42px;height:42px;border-radius:50%;background:var(--evergreen);color:#fff;
+  display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);
+  opacity:0;transform:translateX(-50%) scale(.6);transition:opacity .18s,transform .18s;pointer-events:none}
+#ptr-ind.on{opacity:1;transform:translateX(-50%) scale(1)}
+#ptr-ind .material-symbols-outlined{animation:ptrSpin 1s linear infinite}
+@keyframes ptrSpin{to{transform:rotate(360deg)}}
 .notif small{color:var(--faint);display:block;margin-top:.2rem}
 .notif.read{opacity:.65}

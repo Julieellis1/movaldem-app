@@ -565,20 +565,7 @@
   }
 
   /* ---------------- Profile ---------------- */
-  function pushDiagCard(diag) {
-    const d = diag || {};
-    const row = (k, v) => `<div style="display:flex;justify-content:space-between;gap:.6rem;font-size:.78rem;padding:.3rem 0;border-bottom:1px solid var(--line)"><span style="color:var(--muted)">${k}</span><b style="text-align:right;word-break:break-all">${v || "—"}</b></div>`;
-    return `
-    <div class="section"><div class="card" style="padding:.9rem 1rem">
-      <b style="font-size:.85rem;display:block;margin-bottom:.4rem">Push diagnostics</b>
-      ${row("Permission", esc(d.permission || "not requested"))}
-      ${row("Token", esc(d.token || "none"))}
-      ${row("Server registration", esc(d.lastRegister || "not attempted"))}
-      <button class="btn btn-dark" data-push-retry style="margin-top:.7rem;min-height:42px;font-size:.82rem">Retry push registration</button>
-    </div></div>`;
-  }
-
-  function profile(session, diag) {
+  function profile(session) {
     const name = esc(session?.name || "Member");
     return `
     ${appbar("Movaldem", "Profile", { bell: false })}
@@ -598,8 +585,7 @@
     <div class="section">
       <button class="btn btn-ghost" id="logout-btn"><span class="material-symbols-outlined">logout</span>Sign Out</button>
       <p class="sub" style="text-align:center;margin-top:1rem">${esc(C.CHURCH_ADDRESS)}<br/>${esc(C.CHURCH_PHONE)}</p>
-    </div>
-    ${pushDiagCard(diag)}`;
+    </div>`;
   }
 
   /* Shown instantly while the home data loads, so the sign-in button

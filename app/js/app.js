@@ -259,7 +259,7 @@
       else { location.hash = "#/notifications"; return; }
     }
     else if (base === "notifications") { Api.markNotifsSeen((data.notifications || []).map((n) => n.id)); screen.innerHTML = S.notifications(data.notifications); }
-    else if (base === "profile") screen.innerHTML = S.profile(session, Api.getPushDiag());
+    else if (base === "profile") screen.innerHTML = S.profile(session);
     else if (base === "admin" && arg === "notify") {
       if (!session.isAdmin) { location.hash = "#/home"; return; }
       screen.innerHTML = S.notifyScreen();
@@ -361,23 +361,6 @@
       const sw = document.getElementById("push-switch");
       const on = sw.classList.toggle("on");
       toast(on ? "Instant alerts turned on" : "Instant alerts turned off");
-      return;
-    }
-    const prt = e.target.closest("[data-push-retry]");
-    if (prt) {
-      toast("Registering for push…");
-      try {
-        const PN = window.Capacitor?.Plugins?.PushNotifications;
-        if (PN) {
-          const perm = await PN.requestPermissions();
-          Api.setPushDiag({ permission: perm.receive });
-          if (perm.receive === "granted") await PN.register();
-        } else {
-          Api.setPushDiag({ permission: "no-capacitor-plugin" });
-        }
-      } catch (err) { Api.setPushDiag({ permission: "error: " + String((err && err.message) || err).slice(0, 80) }); }
-      await Api.syncDevice().catch(() => {});
-      render();
       return;
     }
   });
@@ -486,6 +469,38 @@
     });
   }
 
+  /* ---------------- pull to refresh ---------------- */
+  let ptrStartY = null;
+  const PTR_THRESHOLD = 70;
+  function ptrShow(show) {
+    let el = document.getElementById("ptr-ind");
+    if (!el) {
+      el = document.createElement("div");
+      el.id = "ptr-ind";
+      el.innerHTML = '<span class="material-symbols-outlined">refresh</span>';
+      document.body.appendChild(el);
+    }
+    el.classList.toggle("on", !!show);
+  }
+  document.addEventListener("touchstart", (e) => {
+    ptrStartY = (screen.scrollTop <= 0 && Api.session()) ? e.touches[0].clientY : null;
+  }, { passive: true });
+  document.addEventListener("touchmove", (e) => {
+    if (ptrStartY === null) return;
+    ptrShow(e.touches[0].clientY - ptrStartY > PTR_THRESHOLD);
+  }, { passive: true });
+  document.addEventListener("touchend", () => {
+    const el = document.getElementById("ptr-ind");
+    const fire = el && el.classList.contains("on");
+    ptrShow(false);
+    ptrStartY = null;
+    if (fire) {
+      data = null;
+      toast("Refreshing…");
+      render();
+    }
+  }, { passive: true });
+
   /* ---------------- hardware back button ---------------- */
   function initBackButton() {
     try {
@@ -509,7 +524,6 @@
       if (window.Capacitor?.Plugins?.PushNotifications && C.PUSH_ENABLED) {
         const { PushNotifications } = window.Capacitor.Plugins;
         const perm = await PushNotifications.requestPermissions();
-        Api.setPushDiag({ permission: perm.receive });
         if (perm.receive === "granted") {
           await PushNotifications.register();
           // Dedicated channel with the Movaldem voice alert sound.
@@ -524,9 +538,15 @@
             });
           } catch {}
           PushNotifications.addListener("registration", (tok) => Api.registerDevice(tok.value));
-          PushNotifications.addListener("pushNotificationReceived", (n) => {
-            data?.notifications.unshift({ id: Date.now(), title: n.title + " — " + n.body, time: "now", unread: true });
+          PushNotifications.addListener("pushNotificationReceived", async (n) => {
             toast(n.title);
+            // Refresh the inbox live so the new announcement appears without reopening the app.
+            try {
+              const fresh = await Api.notifications();
+              if (data && fresh && fresh.length) data.notifications = fresh;
+            } catch {}
+            const base = (location.hash || "#/splash").replace(/^#\//, "").split("/")[0];
+            if (base === "notifications" || base === "home") render();
           });
         }
       }
