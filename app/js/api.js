@@ -84,9 +84,9 @@
     const timer = setTimeout(() => ctrl.abort(), 30000);
     try {
       const res = await fetch(CFG.WP_JSON + path, {
-        headers: { "Content-Type": "application/json", ...(opts.headers || {}) },
         signal: ctrl.signal,
         ...opts,
+        headers: { "Content-Type": "application/json", ...(opts.headers || {}) },
       });
       if (!res.ok) {
         let msg = "Request failed: " + res.status;
