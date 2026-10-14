@@ -237,7 +237,7 @@
     const [base, arg] = route.split("/");
 
     if (base === "quiz" && arg === "play") {
-      if (!quizState) startQuizSilent();
+      if (!quizState && startQuizSilent() === false) return; // redirected to lobby
       renderQuizPlay(); bindStatic(); return;
     }
 
@@ -260,9 +260,22 @@
   }
 
   function startQuizSilent() {
-    const qs = [...data.quiz.questions].sort(() => Math.random() - 0.5);
-    quizState = { questions: qs, idx: 0, score: 0, picked: null };
-    quizSecs = (data.quiz.quest.minutes || 5) * 60;
+    let qs, live;
+    if (CFG.USE_MOCK) {
+      qs = [...(data.quiz.questions || [])].sort(() => Math.random() - 0.5);
+      live = false;
+    } else {
+      qs = data.quiz.liveQuestions || [];
+      live = true;
+    }
+    quizState = { questions: qs, idx: 0, score: 0, picked: null, answers: {}, live };
+    quizSecs = ((data.quiz.quest && data.quiz.quest.minutes) || 5) * 60;
+    if (!qs.length) {
+      // Nothing to play (already attempted today, or fetch failed) — back to the lobby.
+      location.hash = "#/quiz";
+      return false;
+    }
+    return true;
   }
 
   /* ---------------- global click delegation ---------------- */
