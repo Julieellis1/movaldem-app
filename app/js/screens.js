@@ -221,6 +221,7 @@
         <a class="ql" data-nav="events" style="cursor:pointer"><div class="top"><span class="material-symbols-outlined">celebration</span><span class="material-symbols-outlined">arrow_outward</span></div><b>Events</b><small>Special meetings</small></a>
         <a class="ql" data-nav="quiz" style="cursor:pointer"><div class="top"><span class="material-symbols-outlined">quiz</span><span class="material-symbols-outlined">arrow_outward</span></div><b>Bible Quiz</b><small>Daily challenge</small></a>
         <a class="ql" data-nav="gallery" style="cursor:pointer"><div class="top"><span class="material-symbols-outlined">photo_library</span><span class="material-symbols-outlined">arrow_outward</span></div><b>Gallery</b><small>Moments &amp; clips</small></a>
+        <a class="ql" data-nav="catalogs" style="cursor:pointer"><div class="top"><span class="material-symbols-outlined">collections_bookmark</span><span class="material-symbols-outlined">arrow_outward</span></div><b>Catalogs</b><small>Programs &amp; videos</small></a>
       </div>
     </div>
 
@@ -531,6 +532,117 @@
     </div>`}`;
   }
 
+  /* ---------------- Catalogs ---------------- */
+  /* Who may post: admins, plus workers in the media department. */
+  function canPostCatalog(session) {
+    if (!session) return false;
+    if (session.isAdmin) return true;
+    return session.memberType === "worker" && Array.isArray(session.departments) && session.departments.includes("media");
+  }
+
+  function catalogCard(c) {
+    const d = c.date ? new Date(c.date) : null;
+    const dateStr = d && !isNaN(d) ? d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : "";
+    return `
+    <div class="card cat-card" data-nav="catalogs/${c.id}" style="cursor:pointer">
+      ${c.cover ? `<div class="cat-cover"><img src="${esc(c.cover)}" alt="" loading="lazy"/></div>` : `
+      <div class="cat-cover cat-cover-empty"><span class="material-symbols-outlined">photo_library</span></div>`}
+      <div class="cat-body">
+        <div class="cat-counts">
+          <span><span class="material-symbols-outlined">photo</span>${c.photo_count || 0} photos</span>
+          <span><span class="material-symbols-outlined">movie</span>${c.video_count || 0} videos</span>
+          ${dateStr ? `<span style="margin-left:auto">${esc(dateStr)}</span>` : ""}
+        </div>
+        <h3>${esc(c.title)}</h3>
+        ${c.description ? `<p class="sub" style="margin-bottom:0">${esc(c.description)}</p>` : ""}
+      </div>
+    </div>`;
+  }
+
+  function catalogs(list, session) {
+    const items = Array.isArray(list) ? list : [];
+    return `
+    ${appbar("Movaldem", "Catalogs")}
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin:.6rem 0 .2rem">
+      <div><p class="eyebrow">Media Team</p><h1 class="h-display">Program Catalogs</h1></div>
+      ${canPostCatalog(session) ? `<button class="btn btn-gold" style="width:auto;min-height:40px;font-size:.78rem" data-nav="admin/catalog"><span class="material-symbols-outlined">add</span>New Catalog</button>` : ""}
+    </div>
+    <p class="sub" style="margin-bottom:.8rem">Photo galleries and video highlights from our programs.</p>
+    ${items.length ? items.map(catalogCard).join("") : `
+    <div class="card" style="text-align:center;padding:2rem 1.2rem">
+      <span class="material-symbols-outlined" style="font-size:40px;color:var(--gold-deep)">photo_library</span>
+      <h3 class="h-head" style="margin:.5rem 0">No catalogs yet</h3>
+      <p class="sub">The media team is preparing the first catalogs — check back soon.</p>
+    </div>`}`;
+  }
+
+  function catalogDetail(c) {
+    const photos = Array.isArray(c.photos) ? c.photos : [];
+    const videos = Array.isArray(c.videos) ? c.videos : [];
+    return `
+    <div class="appbar">
+      <button class="icon-btn" data-nav="catalogs" aria-label="Back"><span class="material-symbols-outlined">arrow_back</span></button>
+      <div class="brand"><div><b>Catalog</b><small>${esc(c.author || "Media Team")}</small></div></div>
+    </div>
+    <div class="section" style="margin-top:.4rem">
+      <p class="eyebrow">Program Catalog</p>
+      <h1 class="h-display">${esc(c.title)}</h1>
+      <div class="notif-body" style="font-size:.9rem;line-height:1.55;color:var(--ink);margin:.5rem 0 1rem">${c.content || (c.description ? `<p>${esc(c.description)}</p>` : "")}</div>
+      ${videos.length ? `
+      <div class="section-head"><h2 class="h-head">Videos</h2><span class="link-gold">${videos.length} video${videos.length === 1 ? "" : "s"}</span></div>
+      ${videos.map((v) => `
+      <div class="card" style="margin-bottom:.8rem;padding:.7rem">
+        <div class="vid-wrap">
+          <iframe src="https://www.youtube-nocookie.com/embed/${esc(v.video_id)}?rel=0" title="${esc(v.title || c.title)}"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+        </div>
+        ${v.title ? `<b style="font-size:.88rem;display:block;margin-top:.5rem">${esc(v.title)}</b>` : ""}
+        <a class="link-gold" href="${esc(v.url)}" target="_blank" rel="noopener" style="font-size:.78rem;cursor:pointer">
+          <span class="material-symbols-outlined" style="font-size:14px;vertical-align:-2px">open_in_new</span> Watch on YouTube</a>
+      </div>`).join("")}` : ""}
+      ${photos.length ? `
+      <div class="section-head"><h2 class="h-head">Photos</h2><span class="link-gold">${photos.length} photo${photos.length === 1 ? "" : "s"}</span></div>
+      <div class="cat-photos">
+        ${photos.map((p) => `
+        <button class="cat-photo" data-cat-photo="${esc(p.url || p.thumb)}" aria-label="View photo${p.caption ? ": " + esc(p.caption) : ""}">
+          <img src="${esc(p.thumb || p.url)}" alt="${esc(p.caption || c.title)}" loading="lazy"/>
+        </button>`).join("")}
+      </div>` : `
+      <p class="sub" style="text-align:center;margin-top:1rem">No photos in this catalog yet.</p>`}
+    </div>`;
+  }
+
+  /* Composer: only rendered when canPostCatalog(session) is true. */
+  function catalogComposer(err = "") {
+    return `
+    <div class="page-head">
+      <button class="icon-btn" data-nav="catalogs" aria-label="Back"><span class="material-symbols-outlined">arrow_back</span></button>
+      <div><h1>New Catalog</h1><p class="sub">Photos &amp; YouTube videos</p></div>
+    </div>
+    <div class="section"><div class="card">
+      ${err ? `<div class="auth-err">${esc(err)}</div>` : ""}
+      <form id="catalog-form">
+        <div class="field"><label>Title</label><input name="title" type="text" placeholder="e.g. Youth Evangelism Outreach" required maxlength="120"/></div>
+        <div class="field"><label>Description</label><textarea name="description" rows="3" placeholder="Say a little about this catalog…" maxlength="1000"></textarea></div>
+        <div class="field"><label>Photos <span class="lbl-hint">you can pick several</span></label>
+          <input id="catalog-photos" type="file" accept="image/*" multiple/>
+          <small class="sub" id="catalog-photos-hint">No photos selected yet.</small>
+        </div>
+        <div class="field"><label>YouTube videos <span class="lbl-hint">watch, shorts or live links</span></label>
+          <div id="catalog-videos">
+            <div class="yt-row">
+              <input type="url" name="yt_url" placeholder="https://www.youtube.com/watch?v=…" inputmode="url"/>
+              <input type="text" name="yt_title" placeholder="Video title (optional)" maxlength="120"/>
+              <button type="button" class="icon-btn" data-yt-remove aria-label="Remove video"><span class="material-symbols-outlined">close</span></button>
+            </div>
+          </div>
+          <button type="button" class="btn btn-ghost" data-yt-add style="min-height:40px;font-size:.8rem"><span class="material-symbols-outlined">add</span>Add another video</button>
+        </div>
+        <button class="btn btn-gold" type="submit"><span class="material-symbols-outlined">publish</span>Publish Catalog</button>
+      </form>
+    </div></div>`;
+  }
+
   /* ---------------- Notifications ---------------- */
   function notifications(list) {
     return `
@@ -575,6 +687,7 @@
     </div></div>
     <div class="section"><div class="prof-menu card" style="padding:0;overflow:hidden">
       ${session?.isAdmin ? `<button class="pm-item" data-nav="admin/notify"><span class="material-symbols-outlined">campaign</span>Send Notification<span class="material-symbols-outlined go">chevron_right</span></button>` : ""}
+      ${S.canPostCatalog(session) ? `<button class="pm-item" data-nav="admin/catalog"><span class="material-symbols-outlined">collections_bookmark</span>Post Catalog<span class="material-symbols-outlined go">chevron_right</span></button>` : ""}
       <button class="pm-item" data-toast="Profile editing coming soon"><span class="material-symbols-outlined">edit</span>Edit Profile<span class="material-symbols-outlined go">chevron_right</span></button>
       <button class="pm-item" data-push-toggle><span class="material-symbols-outlined">notifications_active</span>Instant Alerts<span class="switch on" id="push-switch"></span></button>
       <button class="pm-item" data-toast="Daily verse reminder on"><span class="material-symbols-outlined">wb_sunny</span>Daily Verse Reminder<span class="switch on"></span></button>
@@ -616,5 +729,5 @@
     </div>`;
   }
 
-  window.Screens = { splash, welcome, login, registerRole, registerForm, loading, loadError, notifyScreen, DEPARTMENTS, home, events, quiz, quizPlay, quizResult, gallery, notifications, notifDetail, profile };
+  window.Screens = { splash, welcome, login, registerRole, registerForm, loading, loadError, notifyScreen, DEPARTMENTS, canPostCatalog, home, events, quiz, quizPlay, quizResult, gallery, catalogs, catalogDetail, catalogComposer, notifications, notifDetail, profile };
 })();

@@ -7,7 +7,7 @@
   const tabbar = document.getElementById("tabbar");
   const miniPlayer = document.getElementById("mini-player");
 
-  const TABS = ["home", "events", "quiz", "gallery", "profile"];
+  const TABS = ["home", "events", "quiz", "gallery", "catalogs", "profile"];
   let data = null;           // { verse, programs, events, quiz, gallery, notifications }
   let quizState = null;      // { questions, idx, score, picked }
   let quizTimer = null;
@@ -26,10 +26,10 @@
   /* ---------------- data ---------------- */
   async function loadData() {
     if (data) return data;
-    let verse, programs, events, quizHome, gallery, notifications;
+    let verse, programs, events, quizHome, gallery, catalogs, notifications;
     try {
-      [verse, programs, events, quizHome, gallery, notifications] = await Promise.all([
-        Api.verse(), Api.programs(), Api.events(), Api.quizHome(), Api.gallery(), Api.notifications(),
+      [verse, programs, events, quizHome, gallery, catalogs, notifications] = await Promise.all([
+        Api.verse(), Api.programs(), Api.events(), Api.quizHome(), Api.gallery(), Api.listCatalogs().catch(() => []), Api.notifications(),
       ]);
     } catch (err) {
       if (err && err.status === 401) {
@@ -42,7 +42,7 @@
       }
       throw err;
     }
-    data = { verse, programs, events, quiz: quizHome, gallery, notifications };
+    data = { verse, programs, events, quiz: quizHome, gallery, catalogs, notifications };
     return data;
   }
 
@@ -253,6 +253,16 @@
     else if (base === "events") screen.innerHTML = S.events(data, arg === "special" ? "special" : "programs");
     else if (base === "quiz") screen.innerHTML = S.quiz(data, arg === "board" ? "board" : "daily");
     else if (base === "gallery") screen.innerHTML = S.gallery(data, arg === "clips" ? "clips" : "photos");
+    else if (base === "catalogs" && arg) {
+      const detail = await Api.getCatalog(arg).catch(() => null);
+      if (detail) { screen.innerHTML = S.catalogDetail(detail); }
+      else { toast("Could not open that catalog."); location.hash = "#/catalogs"; return; }
+    }
+    else if (base === "catalogs") screen.innerHTML = S.catalogs(data.catalogs, session);
+    else if (base === "admin" && arg === "catalog") {
+      if (!S.canPostCatalog(session)) { location.hash = "#/catalogs"; return; }
+      screen.innerHTML = S.catalogComposer();
+    }
     else if (base === "notifications" && arg) {
       const detail = await Api.notificationDetail(arg, data.notifications);
       if (detail) { Api.markNotifsSeen([detail.id]); screen.innerHTML = S.notifDetail(detail); }
@@ -341,6 +351,36 @@
     const gt = e.target.closest("[data-gallery-tab]");
     if (gt) { location.hash = "#/gallery/" + gt.dataset.galleryTab; return; }
 
+    // Catalog composer: add / remove YouTube rows.
+    if (e.target.closest("[data-yt-add]")) {
+      const wrap = document.getElementById("catalog-videos");
+      if (wrap) {
+        const row = document.createElement("div");
+        row.className = "yt-row";
+        row.innerHTML = `<input type="url" name="yt_url" placeholder="https://www.youtube.com/watch?v=…" inputmode="url"/>
+          <input type="text" name="yt_title" placeholder="Video title (optional)" maxlength="120"/>
+          <button type="button" class="icon-btn" data-yt-remove aria-label="Remove video"><span class="material-symbols-outlined">close</span></button>`;
+        wrap.appendChild(row);
+      }
+      return;
+    }
+    const ytRm = e.target.closest("[data-yt-remove]");
+    if (ytRm) {
+      const wrap = document.getElementById("catalog-videos");
+      const rows = wrap ? wrap.querySelectorAll(".yt-row") : [];
+      if (rows.length > 1) ytRm.closest(".yt-row").remove();
+      else {
+        const r = ytRm.closest(".yt-row");
+        r.querySelector('[name="yt_url"]').value = "";
+        r.querySelector('[name="yt_title"]').value = "";
+      }
+      return;
+    }
+
+    // Catalog photo lightbox (tap a photo to view it larger).
+    const cp = e.target.closest("[data-cat-photo]");
+    if (cp) { openPhotoLightbox(cp.dataset.catPhoto); return; }
+
     const pickBtn = e.target.closest("[data-pick]");
     if (pickBtn) { pick(parseInt(pickBtn.dataset.pick, 10)); return; }
 
@@ -367,7 +407,29 @@
 
   document.addEventListener("input", (e) => {
     if (e.target.id === "radio-vol") audio.volume = e.target.value / 100;
+    // Catalog composer: show how many photos were picked.
+    if (e.target.id === "catalog-photos") {
+      const hint = document.getElementById("catalog-photos-hint");
+      if (hint) {
+        const n = e.target.files ? e.target.files.length : 0;
+        hint.textContent = n ? n + (n === 1 ? " photo selected." : " photos selected.") : "No photos selected yet.";
+      }
+    }
   });
+
+  /* Catalog photo lightbox overlay (created once, reused). */
+  function openPhotoLightbox(url) {
+    let wrap = document.getElementById("cat-lightbox");
+    if (!wrap) {
+      wrap = document.createElement("div");
+      wrap.id = "cat-lightbox";
+      wrap.innerHTML = '<button aria-label="Close"><span class="material-symbols-outlined">close</span></button><img alt="Catalog photo"/>';
+      wrap.addEventListener("click", () => wrap.classList.remove("on"));
+      document.body.appendChild(wrap);
+    }
+    wrap.querySelector("img").src = url || "";
+    wrap.classList.add("on");
+  }
 
   document.addEventListener("submit", async (e) => {
     const setBusy = (form, label) => {
@@ -417,6 +479,38 @@
         screen.scrollTop = 0;
         toast("Notification sent");
       } catch (err) { screen.innerHTML = S.notifyScreen(err.message); screen.scrollTop = 0; }
+    }
+    if (e.target.id === "catalog-form") {
+      e.preventDefault();
+      const btn = setBusy(e.target, "Publishing…");
+      const f = new FormData(e.target);
+      const fail = (msg) => { screen.innerHTML = S.catalogComposer(msg); screen.scrollTop = 0; };
+      try {
+        const title = (f.get("title") || "").trim();
+        if (!title) throw new Error("Give your catalog a title.");
+        // Collect YouTube links; each must resolve to a real video id.
+        const videos = [];
+        e.target.querySelectorAll(".yt-row").forEach((row) => {
+          const url = (row.querySelector('[name="yt_url"]').value || "").trim();
+          if (!url) return;
+          const vid = Api.youtubeVideoId(url);
+          if (!vid) throw new Error("That does not look like a YouTube link: " + url);
+          videos.push({ url, title: (row.querySelector('[name="yt_title"]').value || "").trim() });
+        });
+        // Upload the photos first, one at a time, with progress on the button.
+        const files = [...(document.getElementById("catalog-photos").files || [])];
+        const imageIds = [];
+        for (let i = 0; i < files.length; i++) {
+          if (btn) btn.innerHTML = '<span class="btn-spin"></span> Uploading photo ' + (i + 1) + " of " + files.length + "…";
+          const up = await Api.uploadMedia(files[i]);
+          if (up && up.id) imageIds.push(up.id);
+        }
+        if (btn) btn.innerHTML = '<span class="btn-spin"></span> Publishing…';
+        const created = await Api.createCatalog({ title, description: (f.get("description") || "").trim(), imageIds, videos });
+        data = null; // force a fresh catalogs list on return
+        toast("Catalog published");
+        location.hash = created && created.id ? "#/catalogs/" + created.id : "#/catalogs";
+      } catch (err) { fail(err.message || "Could not publish the catalog."); }
     }
   });
 

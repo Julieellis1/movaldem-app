@@ -76,6 +76,26 @@
       { id: 2, title: "New sermon clip: \u201CBefore You Rise\u201D", time: "1d ago", unread: true },
       { id: 3, title: "Praise Night this Friday \u2014 invite a friend", time: "3d ago", unread: false },
     ],
+    catalogs: {
+      list: [
+        { id: 1, title: "Youth Evangelism Outreach", description: "Taking the gospel to the streets of Alagbado with love and power.", cover: "", photo_count: 3, video_count: 1, date: "2026-10-10T10:00:00", author: "Media Team" },
+        { id: 2, title: "Praise Night Highlights", description: "A night of undiluted praise, worship and thanksgiving.", cover: "", photo_count: 5, video_count: 2, date: "2026-09-26T23:00:00", author: "Media Team" },
+      ],
+      detail: {
+        id: 1, title: "Youth Evangelism Outreach",
+        description: "Taking the gospel to the streets of Alagbado with love and power.",
+        content: "<p>Our youths took the gospel to the streets of Alagbado — food shared, prayers answered, lives changed.</p>",
+        cover: "", photo_count: 3, video_count: 1, date: "2026-10-10T10:00:00", author: "Media Team",
+        photos: [
+          { id: 1, url: "", thumb: "", caption: "Street preaching" },
+          { id: 2, url: "", thumb: "", caption: "Food share" },
+          { id: 3, url: "", thumb: "", caption: "Prayer line" },
+        ],
+        videos: [
+          { url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", title: "Outreach highlights", video_id: "dQw4w9WgXcQ" },
+        ],
+      },
+    },
   };
 
   /* ---------------- WordPress REST client (live mode) ---------------- */
@@ -112,6 +132,44 @@
       return { Authorization: "Bearer " + s.token };
     }
     return {};
+  }
+  /* Multipart POST (photo upload): no JSON Content-Type is set here — the
+     browser must set the multipart boundary itself. */
+  async function wpForm(path, formData) {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 90000);
+    try {
+      const res = await fetch(CFG.WP_JSON + path, {
+        method: "POST",
+        signal: ctrl.signal,
+        headers: authHeaders(),
+        body: formData,
+      });
+      if (!res.ok) {
+        let msg = "Upload failed: " + res.status;
+        try {
+          const body = await res.json();
+          if (body && body.message) msg = body.message;
+        } catch {}
+        const err = new Error(msg);
+        err.status = res.status;
+        throw err;
+      }
+      return res.json();
+    } catch (err) {
+      if (err && err.name === "AbortError") throw new Error("Upload timed out. Check your connection and try again.");
+      throw err;
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+  /* Extract the 11-char YouTube id from watch?v=, youtu.be/, /shorts/,
+     /live/ and /embed/ URLs. Returns "" for non-YouTube URLs. */
+  function youtubeVideoId(url) {
+    const m = String(url || "").trim().match(
+      /(?:youtube\.com\/(?:watch\?[^#\s]*v=|shorts\/|live\/|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/
+    );
+    return m ? m[1] : "";
   }
   function stripTags(html) {
     return String(html || "").replace(/<[^>]+>/g, "").trim();
@@ -302,6 +360,46 @@
         method: "POST",
         headers: authHeaders(),
         body: JSON.stringify({ title, message, audience, departments: departments || [] }),
+      });
+    },
+
+    /* --- catalogs --- */
+    youtubeVideoId,
+    async listCatalogs() {
+      if (CFG.USE_MOCK) return MOCK.catalogs.list;
+      return wp("/movaldem/v1/catalogs?per_page=20").catch(() => []);
+    },
+    async getCatalog(id) {
+      if (CFG.USE_MOCK) return MOCK.catalogs.detail;
+      return wp("/movaldem/v1/catalogs/" + encodeURIComponent(id));
+    },
+    async uploadMedia(file) {
+      if (CFG.USE_MOCK) return { id: Date.now(), url: "", thumb: "" };
+      const fd = new FormData();
+      fd.append("file", file);
+      return wpForm("/movaldem/v1/media", fd);
+    },
+    async createCatalog({ title, description, imageIds, videos }) {
+      if (CFG.USE_MOCK) return { ok: true, mock: true, id: 1 };
+      return wp("/movaldem/v1/catalogs", {
+        method: "POST",
+        headers: authHeaders(),
+        body: JSON.stringify({ title, description, image_ids: imageIds || [], videos: videos || [] }),
+      });
+    },
+    async updateCatalog(id, { title, description, imageIds, videos }) {
+      if (CFG.USE_MOCK) return { ok: true, mock: true };
+      return wp("/movaldem/v1/catalogs/" + encodeURIComponent(id), {
+        method: "PUT",
+        headers: authHeaders(),
+        body: JSON.stringify({ title, description, image_ids: imageIds || [], videos: videos || [] }),
+      });
+    },
+    async deleteCatalog(id) {
+      if (CFG.USE_MOCK) return { ok: true, mock: true };
+      return wp("/movaldem/v1/catalogs/" + encodeURIComponent(id), {
+        method: "DELETE",
+        headers: authHeaders(),
       });
     },
   };
