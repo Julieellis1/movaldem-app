@@ -481,7 +481,10 @@
   /* ---------------- Gallery ---------------- */
   function gallery(data, tab = "photos") {
     const isPhotos = tab === "photos";
-    const feat = data.gallery.albums[0];
+    const gal = (data && data.gallery) || {};
+    const albums = Array.isArray(gal.albums) ? gal.albums : [];
+    const photos = Array.isArray(gal.photos) ? gal.photos : [];
+    const feat = albums[0];
     return `
     ${appbar("Movaldem", "Gallery")}
     <div style="display:flex;justify-content:space-between;align-items:flex-end;margin:.6rem 0 .2rem">
@@ -493,19 +496,25 @@
       <button class="tab2 ${!isPhotos ? "active" : ""}" data-gallery-tab="clips"><span class="material-symbols-outlined">movie</span>Sermon Clips <span class="live-badge" style="background:var(--maroon)">4 New</span></button>
     </div>
     ${isPhotos ? `
+    ${feat ? `
     <div class="feat">
       <span class="pill">&#10022; Featured Album</span>
-      <div style="position:absolute;top:.8rem;right:.8rem;background:rgba(14,42,32,.7);color:#fff;font-size:.66rem;font-weight:700;padding:.25rem .6rem;border-radius:999px">${feat.photos} Photos</div>
-      <div class="meta">${esc(feat.meta)}</div>
-      <h3>${esc(feat.title)} Highlights</h3>
+      <div style="position:absolute;top:.8rem;right:.8rem;background:rgba(14,42,32,.7);color:#fff;font-size:.66rem;font-weight:700;padding:.25rem .6rem;border-radius:999px">${feat.photos || 0} Photos</div>
+      <div class="meta">${esc(feat.meta || "")}</div>
+      <h3>${esc(feat.title || "Album")} Highlights</h3>
       <p>Capturing the dawn vigil, thanksgiving praise and joyful fellowship.</p>
-    </div>
+    </div>` : `
+    <div class="card" style="text-align:center;padding:2rem 1rem">
+      <span class="material-symbols-outlined" style="font-size:40px;color:var(--gold-deep)">photo_library</span>
+      <h3 class="h-head" style="margin:.5rem 0">No albums yet</h3>
+      <p class="sub">Photos from services and events will appear here once the media team publishes them.</p>
+    </div>`}
     <div class="chips">
       <button class="chip active">All Photos</button><button class="chip">Sunday Services</button>
       <button class="chip">Baptism &amp; Dedication</button><button class="chip">Outreach</button><button class="chip">Vigils</button>
     </div>
     <div class="g-grid">
-      ${data.gallery.photos.map((p) => `
+      ${photos.map((p) => `
       <div class="card g-item">
         <div class="g-art"><span class="tag">${esc(p.tag)}</span><span class="material-symbols-outlined">more_vert</span>
           <div><b>${esc(p.title)}</b><small>${esc(p.sub)}</small></div>
@@ -518,6 +527,7 @@
         </div>
       </div>`).join("")}
     </div>
+    ${photos.length ? "" : `<p class="sub" style="text-align:center;margin-top:1rem">No photos yet.</p>`}
     <div class="card" style="margin-top:1rem;display:flex;gap:.8rem;align-items:center">
       <span class="material-symbols-outlined" style="color:var(--gold-deep);font-size:28px">cloud_upload</span>
       <div style="flex:1"><b style="font-size:.88rem">Photographed Sunday?</b><p class="sub">Contribute captures to the sanctuary archive.</p></div>

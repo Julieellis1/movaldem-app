@@ -23,6 +23,21 @@
     clearTimeout(toastT); toastT = setTimeout(() => el.classList.add("hidden"), 2600);
   }
 
+  /* ---------------- top loading spinner ----------------
+     Small pill at the top-middle of the page. The current page stays intact
+     underneath while data loads. */
+  const topLoader = document.getElementById("top-loader");
+  function showTopLoader() {
+    if (!topLoader) return;
+    topLoader.classList.remove("hidden");
+    topLoader.setAttribute("aria-hidden", "false");
+  }
+  function hideTopLoader() {
+    if (!topLoader) return;
+    topLoader.classList.add("hidden");
+    topLoader.setAttribute("aria-hidden", "true");
+  }
+
   /* ---------------- data ---------------- */
   async function loadData() {
     if (data) return data;
@@ -105,7 +120,7 @@
      on submit. Mock mode keeps the old local-graded demo flow. */
   function startQuiz() {
     let qs, live;
-    if (CFG.USE_MOCK) {
+    if (C.USE_MOCK) {
       qs = [...data.quiz.questions].sort(() => Math.random() - 0.5);
       live = false;
     } else {
@@ -219,23 +234,25 @@
       screen.scrollTop = 0; bindStatic(); return;
     }
 
-    // Show a loading shell immediately: the previous screen (e.g. the
-    // sign-in form with its spinner) must not linger while data loads.
-    screen.innerHTML = S.loading();
-    screen.scrollTop = 0;
+    // Show the top-middle spinner: the current page stays intact underneath
+    // while data loads (no full-screen loading page).
+    showTopLoader();
     let loaded;
     try {
       loaded = await loadData();
     } catch (err) {
+      hideTopLoader();
       screen.innerHTML = S.loadError(err && err.message);
       screen.scrollTop = 0;
       return;
     }
-    if (!loaded) return; // 401 path: dead session cleared, login redirect already queued
+    if (!loaded) { hideTopLoader(); return; } // 401 path: dead session cleared, login redirect already queued
     try {
       await renderAuthed(route, session);
+      hideTopLoader();
     } catch (err) {
-      // Never freeze on the loading screen: surface render bugs as a retry screen.
+      // Never freeze on a spinner: surface render bugs as a retry screen.
+      hideTopLoader();
       screen.innerHTML = S.loadError(err && err.message);
       screen.scrollTop = 0;
     }
@@ -288,7 +305,7 @@
 
   function startQuizSilent() {
     let qs, live;
-    if (CFG.USE_MOCK) {
+    if (C.USE_MOCK) {
       qs = [...(data.quiz.questions || [])].sort(() => Math.random() - 0.5);
       live = false;
     } else {
