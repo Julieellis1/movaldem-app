@@ -734,6 +734,7 @@
         <h2 style="margin:.8rem 0 .3rem">Couldn't load your content</h2>
         <p class="sub">${esc(message || "Check your connection and try again.")}</p>
         <button class="btn btn-gold" data-retry-load style="margin-top:1rem"><span class="material-symbols-outlined">refresh</span>Try Again</button>
+        <button class="btn btn-dark" data-nav="home" style="margin-top:.6rem"><span class="material-symbols-outlined">home</span>Back to Dashboard</button>
         <button class="btn btn-ghost" id="logout-btn" style="margin-top:.6rem"><span class="material-symbols-outlined">logout</span>Sign Out</button>
       </div>
     </div>`;

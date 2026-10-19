@@ -137,7 +137,8 @@
     location.hash = "#/quiz/play";
   }
   function renderQuizPlay() {
-    const raw = quizState.questions[quizState.idx];
+    const raw = quizState && quizState.questions[quizState.idx];
+    if (!raw) { location.hash = "#/quiz"; return; } // stale state: back to lobby, never crash
     // Normalize live (server) questions to the screen's shape; live items
     // carry no answer — grading happens server-side on submit.
     const q = quizState.live
@@ -262,7 +263,9 @@
     const [base, arg] = route.split("/");
 
     if (base === "quiz" && arg === "play") {
-      if (!quizState && startQuizSilent() === false) return; // redirected to lobby
+      // (Re)initialize whenever there is no playable state: a stale empty
+      // quizState must not skip this, or the play screen crashes.
+      if ((!quizState || !quizState.questions.length) && startQuizSilent() === false) return; // redirected to lobby
       renderQuizPlay(); bindStatic(); return;
     }
 
@@ -316,6 +319,9 @@
     quizSecs = ((data.quiz.quest && data.quiz.quest.minutes) || 5) * 60;
     if (!qs.length) {
       // Nothing to play (already attempted today, or fetch failed) — back to the lobby.
+      // Clear the state: a stale empty quizState would make the play route
+      // skip re-initializing and crash on questions[0].
+      quizState = null;
       location.hash = "#/quiz";
       return false;
     }
