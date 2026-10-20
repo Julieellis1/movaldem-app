@@ -41,10 +41,11 @@
   /* ---------------- data ---------------- */
   async function loadData() {
     if (data) return data;
-    let verse, programs, events, quizHome, gallery, catalogs, notifications;
+    let verse, programs, events, quizHome, gallery, catalogs, notifications, devotionToday, devotions;
     try {
-      [verse, programs, events, quizHome, gallery, catalogs, notifications] = await Promise.all([
+      [verse, programs, events, quizHome, gallery, catalogs, notifications, devotionToday, devotions] = await Promise.all([
         Api.verse(), Api.programs(), Api.events(), Api.quizHome(), Api.gallery(), Api.listCatalogs().catch(() => []), Api.notifications(),
+        Api.devotionToday().catch(() => null), Api.devotions().catch(() => []),
       ]);
     } catch (err) {
       if (err && err.status === 401) {
@@ -57,7 +58,7 @@
       }
       throw err;
     }
-    data = { verse, programs, events, quiz: quizHome, gallery, catalogs, notifications };
+    data = { verse, programs, events, quiz: quizHome, gallery, catalogs, notifications, devotion: devotionToday, devotions: devotions || [] };
     return data;
   }
 
@@ -289,7 +290,13 @@
       else { location.hash = "#/notifications"; return; }
     }
     else if (base === "notifications") { Api.markNotifsSeen((data.notifications || []).map((n) => n.id)); screen.innerHTML = S.notifications(data.notifications); }
-    else if (base === "profile") screen.innerHTML = S.profile(session);
+    else if (base === "devotion" && arg) {
+      const dv = (data.devotions || []).find((x) => String(x.id) === String(arg)) || (data.devotion && String(data.devotion.id) === String(arg) ? data.devotion : null);
+      if (dv) { screen.innerHTML = S.devotionDetail(dv); }
+      else { location.hash = "#/devotion"; return; }
+    }
+    else if (base === "devotion") screen.innerHTML = S.devotionsList(data.devotions);
+    else if (base === "profile") screen.innerHTML = S.profile(session, Api.notifyPrefs());
     else if (base === "admin" && arg === "notify") {
       if (!session.isAdmin) { location.hash = "#/home"; return; }
       screen.innerHTML = S.notifyScreen();
@@ -424,6 +431,15 @@
       const sw = document.getElementById("push-switch");
       const on = sw.classList.toggle("on");
       toast(on ? "Instant alerts turned on" : "Instant alerts turned off");
+      return;
+    }
+    const np = e.target.closest("[data-notify-pref]");
+    if (np) {
+      const key = np.dataset.notifyPref;
+      const sw = np.querySelector(".switch");
+      const on = sw ? sw.classList.toggle("on") : true;
+      Api.setNotifyPref(key, on);
+      toast((key === "verse" ? "Verse of the day alerts " : "Daily devotion alerts ") + (on ? "on" : "off"));
       return;
     }
   });

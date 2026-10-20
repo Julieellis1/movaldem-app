@@ -182,6 +182,16 @@
       <div class="ref">${esc(data.verse.ref)} (KJV)</div>
       <div class="note">${esc(data.verse.note)}</div>
     </div></div>
+    ${data.devotion ? `
+    <div class="section"><div class="card" data-nav="devotion/${data.devotion.id}" style="cursor:pointer;padding:0;overflow:hidden">
+      ${data.devotion.image ? `<img src="${esc(data.devotion.image)}" alt="" style="width:100%;height:150px;object-fit:cover;display:block"/>` : ""}
+      <div style="padding:1rem">
+        <span class="eyebrow">&#10022; Daily Devotion</span>
+        <h3 class="h-head" style="margin:.35rem 0 .3rem">${esc(data.devotion.title)}</h3>
+        <p class="sub" style="margin:0">${esc(data.devotion.excerpt || "")}</p>
+        <div style="margin-top:.55rem"><span class="link-gold">Read today's devotion &rsaquo;</span></div>
+      </div>
+    </div></div>` : ""}
 
     <div class="section">
       <div class="card dark radio-card">
@@ -687,7 +697,52 @@
   }
 
   /* ---------------- Profile ---------------- */
-  function profile(session) {
+  /* ---------------- Devotions ---------------- */
+  function fmtDayLong(iso) {
+    const d = iso ? new Date(iso + "T00:00") : null;
+    return d && !isNaN(d) ? d.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" }) : "";
+  }
+  function devotionDetail(dv) {
+    const paras = String((dv && (dv.body || dv.excerpt)) || "").split(/\n+/).map((p) => p.trim()).filter(Boolean);
+    return `
+    <div class="appbar">
+      <button class="icon-btn" data-nav="devotion" aria-label="Back"><span class="material-symbols-outlined">arrow_back</span></button>
+      <div class="brand"><div><b>Daily Devotion</b><small>${esc(fmtDayLong(dv && dv.date))}</small></div></div>
+    </div>
+    ${dv && dv.image ? `<img src="${esc(dv.image)}" alt="" style="width:100%;max-height:260px;object-fit:cover;display:block"/>` : ""}
+    <div class="section" style="margin-top:.6rem"><div class="card" style="padding:1.1rem 1.15rem">
+      <span class="eyebrow">&#10022; Daily Devotion</span>
+      <h2 class="h-head" style="margin:.4rem 0 .7rem">${esc((dv && dv.title) || "Daily Devotion")}</h2>
+      ${paras.map((p) => `<p style="margin:0 0 .8rem;line-height:1.65">${esc(p)}</p>`).join("")}
+    </div></div>
+    <div class="section"><button class="btn btn-ghost" data-nav="devotion"><span class="material-symbols-outlined">auto_stories</span>Past Devotions</button></div>`;
+  }
+  function devotionsList(list) {
+    const items = list || [];
+    return `
+    <div class="appbar">
+      <button class="icon-btn" data-nav="home" aria-label="Back"><span class="material-symbols-outlined">arrow_back</span></button>
+      <div class="brand"><div><b>Daily Devotions</b><small>Daily bread from Movaldem</small></div></div>
+    </div>
+    <div class="section" style="margin-top:.6rem">
+      ${items.length ? items.map((dv) => `
+      <div class="card" data-nav="devotion/${dv.id}" style="cursor:pointer;display:flex;gap:.85rem;padding:.8rem;margin-bottom:.7rem">
+        ${dv.image ? `<img src="${esc(dv.image)}" alt="" style="width:64px;height:64px;object-fit:cover;border-radius:12px;flex:none"/>` : `<div style="width:64px;height:64px;border-radius:12px;background:var(--forest,#123524);display:flex;align-items:center;justify-content:center;flex:none"><span class="material-symbols-outlined" style="color:var(--gold)">auto_stories</span></div>`}
+        <div style="min-width:0">
+          <small style="color:var(--gold-deep);font-weight:600">${esc(fmtDayLong(dv.date))}</small>
+          <b style="display:block;margin:.15rem 0 .2rem">${esc(dv.title)}</b>
+          <p class="sub" style="margin:0">${esc(dv.excerpt || "")}</p>
+        </div>
+      </div>`).join("") : `
+      <div class="card" style="text-align:center;padding:1.6rem 1rem">
+        <span class="material-symbols-outlined" style="font-size:40px;color:var(--gold-deep)">auto_stories</span>
+        <p class="sub" style="margin-top:.5rem">No devotions yet. Please check back soon.</p>
+      </div>`}
+    </div>`;
+  }
+
+  function profile(session, prefs) {
+    const p = prefs || { verse: true, devotion: true };
     const name = esc(session?.name || "Member");
     return `
     ${appbar("Movaldem", "Profile", { bell: false })}
@@ -700,7 +755,8 @@
       ${canPostCatalog(session) ? `<button class="pm-item" data-nav="admin/catalog"><span class="material-symbols-outlined">collections_bookmark</span>Post Catalog<span class="material-symbols-outlined go">chevron_right</span></button>` : ""}
       <button class="pm-item" data-toast="Profile editing coming soon"><span class="material-symbols-outlined">edit</span>Edit Profile<span class="material-symbols-outlined go">chevron_right</span></button>
       <button class="pm-item" data-push-toggle><span class="material-symbols-outlined">notifications_active</span>Instant Alerts<span class="switch on" id="push-switch"></span></button>
-      <button class="pm-item" data-toast="Daily verse reminder on"><span class="material-symbols-outlined">wb_sunny</span>Daily Verse Reminder<span class="switch on"></span></button>
+      <button class="pm-item" data-notify-pref="verse"><span class="material-symbols-outlined">wb_sunny</span>Verse of the Day Alerts<span class="switch${p.verse ? " on" : ""}"></span></button>
+      <button class="pm-item" data-notify-pref="devotion"><span class="material-symbols-outlined">auto_stories</span>Daily Devotion Alerts<span class="switch${p.devotion ? " on" : ""}"></span></button>
       <button class="pm-item" data-toast="Link copied — invite your family"><span class="material-symbols-outlined">share</span>Invite a Friend<span class="material-symbols-outlined go">chevron_right</span></button>
       <button class="pm-item" data-toast="Opening WhatsApp"><span class="material-symbols-outlined">call</span>Contact the Church<span class="material-symbols-outlined go">chevron_right</span></button>
       <button class="pm-item" data-toast="Privacy policy coming soon"><span class="material-symbols-outlined">privacy_tip</span>Privacy<span class="material-symbols-outlined go">chevron_right</span></button>
@@ -740,5 +796,5 @@
     </div>`;
   }
 
-  window.Screens = { splash, welcome, login, registerRole, registerForm, loading, loadError, notifyScreen, DEPARTMENTS, canPostCatalog, home, events, quiz, quizPlay, quizResult, gallery, catalogs, catalogDetail, catalogComposer, notifications, notifDetail, profile };
+  window.Screens = { splash, welcome, login, registerRole, registerForm, loading, loadError, notifyScreen, DEPARTMENTS, canPostCatalog, home, events, quiz, quizPlay, quizResult, gallery, catalogs, catalogDetail, catalogComposer, notifications, notifDetail, devotionDetail, devotionsList, profile };
 })();

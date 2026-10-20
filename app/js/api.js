@@ -14,6 +14,16 @@
       ref: "MATTHEW 16:18",
       note: "Morning Meditations",
     },
+    devotion: {
+      id: 9001, title: "Walking in the Light of His Word",
+      body: "The entrance of thy words giveth light; it giveth understanding unto the simple.\n\nToday, carry one verse with you from morning to night. Let it answer your worries before they grow loud, and let it shape the words you speak to others.\n\nPrayer: Lord, open my eyes to the light in Your Word today. Amen.",
+      excerpt: "The entrance of thy words giveth light. Carry one verse with you today and let it answer your worries before they grow loud.",
+      image: "", date: "2026-10-20",
+    },
+    devotions: [
+      { id: 9001, title: "Walking in the Light of His Word", body: "The entrance of thy words giveth light; it giveth understanding unto the simple.\n\nToday, carry one verse with you from morning to night.", excerpt: "The entrance of thy words giveth light. Carry one verse with you today.", image: "", date: "2026-10-20" },
+      { id: 9000, title: "The Lord Is My Shepherd", body: "The Lord is my shepherd; I shall not want.\n\nRest is also faith. Today, refuse anxiety one hour at a time.", excerpt: "The Lord is my shepherd; I shall not want. Rest is also faith.", image: "", date: "2026-10-19" },
+    ],
     programs: [
       { id: 1, title: "New Month Declaration", day: "1st Day Monthly", time: "6:00 AM \u2013 7:00 AM", venue: "Main Auditorium", tag: "Declaration", desc: "We command the new month with prophetic declarations and thanksgiving." },
       { id: 2, title: "Youth Evangelism", day: "1st Friday Monthly", time: "4:00 PM \u2013 6:00 PM", venue: "Church Premises & Outreach", tag: "Outreach", desc: "Taking the gospel to the streets of Alagbado with love and power." },
@@ -238,6 +248,31 @@
       if (CFG.USE_MOCK) return MOCK.verse;
       return wp("/movaldem/v1/verse").catch(() => MOCK.verse);
     },
+    async devotionToday() {
+      if (CFG.USE_MOCK) return MOCK.devotion;
+      return wp("/movaldem/v1/devotion/today").catch(() => null);
+    },
+    async devotions() {
+      if (CFG.USE_MOCK) return MOCK.devotions;
+      return wp("/movaldem/v1/devotions").catch(() => []);
+    },
+    /* --- notification preferences (verse / devotion alerts) --- */
+    notifyPrefs() {
+      let p = { verse: true, devotion: true };
+      try {
+        const raw = localStorage.getItem("movaldem.notifyPrefs");
+        if (raw) p = { ...p, ...JSON.parse(raw) };
+      } catch {}
+      return p;
+    },
+    async setNotifyPref(key, on) {
+      const p = this.notifyPrefs();
+      p[key] = !!on;
+      try { localStorage.setItem("movaldem.notifyPrefs", JSON.stringify(p)); } catch {}
+      if (CFG.USE_MOCK || !this.session()) return { ok: true, local: true };
+      const body = key === "verse" ? { notify_verse: !!on } : { notify_devotion: !!on };
+      return wp("/movaldem/v1/devices/preferences", { method: "POST", headers: authHeaders(), body: JSON.stringify(body) }).catch(() => ({ ok: false }));
+    },
     async programs() {
       if (CFG.USE_MOCK) return MOCK.programs;
       const list = await wp("/wp/v2/program?per_page=20&_fields=id,title,excerpt,app_meta");
@@ -333,7 +368,8 @@
     async registerDevice(token) {
       try { localStorage.setItem(LS_DEVICE, token); } catch {}
       if (CFG.USE_MOCK || !CFG.PUSH_ENABLED) return { ok: true, mock: true };
-      return wp("/movaldem/v1/devices", { method: "POST", headers: authHeaders(), body: JSON.stringify({ token, platform: "android" }) }).catch(() => ({ ok: false }));
+      const p = this.notifyPrefs();
+      return wp("/movaldem/v1/devices", { method: "POST", headers: authHeaders(), body: JSON.stringify({ token, platform: "android", notify_verse: p.verse, notify_devotion: p.devotion }) }).catch(() => ({ ok: false }));
     },
     /* Full announcement content for the detail view (public WP endpoint). */
     async notificationDetail(id, list) {
