@@ -16,8 +16,27 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    signingConfigs {
+        // One permanent key for every build machine. CI runners are
+        // disposable and each invented its own debug key, which made
+        // Android refuse updates ("signature does not match") and force
+        // an uninstall before every update. This keystore is committed
+        // on purpose: it carries the standard Android debug identity
+        // whose password is public knowledge, so there is no secret to
+        // leak. A Play Store release would use a separate private key.
+        pinned {
+            storeFile rootProject.file('debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+    }
     buildTypes {
+        debug {
+            signingConfig signingConfigs.pinned
+        }
         release {
+            signingConfig signingConfigs.pinned
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
