@@ -697,7 +697,7 @@
     </div></div>
     <div class="section"><div class="prof-menu card" style="padding:0;overflow:hidden">
       ${session?.isAdmin ? `<button class="pm-item" data-nav="admin/notify"><span class="material-symbols-outlined">campaign</span>Send Notification<span class="material-symbols-outlined go">chevron_right</span></button>` : ""}
-      ${S.canPostCatalog(session) ? `<button class="pm-item" data-nav="admin/catalog"><span class="material-symbols-outlined">collections_bookmark</span>Post Catalog<span class="material-symbols-outlined go">chevron_right</span></button>` : ""}
+      ${canPostCatalog(session) ? `<button class="pm-item" data-nav="admin/catalog"><span class="material-symbols-outlined">collections_bookmark</span>Post Catalog<span class="material-symbols-outlined go">chevron_right</span></button>` : ""}
       <button class="pm-item" data-toast="Profile editing coming soon"><span class="material-symbols-outlined">edit</span>Edit Profile<span class="material-symbols-outlined go">chevron_right</span></button>
       <button class="pm-item" data-push-toggle><span class="material-symbols-outlined">notifications_active</span>Instant Alerts<span class="switch on" id="push-switch"></span></button>
       <button class="pm-item" data-toast="Daily verse reminder on"><span class="material-symbols-outlined">wb_sunny</span>Daily Verse Reminder<span class="switch on"></span></button>
