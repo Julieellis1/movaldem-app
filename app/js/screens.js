@@ -373,7 +373,7 @@
     ` : `
       <p class="eyebrow">Mark Your Calendar</p>
       <h2 class="h-head" style="margin-bottom:.8rem">Upcoming Special Events</h2>
-      ${data.events.map((e, i) => eventCard(e, i === 1)).join("")}
+      ${data.events.length ? data.events.map((e, i) => eventCard(e, i === 1)).join("") : `<div class="card" style="text-align:center;padding:1.4rem 1rem"><span class="material-symbols-outlined" style="font-size:32px;color:var(--gold-deep)">celebration</span><p class="sub" style="margin:.5rem 0 0">No special events are scheduled right now.<br/>Our weekly gatherings continue on the Weekly Gatherings tab.</p></div>`}
     `}`;
   }
 

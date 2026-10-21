@@ -25,17 +25,15 @@
       { id: 9000, title: "The Lord Is My Shepherd", body: "The Lord is my shepherd; I shall not want.\n\nRest is also faith. Today, refuse anxiety one hour at a time.", excerpt: "The Lord is my shepherd; I shall not want. Rest is also faith.", image: "", date: "2026-10-19" },
     ],
     programs: [
-      { id: 1, title: "New Month Declaration", day: "1st Day Monthly", time: "6:00 AM \u2013 7:00 AM", venue: "Main Auditorium", tag: "Declaration", desc: "We command the new month with prophetic declarations and thanksgiving." },
-      { id: 2, title: "Youth Evangelism", day: "1st Friday Monthly", time: "4:00 PM \u2013 6:00 PM", venue: "Church Premises & Outreach", tag: "Outreach", desc: "Taking the gospel to the streets of Alagbado with love and power." },
-      { id: 3, title: "Praise Night", day: "Last Friday Monthly", time: "12:00 AM \u2013 2:00 AM", venue: "Main Auditorium", tag: "Worship", desc: "A night of undiluted praise, worship and thanksgiving unto the Lord." },
-      { id: 4, title: "Sunday Celebration Service", day: "Sunday", time: "9:00 AM", venue: "Main Auditorium", tag: "Worship", desc: "Our weekly celebration with the Word, worship and warm fellowship." },
-      { id: 5, title: "Midweek Bible Study", day: "Wednesday", time: "6:00 PM", venue: "Main Auditorium", tag: "Word", desc: "Digging deep into the Scriptures for doctrine and daily living." },
+      { id: 1, title: "Sunday Service", day: "Sunday", time: "8:00 AM \u2013 12:00 PM", venue: "17, Sikiru Omolaja Street, Oke Abiye, Alagbado, Lagos State", tag: "Worship", desc: "Weekly Sunday worship service." },
+      { id: 2, title: "Victory @ Last", day: "Tuesday", time: "10:00 AM \u2013 12:00 PM", venue: "17, Sikiru Omolaja Street, Oke Abiye, Alagbado, Lagos State", tag: "Victory", desc: "Weekly Tuesday program." },
+      { id: 3, title: "Hour of Mercy", day: "Wednesday", time: "10:00 AM \u2013 11:00 AM", venue: "17, Sikiru Omolaja Street, Oke Abiye, Alagbado, Lagos State", tag: "Mercy", desc: "Weekly Wednesday program." },
+      { id: 4, title: "Thursday Bible Study", day: "Thursday", time: "5:00 PM \u2013 6:00 PM", venue: "17, Sikiru Omolaja Street, Oke Abiye, Alagbado, Lagos State", tag: "Word", desc: "Weekly Thursday Bible study." },
+      { id: 5, title: "New Month Declaration", day: "1st day of every month", time: "6:00 AM \u2013 7:00 AM", venue: "17, Sikiru Omolaja Street, Oke Abiye, Alagbado, Lagos State", tag: "Declaration", desc: "Monthly declaration service on the first day of every month." },
+      { id: 6, title: "Youth Evangelism", day: "1st Friday of every month", time: "4:00 PM \u2013 6:00 PM", venue: "17, Sikiru Omolaja Street, Oke Abiye, Alagbado, Lagos State", tag: "Outreach", desc: "Monthly youth evangelism outreach." },
+      { id: 7, title: "Praise Night", day: "Last Friday of every month", time: "12:00 AM \u2013 2:00 AM", venue: "17, Sikiru Omolaja Street, Oke Abiye, Alagbado, Lagos State", tag: "Praise", desc: "Monthly night of praise on the last Friday of every month." },
     ],
-    events: [
-      { id: 101, title: "8th Anniversary Thanksgiving", date: "2026-09-12", time: "10:00 AM", venue: "Church Auditorium", tag: "Celebration", desc: "Celebrating 8 years of God's faithfulness at Movaldem.", seats: null },
-      { id: 102, title: "Night of Divine Encounter", date: "2026-10-30", time: "10:00 PM", venue: "Main Auditorium", tag: "Vigil", desc: "A night of prayer, worship and divine visitation.", seats: 500 },
-      { id: 103, title: "Workers' Refresher Training", date: "2026-11-07", time: "9:00 AM", venue: "Youth Hall", tag: "Training", desc: "Equipping all workers for effective kingdom service.", seats: 120 },
-    ],
+    events: [],
     quiz: {
       me: { name: "Member", rank: 4, xp: 1450, weeklyXp: 1450, streak: 7 },
       quest: {
