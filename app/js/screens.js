@@ -273,6 +273,7 @@
         <a class="ql" data-nav="events" style="cursor:pointer"><div class="top"><span class="material-symbols-outlined">event</span><span class="material-symbols-outlined">arrow_outward</span></div><b>Programs</b><small>Weekly gatherings</small></a>
         <a class="ql" data-nav="events" style="cursor:pointer"><div class="top"><span class="material-symbols-outlined">celebration</span><span class="material-symbols-outlined">arrow_outward</span></div><b>Events</b><small>Special meetings</small></a>
         <a class="ql" data-nav="quiz" style="cursor:pointer"><div class="top"><span class="material-symbols-outlined">quiz</span><span class="material-symbols-outlined">arrow_outward</span></div><b>Bible Quiz</b><small>Daily challenge</small></a>
+        <a class="ql" data-nav="devotion" style="cursor:pointer"><div class="top"><span class="material-symbols-outlined">auto_stories</span><span class="material-symbols-outlined">arrow_outward</span></div><b>Devotions</b><small>Daily bread</small></a>
         <a class="ql" data-nav="gallery" style="cursor:pointer"><div class="top"><span class="material-symbols-outlined">photo_library</span><span class="material-symbols-outlined">arrow_outward</span></div><b>Gallery</b><small>Moments &amp; clips</small></a>
         <a class="ql" data-nav="catalogs" style="cursor:pointer"><div class="top"><span class="material-symbols-outlined">collections_bookmark</span><span class="material-symbols-outlined">arrow_outward</span></div><b>Catalogs</b><small>Programs &amp; videos</small></a>
       </div>
