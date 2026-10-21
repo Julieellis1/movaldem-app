@@ -49,6 +49,10 @@
         { id: "acts", name: "Acts & Early Church", sub: "Pentecost to Antioch", quizzes: 15, xpMax: 700 },
         { id: "prophecy", name: "Prophecies & Revelation", sub: "Visions of St. John", quizzes: 12, xpMax: 1200 },
       ],
+      sets: [
+        { id: 1, title: "The Book of Ruth", description: "Loyalty, loss and redemption in four chapters.", category: "OT", questions: 8, my_best: null, my_attempts: 0 },
+        { id: 2, title: "Parables of Jesus", description: "Stories of grace and mercy from the Gospels.", category: "NT", questions: 12, my_best: 9, my_attempts: 2 },
+      ],
       questions: [
         { q: "Who wrote the Epistle to the Romans?", opts: ["Peter", "Paul", "John", "James"], answer: 1, ref: "Romans 1:1" },
         { q: "In which city was Paul when he wrote 1 Corinthians?", opts: ["Ephesus", "Athens", "Rome", "Antioch"], answer: 0, ref: "1 Cor 16:8" },
@@ -306,10 +310,11 @@
     async quizHome() {
       if (CFG.USE_MOCK) return MOCK.quiz;
       const headers = authHeaders();
-      const [today, board, cats] = await Promise.all([
+      const [today, board, cats, sets] = await Promise.all([
         wp("/movaldem/v1/quiz/today", { headers }).catch(() => null),
         wp("/movaldem/v1/quiz/leaderboard").catch(() => null),
         wp("/movaldem/v1/quiz/categories").catch(() => []),
+        wp("/movaldem/v1/quiz/sets", { headers }).catch(() => []),
       ]);
       const session = this.session();
       const meName = session?.name || "Member";
@@ -332,6 +337,7 @@
         } : null,
         attempted: !!(today && today.attempted),
         liveQuestions: today && !today.attempted ? today.questions : [],
+        sets: sets || [],
         categories: (cats || []).map((c) => ({ id: c.id, name: c.name, sub: c.name, quizzes: c.questions, xpMax: c.questions * 10 })),
         leaderboard: entries,
       };
@@ -343,6 +349,29 @@
       }
       // Server-graded: answers = {question_id: selected_option_index}.
       return wp("/movaldem/v1/quiz/submit", { method: "POST", headers: authHeaders(), body: JSON.stringify({ answers }) });
+    },
+    /* --- standalone topic quizzes + category practice --- */
+    async playQuestions(mode, ref) {
+      if (CFG.USE_MOCK) return { total: MOCK.quiz.questions.length, questions: MOCK.quiz.questions };
+      const body = mode === "set" ? { mode, set_id: ref } : { mode, category: ref };
+      return wp("/movaldem/v1/quiz/play", { method: "POST", headers: authHeaders(), body: JSON.stringify(body) });
+    },
+    async submitPlay(mode, ref, answers) {
+      const body = mode === "set" ? { mode, set_id: ref, answers } : { mode, category: ref, answers };
+      return wp("/movaldem/v1/quiz/submit-play", { method: "POST", headers: authHeaders(), body: JSON.stringify(body) });
+    },
+    /* --- in-app admin: daily verse + devotions --- */
+    async adminGetVerse(date) {
+      if (CFG.USE_MOCK) return { verse: null };
+      return wp("/movaldem/v1/admin/verse?date=" + encodeURIComponent(date), { headers: authHeaders() }).catch(() => ({ verse: null }));
+    },
+    async adminSaveVerse(v) {
+      if (CFG.USE_MOCK) return { ok: true, pushed: false, verse: v };
+      return wp("/movaldem/v1/admin/verse", { method: "POST", headers: authHeaders(), body: JSON.stringify(v) });
+    },
+    async adminCreateDevotion(d) {
+      if (CFG.USE_MOCK) return { ok: true, id: 9999, title: d.title, date: "2026-10-21" };
+      return wp("/movaldem/v1/admin/devotions", { method: "POST", headers: authHeaders(), body: JSON.stringify(d) });
     },
 
     /* --- push --- */

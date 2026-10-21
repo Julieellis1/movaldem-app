@@ -137,6 +137,22 @@
     }
     location.hash = "#/quiz/play";
   }
+  /* Standalone plays: a topic quiz set, or a random draw from a category.
+     Server-graded like the daily quiz, but they never touch the daily
+     attempt, streak or leaderboard (the plugin records them separately). */
+  async function startPlay(mode, ref, title) {
+    showTopLoader();
+    try {
+      const r = await Api.playQuestions(mode, ref);
+      const qs = (r && r.questions) || [];
+      if (!qs.length) { toast("No questions available yet. Please check back soon."); return; }
+      quizState = { questions: qs, idx: 0, score: 0, picked: null, answers: {}, live: !C.USE_MOCK, mode, refId: ref, title };
+      quizSecs = Math.max(120, qs.length * 30);
+      location.hash = "#/quiz/play";
+    } catch (e) {
+      toast("Could not load questions. Check your connection.");
+    } finally { hideTopLoader(); }
+  }
   function renderQuizPlay() {
     const raw = quizState && quizState.questions[quizState.idx];
     if (!raw) { location.hash = "#/quiz"; return; } // stale state: back to lobby, never crash
@@ -145,7 +161,7 @@
     const q = quizState.live
       ? { q: raw.text, opts: raw.options, ref: raw.ref, answer: undefined }
       : raw;
-    screen.innerHTML = S.quizPlay(q, quizState.idx, quizState.questions.length, quizState.picked, quizState.live);
+    screen.innerHTML = S.quizPlay(q, quizState.idx, quizState.questions.length, quizState.picked, quizState.live, quizState.title);
     screen.scrollTop = 0;
     clearInterval(quizTimer);
     const clock = () => {
@@ -179,16 +195,28 @@
   async function finishQuiz() {
     clearInterval(quizTimer);
     const wasLive = quizState.live;
+    const qMode = quizState.mode || "daily";
+    const qRef = quizState.refId;
     const total = quizState.questions.length;
     let result;
     if (wasLive) {
       try {
-        result = await Api.submitQuiz(quizState.answers);
+        result = qMode === "daily"
+          ? await Api.submitQuiz(quizState.answers)
+          : await Api.submitPlay(qMode, qRef, quizState.answers);
       } catch (e) {
         result = { score: 0, correct_count: 0, total, streak_day: 0, review: [], error: true };
       }
-      data.quiz.me.streak = result.streak_day || data.quiz.me.streak;
-      data.quiz.attempted = true;
+      if (qMode === "daily") {
+        data.quiz.me.streak = result.streak_day || data.quiz.me.streak;
+        data.quiz.attempted = true;
+      } else if (qMode === "set" && !result.error) {
+        const s = (data.quiz.sets || []).find((x) => String(x.id) === String(qRef));
+        if (s) {
+          s.my_attempts = (s.my_attempts || 0) + 1;
+          if (result.correct_count > (s.my_best ?? -1)) s.my_best = result.correct_count;
+        }
+      }
     } else {
       const score = quizState.score;
       result = { score, correct_count: score, total, streak_day: (data.quiz.me.streak || 0) + 1, review: [] };
@@ -300,6 +328,27 @@
     else if (base === "admin" && arg === "notify") {
       if (!session.isAdmin) { location.hash = "#/home"; return; }
       screen.innerHTML = S.notifyScreen();
+    }
+    else if (base === "admin" && arg === "verse") {
+      if (!session.isAdmin) { location.hash = "#/home"; return; }
+      screen.innerHTML = S.adminVerse();
+      // Prefill with the verse already saved for the picked date, if any.
+      const form = screen.querySelector("#verse-form");
+      const fill = async () => {
+        const date = form?.querySelector('[name="verse_date"]')?.value;
+        if (!date) return;
+        const r = await Api.adminGetVerse(date).catch(() => null);
+        if (!r || !r.verse || !document.body.contains(form)) return;
+        form.querySelector('[name="text"]').value = r.verse.text || "";
+        form.querySelector('[name="ref"]').value = r.verse.ref || "";
+        form.querySelector('[name="note"]').value = r.verse.note || "";
+      };
+      fill();
+      form?.querySelector('[name="verse_date"]')?.addEventListener("change", fill);
+    }
+    else if (base === "admin" && arg === "devotion") {
+      if (!session.isAdmin) { location.hash = "#/home"; return; }
+      screen.innerHTML = S.adminDevotion();
     }
     else { location.hash = "#/home"; return; }
 
@@ -442,6 +491,18 @@
       toast((key === "verse" ? "Verse of the day alerts " : "Daily devotion alerts ") + (on ? "on" : "off"));
       return;
     }
+    const qset = e.target.closest("[data-quiz-set]");
+    if (qset) {
+      const s = (data?.quiz?.sets || []).find((x) => String(x.id) === String(qset.dataset.quizSet));
+      startPlay("set", qset.dataset.quizSet, s ? s.title : "Topic Quiz");
+      return;
+    }
+    const qcat = e.target.closest("[data-quiz-cat]");
+    if (qcat) {
+      const c = (data?.quiz?.categories || []).find((x) => String(x.id) === String(qcat.dataset.quizCat));
+      startPlay("category", qcat.dataset.quizCat, c ? c.name : "Category Practice");
+      return;
+    }
   });
 
   document.addEventListener("input", (e) => {
@@ -468,6 +529,28 @@
     }
     wrap.querySelector("img").src = url || "";
     wrap.classList.add("on");
+  }
+
+  // Downscale a picked photo to a JPEG data URL (max 1200px wide) so the
+  // devotion upload stays small.
+  function fileToDataUrl(file) {
+    return new Promise((resolve) => {
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        try {
+          const scale = Math.min(1, 1200 / (img.width || 1200));
+          const c = document.createElement("canvas");
+          c.width = Math.max(1, Math.round(img.width * scale));
+          c.height = Math.max(1, Math.round(img.height * scale));
+          c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+          resolve(c.toDataURL("image/jpeg", 0.85));
+        } catch { resolve(null); }
+        URL.revokeObjectURL(url);
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); resolve(null); };
+      img.src = url;
+    });
   }
 
   document.addEventListener("submit", async (e) => {
@@ -518,6 +601,46 @@
         screen.scrollTop = 0;
         toast("Notification sent");
       } catch (err) { screen.innerHTML = S.notifyScreen(err.message); screen.scrollTop = 0; }
+    }
+    if (e.target.id === "verse-form") {
+      e.preventDefault();
+      setBusy(e.target, "Saving…");
+      const f = new FormData(e.target);
+      const payload = {
+        verse_date: (f.get("verse_date") || "").trim(),
+        text: (f.get("text") || "").trim(),
+        ref: (f.get("ref") || "").trim(),
+        note: (f.get("note") || "").trim(),
+      };
+      try {
+        const r = await Api.adminSaveVerse(payload);
+        const msg = r && r.pushed
+          ? `Verse saved for ${payload.verse_date} and sent to members.`
+          : `Verse saved for ${payload.verse_date}.`;
+        screen.innerHTML = S.adminVerse("", msg, payload);
+        screen.scrollTop = 0;
+        toast("Daily verse saved");
+      } catch (err) { screen.innerHTML = S.adminVerse(err.message, "", payload); screen.scrollTop = 0; }
+    }
+    if (e.target.id === "devotion-form") {
+      e.preventDefault();
+      setBusy(e.target, "Publishing…");
+      const f = new FormData(e.target);
+      const fail = (msg, vals) => { screen.innerHTML = S.adminDevotion(msg); screen.scrollTop = 0; if (vals) toast(vals); };
+      try {
+        const title = (f.get("title") || "").trim();
+        const body = (f.get("body") || "").trim();
+        if (!title) throw new Error("Give the devotion a title.");
+        if (!body) throw new Error("Write the devotion text first.");
+        let image_base64 = "";
+        const file = f.get("image");
+        if (file && file.size) image_base64 = (await fileToDataUrl(file)) || "";
+        const r = await Api.adminCreateDevotion({ title, body, image_base64, image_filename: file && file.name ? file.name : "" });
+        data = null; // home must refetch so the new devotion card appears
+        screen.innerHTML = S.adminDevotion("", `Published: "${(r && r.title) || title}". It is now on the app home screen and the website.`);
+        screen.scrollTop = 0;
+        toast("Devotion published");
+      } catch (err) { fail(err.message); }
     }
     if (e.target.id === "catalog-form") {
       e.preventDefault();
@@ -685,6 +808,13 @@
       }
     } catch { /* push unavailable in browser preview */ }
   }
+
+  // Full-bleed screens (splash, login, register, loading, error) drop the
+  // tab-bar bottom padding; CSS :has() covers modern WebViews, this observer
+  // is the fallback for older ones.
+  new MutationObserver(() => {
+    screen.classList.toggle("screen-bare", !!screen.querySelector(":scope > .auth-wrap, :scope > .splash-wrap"));
+  }).observe(screen, { childList: true });
 
   window.addEventListener("hashchange", render);
   initPush();

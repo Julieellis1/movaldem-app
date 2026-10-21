@@ -156,6 +156,49 @@
     </div></div>`;
   }
 
+  /* ---------------- Admin: daily verse + devotion ---------------- */
+  function todayStr() {
+    const d = new Date();
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  }
+  function adminVerse(err = "", done = "", v = null) {
+    return `
+    <div class="page-head">
+      <button class="icon-btn" data-nav="profile" aria-label="Back"><span class="material-symbols-outlined">arrow_back</span></button>
+      <div><h1>Daily Verse</h1><p class="sub">Set the verse members see and receive</p></div>
+    </div>
+    <div class="section"><div class="card">
+      ${err ? `<div class="auth-err">${esc(err)}</div>` : ""}
+      ${done ? `<div class="auth-ok">${esc(done)}</div>` : ""}
+      <form id="verse-form">
+        <div class="field"><label>Date</label><input name="verse_date" type="date" value="${esc((v && v.verse_date) || todayStr())}" required/></div>
+        <div class="field"><label>Verse text</label><textarea name="text" rows="3" placeholder="e.g. I can do all things through Christ which strengtheneth me." required maxlength="600">${esc((v && v.text) || "")}</textarea></div>
+        <div class="field"><label>Reference</label><input name="ref" type="text" placeholder="e.g. Philippians 4:13" required maxlength="120" value="${esc((v && v.ref) || "")}"/></div>
+        <div class="field"><label>Note (optional)</label><input name="note" type="text" placeholder="e.g. Morning Meditations" maxlength="255" value="${esc((v && v.note) || "")}"/></div>
+        <button class="btn btn-gold" type="submit"><span class="material-symbols-outlined">wb_sunny</span> Save Verse</button>
+      </form>
+      <p class="sub" style="margin-top:.8rem">Days you leave unset use the automatic verse rotation. Members with Verse of the Day alerts on receive the day's verse by push notification.</p>
+    </div></div>`;
+  }
+  function adminDevotion(err = "", done = "") {
+    return `
+    <div class="page-head">
+      <button class="icon-btn" data-nav="profile" aria-label="Back"><span class="material-symbols-outlined">arrow_back</span></button>
+      <div><h1>New Devotion</h1><p class="sub">Published to the app and website at once</p></div>
+    </div>
+    <div class="section"><div class="card">
+      ${err ? `<div class="auth-err">${esc(err)}</div>` : ""}
+      ${done ? `<div class="auth-ok">${esc(done)}</div>` : ""}
+      <form id="devotion-form">
+        <div class="field"><label>Title</label><input name="title" type="text" placeholder="e.g. Walking in the Light of His Word" required maxlength="190"/></div>
+        <div class="field"><label>Devotion text</label><textarea name="body" rows="9" placeholder="Write the devotion here. Leave a blank line between paragraphs." required></textarea></div>
+        <div class="field"><label>Photo (optional)</label><input name="image" type="file" accept="image/*"/></div>
+        <button class="btn btn-gold" type="submit"><span class="material-symbols-outlined">auto_stories</span> Publish Devotion</button>
+      </form>
+      <p class="sub" style="margin-top:.8rem">Publishing sends a push notification to members with Daily Devotion alerts on.</p>
+    </div></div>`;
+  }
+
   /* ---------------- Home ---------------- */
   function home(data, session) {
     const first = esc((session?.name || "Friend").split(" ")[0]);
@@ -385,12 +428,26 @@
         <small class="sub">${10 - me.streak} days away from unlocking the Sacred Scholar badge</small></div>
       <b style="color:var(--maroon);font-size:.8rem">+250 XP</b>
     </div></div>
+    ${(data.quiz.sets && data.quiz.sets.length) ? `
+    <div class="section">
+      <div class="section-head"><h2 class="h-head">Topic Quizzes</h2><span class="link-gold">${data.quiz.sets.length} ready</span></div>
+      ${data.quiz.sets.map((s) => `
+      <div class="card" data-quiz-set="${s.id}" style="cursor:pointer;display:flex;gap:.85rem;align-items:center;padding:.9rem;margin-bottom:.7rem">
+        <div style="width:48px;height:48px;border-radius:12px;background:var(--forest,#123524);display:flex;align-items:center;justify-content:center;flex:none"><span class="material-symbols-outlined" style="color:var(--gold)">auto_stories</span></div>
+        <div style="flex:1;min-width:0">
+          <b style="display:block">${esc(s.title)}</b>
+          <small class="sub">${esc(s.description || s.category || "")}</small>
+          <div style="margin-top:.2rem"><small style="color:var(--gold-deep);font-weight:700">${s.questions} Questions${s.my_best !== null && s.my_best !== undefined ? ` &bull; Your best: ${s.my_best}/${s.questions}` : ""}</small></div>
+        </div>
+        <span class="material-symbols-outlined" style="color:var(--gold-deep)">play_circle</span>
+      </div>`).join("")}
+    </div>` : ""}
     <div class="section">
       <div class="section-head"><h2 class="h-head">Scripture Categories</h2><span class="link-gold">${data.quiz.categories.length} tracks ready</span></div>
       <div class="cat-grid">
         ${data.quiz.categories.map((c) => `
-        <a class="card cat" data-nav="quiz/play" style="cursor:pointer">
-          <div class="cat-art"><span class="cnt">${c.quizzes} Quizzes</span><span class="material-symbols-outlined">menu_book</span></div>
+        <a class="card cat" data-quiz-cat="${esc(c.id)}" style="cursor:pointer">
+          <div class="cat-art"><span class="cnt">${c.quizzes} Questions</span><span class="material-symbols-outlined">menu_book</span></div>
           <div class="cat-body"><b>${esc(c.name)}</b><small>${esc(c.sub)}</small>
             <div class="cat-foot"><span>&#9733; ${c.xpMax} XP max</span><span class="material-symbols-outlined">arrow_forward</span></div>
           </div>
@@ -409,13 +466,13 @@
     <p class="sub" style="text-align:center;margin-top:.8rem">Answer daily quests to climb the ranks and earn the Sacred Scholar badge.</p>`}`;
   }
 
-  function quizPlay(q, idx, total, picked, live) {
+  function quizPlay(q, idx, total, picked, live, title) {
     const letters = ["A", "B", "C", "D"];
     const locked = picked !== null && picked !== undefined;
     return `
     <div class="appbar">
       <button class="icon-btn" data-nav="quiz" aria-label="Quit quiz"><span class="material-symbols-outlined">close</span></button>
-      <div class="brand"><div><b>Daily Challenge</b><small>Question ${idx + 1} of ${total}</small></div></div>
+      <div class="brand"><div><b>${esc(title || "Daily Challenge")}</b><small>Question ${idx + 1} of ${total}</small></div></div>
       <span class="q-timer"><span class="material-symbols-outlined">timer</span><span id="q-clock">5:00</span></span>
     </div>
     <div class="q-progress"><i style="width:${(idx / total) * 100}%"></i></div>
@@ -752,6 +809,8 @@
     </div></div>
     <div class="section"><div class="prof-menu card" style="padding:0;overflow:hidden">
       ${session?.isAdmin ? `<button class="pm-item" data-nav="admin/notify"><span class="material-symbols-outlined">campaign</span>Send Notification<span class="material-symbols-outlined go">chevron_right</span></button>` : ""}
+      ${session?.isAdmin ? `<button class="pm-item" data-nav="admin/verse"><span class="material-symbols-outlined">wb_sunny</span>Set Daily Verse<span class="material-symbols-outlined go">chevron_right</span></button>` : ""}
+      ${session?.isAdmin ? `<button class="pm-item" data-nav="admin/devotion"><span class="material-symbols-outlined">auto_stories</span>New Daily Devotion<span class="material-symbols-outlined go">chevron_right</span></button>` : ""}
       ${canPostCatalog(session) ? `<button class="pm-item" data-nav="admin/catalog"><span class="material-symbols-outlined">collections_bookmark</span>Post Catalog<span class="material-symbols-outlined go">chevron_right</span></button>` : ""}
       <button class="pm-item" data-toast="Profile editing coming soon"><span class="material-symbols-outlined">edit</span>Edit Profile<span class="material-symbols-outlined go">chevron_right</span></button>
       <button class="pm-item" data-push-toggle><span class="material-symbols-outlined">notifications_active</span>Instant Alerts<span class="switch on" id="push-switch"></span></button>
@@ -796,5 +855,5 @@
     </div>`;
   }
 
-  window.Screens = { splash, welcome, login, registerRole, registerForm, loading, loadError, notifyScreen, DEPARTMENTS, canPostCatalog, home, events, quiz, quizPlay, quizResult, gallery, catalogs, catalogDetail, catalogComposer, notifications, notifDetail, devotionDetail, devotionsList, profile };
+  window.Screens = { splash, welcome, login, registerRole, registerForm, loading, loadError, notifyScreen, adminVerse, adminDevotion, DEPARTMENTS, canPostCatalog, home, events, quiz, quizPlay, quizResult, gallery, catalogs, catalogDetail, catalogComposer, notifications, notifDetail, devotionDetail, devotionsList, profile };
 })();
