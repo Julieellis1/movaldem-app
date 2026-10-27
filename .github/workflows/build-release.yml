@@ -1,0 +1,79 @@
+name: Build Movaldem release APK
+
+# Manual only: run from the repo's Actions tab. Never runs on push,
+# so no release build is produced by accident.
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Sync Capacitor
+        run: npx cap sync android
+
+      - name: Check signing secrets are set
+        env:
+          KEYSTORE_B64: ${{ secrets.RELEASE_KEYSTORE_B64 }}
+          STORE_PASS: ${{ secrets.MOVALDEM_RELEASE_STORE_PASSWORD }}
+          KEY_PASS: ${{ secrets.MOVALDEM_RELEASE_KEY_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.MOVALDEM_RELEASE_KEY_ALIAS }}
+        run: |
+          for v in "$KEYSTORE_B64" "$STORE_PASS" "$KEY_PASS" "$KEY_ALIAS"; do
+            [ -n "$v" ] || { echo "A release signing secret is missing. Check Settings > Secrets and variables > Actions."; exit 1; }
+          done
+          echo "All four release signing secrets are set."
+
+      - name: Restore release keystore
+        env:
+          KEYSTORE_B64: ${{ secrets.RELEASE_KEYSTORE_B64 }}
+        run: |
+          printf '%s' "$KEYSTORE_B64" | base64 -d > android/release.keystore
+          chmod 600 android/release.keystore
+          [ -s android/release.keystore ] || { echo "Keystore file is empty."; exit 1; }
+          echo "Keystore restored."
+
+      - name: Build release APK
+        env:
+          MOVALDEM_RELEASE_KEYSTORE: ${{ github.workspace }}/android/release.keystore
+          MOVALDEM_RELEASE_KEY_ALIAS: ${{ secrets.MOVALDEM_RELEASE_KEY_ALIAS }}
+          MOVALDEM_RELEASE_STORE_PASSWORD: ${{ secrets.MOVALDEM_RELEASE_STORE_PASSWORD }}
+          MOVALDEM_RELEASE_KEY_PASSWORD: ${{ secrets.MOVALDEM_RELEASE_KEY_PASSWORD }}
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleRelease
+
+      - name: Verify release APK
+        run: |
+          APK=android/app/build/outputs/apk/release/app-release.apk
+          [ -f "$APK" ] || { echo "Release APK not found."; exit 1; }
+          ls -lh "$APK"
+          APKSIGNER=$(find "$ANDROID_HOME/build-tools" -name apksigner | sort | tail -1)
+          echo "Using apksigner: $APKSIGNER"
+          "$APKSIGNER" verify --print-certs --verbose "$APK"
+          AAPT2=$(find "$ANDROID_HOME/build-tools" -name aapt2 | sort | tail -1)
+          "$AAPT2" dump badging "$APK" | grep -E "package:|application:.*debuggable" || true
+          echo "The APK above must show the release certificate, not the Android debug certificate."
+
+      - name: Upload release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: movaldem-release-apk
+          path: android/app/build/outputs/apk/release/app-release.apk
+          retention-days: 7
