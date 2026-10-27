@@ -822,18 +822,45 @@
       ${session?.isAdmin ? `<button class="pm-item" data-nav="admin/notify"><span class="material-symbols-outlined">campaign</span>Send Notification<span class="material-symbols-outlined go">chevron_right</span></button>` : ""}
       ${session?.isAdmin ? `<button class="pm-item" data-nav="admin/verse"><span class="material-symbols-outlined">wb_sunny</span>Set Daily Verse<span class="material-symbols-outlined go">chevron_right</span></button>` : ""}
       ${session?.isAdmin ? `<button class="pm-item" data-nav="admin/devotion"><span class="material-symbols-outlined">auto_stories</span>New Daily Devotion<span class="material-symbols-outlined go">chevron_right</span></button>` : ""}
+      ${session?.isAdmin ? `<button class="pm-item" data-nav="admin/app"><span class="material-symbols-outlined">upload</span>Upload App Update<span class="material-symbols-outlined go">chevron_right</span></button>` : ""}
       ${canPostCatalog(session) ? `<button class="pm-item" data-nav="admin/catalog"><span class="material-symbols-outlined">collections_bookmark</span>Post Catalog<span class="material-symbols-outlined go">chevron_right</span></button>` : ""}
       <button class="pm-item" data-toast="Profile editing coming soon"><span class="material-symbols-outlined">edit</span>Edit Profile<span class="material-symbols-outlined go">chevron_right</span></button>
       <button class="pm-item" data-push-toggle><span class="material-symbols-outlined">notifications_active</span>Instant Alerts<span class="switch on" id="push-switch"></span></button>
       <button class="pm-item" data-notify-pref="verse"><span class="material-symbols-outlined">wb_sunny</span>Verse of the Day Alerts<span class="switch${p.verse ? " on" : ""}"></span></button>
       <button class="pm-item" data-notify-pref="devotion"><span class="material-symbols-outlined">auto_stories</span>Daily Devotion Alerts<span class="switch${p.devotion ? " on" : ""}"></span></button>
-      <button class="pm-item" data-toast="Link copied — invite your family"><span class="material-symbols-outlined">share</span>Invite a Friend<span class="material-symbols-outlined go">chevron_right</span></button>
+      <button class="pm-item" data-share-app><span class="material-symbols-outlined">share</span>Invite a Friend<span class="material-symbols-outlined go">chevron_right</span></button>
       <button class="pm-item" data-nav="contact"><span class="material-symbols-outlined">call</span>Contact the Church<span class="material-symbols-outlined go">chevron_right</span></button>
     </div></div>
     <div class="section">
       <button class="btn btn-ghost" id="logout-btn"><span class="material-symbols-outlined">logout</span>Sign Out</button>
       <p class="sub" style="text-align:center;margin-top:1rem">${esc(C.CHURCH_ADDRESS)}<br/>${esc(C.CHURCH_PHONE)}</p>
     </div>`;
+  }
+
+  /* ---------------- Upload App Update (admin only) ---------------- */
+  /* The APK always lands on the same file, so the download link never
+     changes: a new upload simply replaces the old one. */
+  function appUpload(info) {
+    const current = (info && info.url) || C.APP_APK_URL;
+    const hasFile = !!(info && info.exists);
+    return `
+    <div class="page-head">
+      <button class="icon-btn" data-nav="profile" aria-label="Back"><span class="material-symbols-outlined">arrow_back</span></button>
+      <div><h1>Upload App Update</h1><p class="sub">Replaces the current app file at the same link</p></div>
+    </div>
+    <div class="section"><div class="card">
+      <p class="sub" style="margin:0 0 .8rem">Current download link (never changes):</p>
+      <p style="word-break:break-all;font-size:.82rem;margin:0 0 .4rem"><a class="link-gold" href="${esc(current)}" target="_blank" rel="noopener">${esc(current)}</a></p>
+      <p class="sub" style="margin:0 0 1rem">${hasFile ? `Current file: ${(info.size / 1048576).toFixed(1)} MB, uploaded ${esc(info.updated || "")}.` : "No app file has been uploaded yet."}</p>
+      <form id="app-apk-form">
+        <div class="field"><label>Choose app file <span class="lbl-hint">.apk only</span></label>
+          <input id="app-apk-file" type="file" accept=".apk" required/>
+          <small class="sub" id="app-apk-hint">Pick the signed APK to publish.</small>
+        </div>
+        <button class="btn btn-gold" type="submit"><span class="material-symbols-outlined">upload</span>Upload &amp; Replace</button>
+      </form>
+      <p class="sub" style="margin-top:.8rem">After uploading, anyone opening the download link gets the new version immediately. Members already on the old version can install over it.</p>
+    </div></div>`;
   }
 
   /* ---------------- Contact the Church ---------------- */
@@ -852,6 +879,10 @@
         <label style="display:flex;align-items:center;gap:.4rem"><span class="material-symbols-outlined" style="font-size:16px">call</span>Phone</label>
         <p style="margin:.2rem 0 0"><a class="link-gold" href="tel:${esc(String(C.CHURCH_PHONE).replace(/[^+\d]/g, ""))}">${esc(C.CHURCH_PHONE)}</a></p>
         <p class="sub" style="margin:.2rem 0 0">For prayers &amp; enquiries</p>
+      </div>
+      <div class="field" style="margin-bottom:1rem">
+        <label style="display:flex;align-items:center;gap:.4rem"><span class="material-symbols-outlined" style="font-size:16px">mail</span>Email</label>
+        <p style="margin:.2rem 0 0"><a class="link-gold" href="mailto:${esc(C.CHURCH_EMAIL)}">${esc(C.CHURCH_EMAIL)}</a></p>
       </div>
       <a class="btn btn-gold" href="https://wa.me/${esc(waNumber)}?text=${encodeURIComponent("Hello MOVALDEM, I would like to make an enquiry.")}" target="_blank" rel="noopener">
         <span class="material-symbols-outlined">chat</span>Chat on WhatsApp</a>
@@ -888,5 +919,5 @@
     </div>`;
   }
 
-  window.Screens = { splash, welcome, login, registerRole, registerForm, loading, loadError, notifyScreen, adminVerse, adminDevotion, DEPARTMENTS, canPostCatalog, home, events, quiz, quizPlay, quizResult, gallery, catalogs, catalogDetail, catalogComposer, notifications, notifDetail, devotionDetail, devotionsList, profile, contactChurch };
+  window.Screens = { splash, welcome, login, registerRole, registerForm, loading, loadError, notifyScreen, adminVerse, adminDevotion, DEPARTMENTS, canPostCatalog, home, events, quiz, quizPlay, quizResult, gallery, catalogs, catalogDetail, catalogComposer, notifications, notifDetail, devotionDetail, devotionsList, profile, contactChurch, appUpload };
 })();

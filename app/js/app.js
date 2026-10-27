@@ -320,6 +320,11 @@
       }
     }
     else if (base === "contact") screen.innerHTML = S.contactChurch();
+    else if (base === "admin" && arg === "app") {
+      if (!session.isAdmin) { location.hash = "#/home"; return; }
+      const info = await Api.appApkInfo().catch(() => null);
+      screen.innerHTML = S.appUpload(info);
+    }
     else if (base === "notifications" && arg) {
       const detail = await Api.notificationDetail(arg, data.notifications);
       if (detail) { Api.markNotifsSeen([detail.id]); screen.innerHTML = S.notifDetail(detail); }
@@ -422,6 +427,26 @@
 
     const nn = e.target.closest("[data-notif]");
     if (nn) { location.hash = "#/notifications/" + nn.dataset.notif; return; }
+
+    // Invite a Friend: open the phone's share menu with the constant
+    // app download link, so it can go by SMS, WhatsApp, copy, or
+    // whatever else the phone offers.
+    const shareBtn = e.target.closest("[data-share-app]");
+    if (shareBtn) {
+      const url = C.APP_APK_URL;
+      try {
+        if (navigator.share) {
+          await navigator.share({ title: "Movaldem App", text: "Download the Movaldem church app", url });
+        } else { throw new Error("no-share"); }
+      } catch (err) {
+        if (err && err.name === "AbortError") return; // user closed the sheet
+        try {
+          await navigator.clipboard.writeText(url);
+          toast("App link copied — share it anywhere");
+        } catch { toast("Sharing is not available on this device"); }
+      }
+      return;
+    }
 
     const t = e.target.closest("[data-toast]");
     if (t) { toast(t.dataset.toast); return; }
@@ -717,6 +742,21 @@
           location.hash = created && created.id ? "#/catalogs/" + created.id : "#/catalogs";
         }
       } catch (err) { fail(err.message || "Could not save the catalog."); }
+    }
+    if (e.target.id === "app-apk-form") {
+      e.preventDefault();
+      const form = e.target;
+      const file = document.getElementById("app-apk-file").files[0];
+      const btn = setBusy(form, "Uploading…");
+      const restore = () => { if (btn) { btn.disabled = false; btn.innerHTML = btn.dataset.label || "Upload & Replace"; } };
+      try {
+        if (!file) throw new Error("Choose an APK file first.");
+        if (!/\.apk$/i.test(file.name)) throw new Error("That is not an APK file.");
+        const r = await Api.uploadAppApk(file);
+        data = null;
+        toast("App updated — the download link now serves the new version");
+        location.hash = "#/admin/app";
+      } catch (err) { restore(); toast(err.message || "Could not upload the app."); }
     }
   });
 

@@ -25,4 +25,9 @@ window.MOVALDEM_CONFIG = {
   CHURCH_FULL_NAME: "Mountain of Victory at the Last Day Evangelical Ministry",
   CHURCH_ADDRESS: "17, Sikiru Omolaja Street, Oke Abiye, Alagbado, Lagos State",
   CHURCH_PHONE: "+234 903 452 9959",
+  CHURCH_EMAIL: "emailmovaldem@gmail.com",
+
+  /* Constant app download link: every APK upload overwrites this one
+     file, so the link never changes no matter how often it is updated. */
+  get APP_APK_URL() { return this.WP_BASE + "/wp-content/uploads/movaldem-app/movaldem.apk"; },
 };

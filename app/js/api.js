@@ -465,6 +465,18 @@
         headers: authHeaders(),
       });
     },
+
+    /* --- app download file (constant link, overwritten on upload) --- */
+    async appApkInfo() {
+      if (CFG.USE_MOCK) return { ok: true, url: CFG.APP_APK_URL, exists: false, size: 0, updated: "" };
+      return wp("/movaldem/v1/app-apk").catch(() => ({ ok: true, url: CFG.APP_APK_URL, exists: false, size: 0, updated: "" }));
+    },
+    async uploadAppApk(file) {
+      if (CFG.USE_MOCK) return { ok: true, mock: true };
+      const fd = new FormData();
+      fd.append("app_apk", file);
+      return wpForm("/movaldem/v1/app-apk", fd);
+    },
   };
 
   window.MovaldemApi = Api;
