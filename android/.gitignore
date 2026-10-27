@@ -53,9 +53,15 @@ captures/
 .idea/navEditor.xml
 
 # Keystore files
-# Uncomment the following lines if you do not want to check your keystore files in.
-#*.jks
-#*.keystore
+# The debug keystore is already tracked on purpose (public debug
+# identity). The release keystore must NEVER be committed: this repo
+# is public, and anyone with it plus its passwords could sign as
+# Movaldem. Keep it outside the repo and pass its path via
+# MOVALDEM_RELEASE_KEYSTORE.
+release.keystore
+*.jks
+keystore.properties
+release-signing.env
 
 # External native build folder generated in Android Studio 2.2 and later
 .externalNativeBuild

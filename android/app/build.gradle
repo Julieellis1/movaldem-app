@@ -7,7 +7,7 @@ android {
         applicationId "org.movaldem.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
+        versionCode 2
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
@@ -30,13 +30,44 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        // Proper release signing. The release keystore is NEVER
+        // committed (this repo is public) and its passwords are NEVER
+        // written here. Supply them as environment variables or
+        // Gradle properties, e.g. for a local build:
+        //   MOVALDEM_RELEASE_KEYSTORE=/path/to/release.keystore
+        //   MOVALDEM_RELEASE_KEY_ALIAS=movaldem
+        //   MOVALDEM_RELEASE_STORE_PASSWORD=...
+        //   MOVALDEM_RELEASE_KEY_PASSWORD=...
+        // or the matching movaldemRelease* Gradle properties. Without
+        // them, a release build falls back to the debug key with a
+        // warning, so CI debug builds keep working but the result
+        // must not be shipped as a release.
+        release {
+            def storePath = System.getenv('MOVALDEM_RELEASE_KEYSTORE') ?: project.findProperty('movaldemReleaseKeystore')
+            def storePass = System.getenv('MOVALDEM_RELEASE_STORE_PASSWORD') ?: project.findProperty('movaldemReleaseStorePassword')
+            def keyAliasProp = System.getenv('MOVALDEM_RELEASE_KEY_ALIAS') ?: project.findProperty('movaldemReleaseKeyAlias')
+            def keyPass = System.getenv('MOVALDEM_RELEASE_KEY_PASSWORD') ?: project.findProperty('movaldemReleaseKeyPassword')
+            if (storePath && storePass && keyAliasProp && keyPass && file(storePath).exists()) {
+                storeFile file(storePath)
+                storePassword storePass
+                keyAlias keyAliasProp
+                keyPassword keyPass
+            } else {
+                logger.warn('No release keystore configured; release build will be signed with the debug key and must not be shipped as a release.')
+                storeFile rootProject.file('debug.keystore')
+                storePassword 'android'
+                keyAlias 'androiddebugkey'
+                keyPassword 'android'
+            }
+        }
     }
     buildTypes {
         debug {
             signingConfig signingConfigs.pinned
         }
         release {
-            signingConfig signingConfigs.pinned
+            signingConfig signingConfigs.release
+            debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
