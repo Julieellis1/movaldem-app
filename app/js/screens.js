@@ -192,7 +192,7 @@
       <form id="devotion-form">
         <div class="field"><label>Title</label><input name="title" type="text" placeholder="e.g. Walking in the Light of His Word" required maxlength="190"/></div>
         <div class="field"><label>Devotion text</label><textarea name="body" rows="9" placeholder="Write the devotion here. Leave a blank line between paragraphs." required></textarea></div>
-        <div class="field"><label>Photo (optional)</label><input name="image" type="file" accept="image/*"/></div>
+        <div class="field"><label>Photo (optional)</label><input name="image" type="file" accept="image/jpeg,image/png,image/gif,image/webp,.jpg,.jpeg,.png,.gif,.webp"/><small class="sub">JPG, PNG, GIF or WebP. Photos are compressed to WebP, max 400 KB, before upload.</small></div>
         <button class="btn btn-gold" type="submit"><span class="material-symbols-outlined">auto_stories</span> Publish Devotion</button>
       </form>
       <p class="sub" style="margin-top:.8rem">Publishing sends a push notification to members with Daily Devotion alerts on.</p>
@@ -716,8 +716,8 @@
           </div>
         </div>` : ""}
         <div class="field"><label>${editing ? "Add more photos" : "Photos"} <span class="lbl-hint">you can pick several</span></label>
-          <input id="catalog-photos" type="file" accept="image/*" multiple/>
-          <small class="sub" id="catalog-photos-hint">No photos selected yet.</small>
+          <input id="catalog-photos" type="file" accept="image/jpeg,image/png,image/gif,image/webp,.jpg,.jpeg,.png,.gif,.webp" multiple/>
+          <small class="sub" id="catalog-photos-hint">No photos selected yet. JPG, PNG, GIF or WebP; each photo is compressed to WebP, max 400 KB, before upload.</small>
         </div>
         <div class="field"><label>YouTube videos <span class="lbl-hint">watch, shorts or live links</span></label>
           <div id="catalog-videos">

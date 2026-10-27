@@ -585,26 +585,93 @@
     wrap.classList.add("on");
   }
 
-  // Downscale a picked photo to a JPEG data URL (max 1200px wide) so the
-  // devotion upload stays small.
-  function fileToDataUrl(file) {
-    return new Promise((resolve) => {
+  // Frontend image rule: JPG, PNG, GIF and WebP only, compressed to
+  // WebP and no larger than MAX_IMAGE_BYTES (400 KB) before anything
+  // is sent to the server. A WebP or animated GIF that is already
+  // within the limit is sent as picked, so animation is not destroyed
+  // by re-encoding. Anything else is decoded, downscaled and
+  // re-encoded as WebP, lowering quality and then size until it fits.
+  // If it still does not fit, the upload is refused with a plain
+  // message instead of sending a file the server would reject.
+  const MAX_IMAGE_BYTES = (C && C.MAX_IMAGE_BYTES) || 400 * 1024;
+  const IMAGE_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp"];
+  function imageFileError(file) {
+    const name = (file && file.name) || "photo";
+    const ext = name.split(".").pop().toLowerCase();
+    const okType = file && IMAGE_TYPES.includes(file.type);
+    const okExt = ["jpg", "jpeg", "png", "gif", "webp"].includes(ext);
+    if (!okType && !okExt) return "Only JPG, PNG, GIF or WebP photos are accepted.";
+    return "";
+  }
+  function loadPickedImage(file) {
+    return new Promise((resolve, reject) => {
       const url = URL.createObjectURL(file);
       const img = new Image();
-      img.onload = () => {
-        try {
-          const scale = Math.min(1, 1200 / (img.width || 1200));
-          const c = document.createElement("canvas");
-          c.width = Math.max(1, Math.round(img.width * scale));
-          c.height = Math.max(1, Math.round(img.height * scale));
-          c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
-          resolve(c.toDataURL("image/jpeg", 0.85));
-        } catch { resolve(null); }
-        URL.revokeObjectURL(url);
-      };
-      img.onerror = () => { URL.revokeObjectURL(url); resolve(null); };
+      img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
+      img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("That photo could not be read. Pick another one.")); };
       img.src = url;
     });
+  }
+  function canvasToBlob(canvas, type, quality) {
+    return new Promise((resolve) => {
+      if (canvas.toBlob) canvas.toBlob((b) => resolve(b), type, quality);
+      else resolve(null);
+    });
+  }
+  async function compressToWebpFile(file) {
+    const typeErr = imageFileError(file);
+    if (typeErr) throw new Error(typeErr);
+    if (!file || !file.size) throw new Error("No photo was picked.");
+    // Already WebP within the limit, or a small animated GIF: keep it.
+    if (file.size <= MAX_IMAGE_BYTES && (file.type === "image/webp" || file.type === "image/gif")) return file;
+    const img = await loadPickedImage(file);
+    const baseName = ((file.name || "photo").replace(/\.[^.]+$/, "") || "photo");
+    let longest = Math.max(img.width || 0, img.height || 0) || 1600;
+    let scale = Math.min(1, 1600 / longest);
+    for (let attempt = 0; attempt < 14; attempt++) {
+      const quality = Math.max(0.5, 0.85 - attempt * 0.05);
+      const c = document.createElement("canvas");
+      c.width = Math.max(1, Math.round((img.width || 1600) * scale));
+      c.height = Math.max(1, Math.round((img.height || 1600) * scale));
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      let blob = await canvasToBlob(c, "image/webp", quality);
+      let ext = "webp";
+      let type = "image/webp";
+      if (!blob) {
+        blob = await canvasToBlob(c, "image/jpeg", quality);
+        ext = "jpg";
+        type = "image/jpeg";
+      }
+      if (blob && blob.size <= MAX_IMAGE_BYTES) {
+        return new File([blob], baseName + "." + ext, { type, lastModified: Date.now() });
+      }
+      // Shrink the picture itself every few attempts, then try again.
+      if (attempt % 3 === 2) scale *= 0.8;
+      if (longest * scale < 800 && quality <= 0.5) break;
+    }
+    throw new Error("That photo is still larger than 400 KB after compression. Pick a smaller photo.");
+  }
+  async function fileToDataUrl(file) {
+    const compressed = await compressToWebpFile(file);
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => reject(new Error("That photo could not be read. Pick another one."));
+      reader.readAsDataURL(compressed);
+    });
+  }
+  // Compressed WebP data URL plus the matching filename, so the
+  // server stores the bytes under a .webp name, not the original
+  // .jpg/.png name the photo was picked with.
+  async function fileToWebpDataUrl(file) {
+    const compressed = await compressToWebpFile(file);
+    const dataUrl = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => reject(new Error("That photo could not be read. Pick another one."));
+      reader.readAsDataURL(compressed);
+    });
+    return { dataUrl, filename: compressed.name };
   }
 
   document.addEventListener("submit", async (e) => {
@@ -687,9 +754,14 @@
         if (!title) throw new Error("Give the devotion a title.");
         if (!body) throw new Error("Write the devotion text first.");
         let image_base64 = "";
+        let image_filename = "";
         const file = f.get("image");
-        if (file && file.size) image_base64 = (await fileToDataUrl(file)) || "";
-        const r = await Api.adminCreateDevotion({ title, body, image_base64, image_filename: file && file.name ? file.name : "" });
+        if (file && file.size) {
+          const webp = await fileToWebpDataUrl(file);
+          image_base64 = webp.dataUrl;
+          image_filename = webp.filename;
+        }
+        const r = await Api.adminCreateDevotion({ title, body, image_base64, image_filename });
         data = null; // home must refetch so the new devotion card appears
         screen.innerHTML = S.adminDevotion("", `Published: "${(r && r.title) || title}". It is now on the app home screen and the website.`);
         screen.scrollTop = 0;
@@ -724,8 +796,10 @@
         const imageIds = [...form.querySelectorAll(".cat-keep")].map((el) => parseInt(el.dataset.photoId, 10)).filter((n) => n > 0);
         const files = [...(document.getElementById("catalog-photos").files || [])];
         for (let i = 0; i < files.length; i++) {
+          if (btn) btn.innerHTML = '<span class="btn-spin"></span> Compressing photo ' + (i + 1) + " of " + files.length + "…";
+          const compressed = await compressToWebpFile(files[i]);
           if (btn) btn.innerHTML = '<span class="btn-spin"></span> Uploading photo ' + (i + 1) + " of " + files.length + "…";
-          const up = await Api.uploadMedia(files[i]);
+          const up = await Api.uploadMedia(compressed);
           if (up && up.id) imageIds.push(up.id);
         }
         if (btn) btn.innerHTML = '<span class="btn-spin"></span> ' + (editId ? "Saving…" : "Publishing…");

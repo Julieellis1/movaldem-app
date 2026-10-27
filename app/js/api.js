@@ -438,6 +438,13 @@
     },
     async uploadMedia(file) {
       if (CFG.USE_MOCK) return { id: Date.now(), url: "", thumb: "" };
+      // Second line of defence for the frontend image rule: nothing
+      // larger than 400 KB is sent, even if a caller forgets to
+      // compress first. JPG, PNG, GIF and WebP only.
+      const maxBytes = (CFG && CFG.MAX_IMAGE_BYTES) || 400 * 1024;
+      const okTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
+      if (file && !okTypes.includes(file.type)) throw new Error("Only JPG, PNG, GIF or WebP photos are accepted.");
+      if (file && file.size > maxBytes) throw new Error("Photos must be 400 KB or smaller after compression.");
       const fd = new FormData();
       fd.append("file", file);
       return wpForm("/movaldem/v1/media", fd);

@@ -21,6 +21,12 @@ window.MOVALDEM_CONFIG = {
   // server key into the movaldem-core push settings in WP Admin.
   PUSH_ENABLED: true,
 
+  // Frontend image uploads (catalog photos, devotion photos): every
+  // picked photo is compressed to WebP in the app first, and nothing
+  // larger than this is ever sent to the server.
+  MAX_IMAGE_BYTES: 400 * 1024,
+  MAX_IMAGE_LABEL: "400 KB",
+
   APP_NAME: "Movaldem",
   CHURCH_FULL_NAME: "Mountain of Victory at the Last Day Evangelical Ministry",
   CHURCH_ADDRESS: "17, Sikiru Omolaja Street, Oke Abiye, Alagbado, Lagos State",
