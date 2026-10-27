@@ -304,14 +304,22 @@
     else if (base === "gallery") screen.innerHTML = S.gallery(data, arg === "clips" ? "clips" : "photos");
     else if (base === "catalogs" && arg) {
       const detail = await Api.getCatalog(arg).catch(() => null);
-      if (detail) { screen.innerHTML = S.catalogDetail(detail); }
+      if (detail) { screen.innerHTML = S.catalogDetail(detail, session); }
       else { toast("Could not open that catalog."); location.hash = "#/catalogs"; return; }
     }
     else if (base === "catalogs") screen.innerHTML = S.catalogs(data.catalogs, session);
     else if (base === "admin" && arg === "catalog") {
       if (!S.canPostCatalog(session)) { location.hash = "#/catalogs"; return; }
-      screen.innerHTML = S.catalogComposer();
+      const editId = route.split("/")[2];
+      if (editId) {
+        const existing = await Api.getCatalog(editId).catch(() => null);
+        if (!existing) { toast("Could not open that catalog."); location.hash = "#/catalogs"; return; }
+        screen.innerHTML = S.catalogComposer("", existing);
+      } else {
+        screen.innerHTML = S.catalogComposer();
+      }
     }
+    else if (base === "contact") screen.innerHTML = S.contactChurch();
     else if (base === "notifications" && arg) {
       const detail = await Api.notificationDetail(arg, data.notifications);
       if (detail) { Api.markNotifsSeen([detail.id]); screen.innerHTML = S.notifDetail(detail); }
@@ -452,6 +460,27 @@
         const r = ytRm.closest(".yt-row");
         r.querySelector('[name="yt_url"]').value = "";
         r.querySelector('[name="yt_title"]').value = "";
+      }
+      return;
+    }
+
+    // Catalog composer (edit mode): drop an existing photo from the save.
+    const rmPhoto = e.target.closest("[data-cat-photo-remove]");
+    if (rmPhoto) { rmPhoto.closest(".cat-keep").remove(); return; }
+
+    // Catalog composer (edit mode): delete the whole catalog.
+    const delCat = e.target.closest("[data-catalog-delete]");
+    if (delCat) {
+      const form = document.getElementById("catalog-form");
+      const id = form ? form.dataset.catalogId : "";
+      if (!id) return;
+      if (await confirmDialog("Delete catalog?", "This removes the catalog and its photos and videos. This cannot be undone.", "Delete")) {
+        try {
+          await Api.deleteCatalog(id);
+          data = null;
+          toast("Catalog deleted");
+          location.hash = "#/catalogs";
+        } catch (err) { toast(err.message || "Could not delete the catalog."); }
       }
       return;
     }
@@ -644,35 +673,50 @@
     }
     if (e.target.id === "catalog-form") {
       e.preventDefault();
-      const btn = setBusy(e.target, "Publishing…");
-      const f = new FormData(e.target);
-      const fail = (msg) => { screen.innerHTML = S.catalogComposer(msg); screen.scrollTop = 0; };
+      const form = e.target;
+      const editId = form.dataset.catalogId || "";
+      const btn = setBusy(form, editId ? "Saving…" : "Publishing…");
+      const f = new FormData(form);
+      /* On failure keep the form (and its typed values) on screen and
+         just say what went wrong, instead of wiping it with a fresh form. */
+      const fail = (msg) => {
+        if (btn) { btn.disabled = false; btn.innerHTML = btn.dataset.label || (editId ? "Save Changes" : "Publish Catalog"); }
+        toast(msg);
+      };
       try {
         const title = (f.get("title") || "").trim();
         if (!title) throw new Error("Give your catalog a title.");
         // Collect YouTube links; each must resolve to a real video id.
         const videos = [];
-        e.target.querySelectorAll(".yt-row").forEach((row) => {
+        form.querySelectorAll(".yt-row").forEach((row) => {
           const url = (row.querySelector('[name="yt_url"]').value || "").trim();
           if (!url) return;
           const vid = Api.youtubeVideoId(url);
           if (!vid) throw new Error("That does not look like a YouTube link: " + url);
           videos.push({ url, title: (row.querySelector('[name="yt_title"]').value || "").trim() });
         });
-        // Upload the photos first, one at a time, with progress on the button.
+        // Kept existing photos (edit mode) plus newly uploaded ones.
+        const imageIds = [...form.querySelectorAll(".cat-keep")].map((el) => parseInt(el.dataset.photoId, 10)).filter((n) => n > 0);
         const files = [...(document.getElementById("catalog-photos").files || [])];
-        const imageIds = [];
         for (let i = 0; i < files.length; i++) {
           if (btn) btn.innerHTML = '<span class="btn-spin"></span> Uploading photo ' + (i + 1) + " of " + files.length + "…";
           const up = await Api.uploadMedia(files[i]);
           if (up && up.id) imageIds.push(up.id);
         }
-        if (btn) btn.innerHTML = '<span class="btn-spin"></span> Publishing…';
-        const created = await Api.createCatalog({ title, description: (f.get("description") || "").trim(), imageIds, videos });
-        data = null; // force a fresh catalogs list on return
-        toast("Catalog published");
-        location.hash = created && created.id ? "#/catalogs/" + created.id : "#/catalogs";
-      } catch (err) { fail(err.message || "Could not publish the catalog."); }
+        if (btn) btn.innerHTML = '<span class="btn-spin"></span> ' + (editId ? "Saving…" : "Publishing…");
+        const payload = { title, description: (f.get("description") || "").trim(), imageIds, videos };
+        if (editId) {
+          await Api.updateCatalog(editId, payload);
+          data = null; // force a fresh catalogs list on return
+          toast("Catalog updated");
+          location.hash = "#/catalogs/" + editId;
+        } else {
+          const created = await Api.createCatalog(payload);
+          data = null; // force a fresh catalogs list on return
+          toast("Catalog published");
+          location.hash = created && created.id ? "#/catalogs/" + created.id : "#/catalogs";
+        }
+      } catch (err) { fail(err.message || "Could not save the catalog."); }
     }
   });
 
@@ -726,8 +770,11 @@
   }
 
   /* ---------------- pull to refresh ---------------- */
-  let ptrStartY = null;
-  const PTR_THRESHOLD = 70;
+  /* Deliberate-pull only: a long drag (160px) from the very top of the
+     page. Short scrolls and mid-page drags never refresh, so an
+     ordinary little slide down does not reload the screen. */
+  let ptrStartY = null, ptrMaxPull = 0;
+  const PTR_THRESHOLD = 160;
   function ptrShow(show) {
     let el = document.getElementById("ptr-ind");
     if (!el) {
@@ -739,17 +786,22 @@
     el.classList.toggle("on", !!show);
   }
   document.addEventListener("touchstart", (e) => {
+    ptrMaxPull = 0;
     ptrStartY = (screen.scrollTop <= 0 && Api.session()) ? e.touches[0].clientY : null;
   }, { passive: true });
   document.addEventListener("touchmove", (e) => {
     if (ptrStartY === null) return;
-    ptrShow(e.touches[0].clientY - ptrStartY > PTR_THRESHOLD);
+    /* Only count a downward drag that starts at the top; if the user
+       scrolls back up mid-gesture the pull no longer counts. */
+    if (screen.scrollTop > 0) { ptrStartY = null; ptrShow(false); return; }
+    ptrMaxPull = Math.max(ptrMaxPull, e.touches[0].clientY - ptrStartY);
+    ptrShow(ptrMaxPull > PTR_THRESHOLD);
   }, { passive: true });
   document.addEventListener("touchend", () => {
-    const el = document.getElementById("ptr-ind");
-    const fire = el && el.classList.contains("on");
+    const fire = ptrMaxPull > PTR_THRESHOLD;
     ptrShow(false);
     ptrStartY = null;
+    ptrMaxPull = 0;
     if (fire) {
       data = null;
       toast("Refreshing…");

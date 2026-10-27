@@ -417,3 +417,22 @@ body{
   border:1px solid rgba(255,255,255,.16);padding:.55rem 1rem;border-radius:999px;
   font-size:.8rem;box-shadow:0 8px 24px rgba(0,0,0,.35)}
 .top-loader .btn-spin{width:1.1em;height:1.1em}
+
+/* Compact event cards: one line of time + venue, small action. */
+.ev-compact{margin-bottom:.6rem}
+.ev-compact .ev-body h3{font-size:1rem;margin:.1rem 0 .25rem}
+.ev-meta-line{flex-direction:row;flex-wrap:wrap;align-items:center;gap:.35rem;margin:.2rem 0 .55rem}
+.ev-meta-line .material-symbols-outlined{font-size:14px}
+.ev-meta-line .ev-dot{color:var(--faint)}
+.ev-meta-line .ev-venue{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.btn-sm{min-height:36px;font-size:.78rem;padding:.4rem .9rem}
+.btn-sm .material-symbols-outlined{font-size:16px}
+
+/* Catalog photo download + composer remove controls. */
+.cat-photo-wrap{position:relative}
+.cat-dl{position:absolute;right:.35rem;bottom:.35rem;width:30px;height:30px;border-radius:50%;
+  background:rgba(14,42,32,.75);color:#fff;display:flex;align-items:center;justify-content:center;text-decoration:none}
+.cat-dl .material-symbols-outlined{font-size:16px}
+.cat-rm{position:absolute;top:.3rem;right:.3rem;width:26px;height:26px;border-radius:50%;
+  background:rgba(120,20,30,.85);color:#fff;border:0;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.cat-rm .material-symbols-outlined{font-size:15px}

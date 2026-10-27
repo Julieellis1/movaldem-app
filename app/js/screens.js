@@ -300,44 +300,29 @@
       </div>
     </div>
 
-    <div class="section">
-      <div class="card" style="display:flex;gap:.8rem;align-items:center">
-        <div class="avatar" style="background:linear-gradient(135deg,var(--maroon),#8f485b)">P</div>
-        <div><p class="eyebrow">Community Thought</p>
-        <p style="font-family:var(--font-display);font-style:italic;font-size:1rem;line-height:1.5">&ldquo;When we sing together, the distance dissolves and heaven leans close.&rdquo;</p>
-        <small class="sub">&mdash; Pastor Abiodun D. Durowoju</small></div>
-      </div>
-    </div>`;
+`;
   }
 
   /* ---------------- Programs & Events ---------------- */
+  /* Compact cards: title, one line of time + venue, one small action.
+     Descriptions are dropped so the list stays short and scannable. */
   function programCard(p) {
     const day = p.day.split(" ")[0].toUpperCase().slice(0, 3);
     return `
-    <div class="card ev"><div class="ev-date">
+    <div class="card ev ev-compact"><div class="ev-date">
       <div class="ev-day"><b>${esc(day)}</b><span>${esc(p.day.split(" ").slice(1).join(" ") || "Weekly")}</span></div>
       <div class="ev-body">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <span class="ev-tag">${esc(p.tag)}</span>
-          <span class="material-symbols-outlined" style="font-size:18px;color:var(--faint)">notifications</span>
-        </div>
+        <span class="ev-tag">${esc(p.tag)}</span>
         <h3>${esc(p.title)}</h3>
-        <div class="ev-meta">
-          <div><span class="material-symbols-outlined">schedule</span>${esc(p.time)}</div>
-          <div><span class="material-symbols-outlined">location_on</span>${esc(p.venue)}</div>
-        </div>
-        <p class="sub" style="margin-bottom:.7rem">${esc(p.desc)}</p>
-        <div class="btn-row">
-          <button class="btn btn-dark" data-toast="Added to your calendar: ${esc(p.title)}"><span class="material-symbols-outlined">calendar_month</span>Add to Calendar</button>
-          <button class="icon-btn" data-toast="Link copied" aria-label="Share"><span class="material-symbols-outlined">share</span></button>
-        </div>
+        <div class="ev-meta ev-meta-line"><span class="material-symbols-outlined">schedule</span>${esc(p.time)}<span class="ev-dot">&bull;</span><span class="material-symbols-outlined">location_on</span><span class="ev-venue">${esc(p.venue)}</span></div>
+        <button class="btn btn-dark btn-sm" data-toast="Added to your calendar: ${esc(p.title)}"><span class="material-symbols-outlined">calendar_month</span>Add to Calendar</button>
       </div>
     </div></div>`;
   }
 
   function eventCard(e, special = false) {
     return `
-    <div class="card ev ${special ? "ev-special" : ""}"><div class="ev-date">
+    <div class="card ev ev-compact ${special ? "ev-special" : ""}"><div class="ev-date">
       <div class="ev-day"><b>${esc(e.date.slice(8))}</b><span>${esc(new Date(e.date + "T00:00").toLocaleDateString("en-US", { month: "short" }))}</span></div>
       <div class="ev-body">
         <div style="display:flex;justify-content:space-between;align-items:center">
@@ -345,12 +330,8 @@
           ${e.seats ? `<span style="font-size:.68rem;color:var(--gold);font-weight:700">${e.seats} seats left</span>` : ""}
         </div>
         <h3>${esc(e.title)}</h3>
-        <div class="ev-meta">
-          <div><span class="material-symbols-outlined">schedule</span>${esc(e.time)}</div>
-          <div><span class="material-symbols-outlined">location_on</span>${esc(e.venue)}</div>
-        </div>
-        <p class="sub" style="margin-bottom:.7rem;${special ? "color:rgba(242,241,236,.8)" : ""}">${esc(e.desc)}</p>
-        <button class="btn ${special ? "btn-gold" : "btn-dark"}" data-toast="You are registered: ${esc(e.title)}">
+        <div class="ev-meta ev-meta-line"><span class="material-symbols-outlined">schedule</span>${esc(e.time)}<span class="ev-dot">&bull;</span><span class="material-symbols-outlined">location_on</span><span class="ev-venue">${esc(e.venue)}</span></div>
+        <button class="btn btn-sm ${special ? "btn-gold" : "btn-dark"}" data-toast="You are registered: ${esc(e.title)}">
           <span class="material-symbols-outlined">confirmation_number</span>${e.seats ? "Reserve Your Seat" : "View Details"}
         </button>
       </div>
@@ -555,13 +536,12 @@
     const feat = albums[0];
     return `
     ${appbar("Movaldem", "Gallery")}
-    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin:.6rem 0 .2rem">
-      <div><p class="eyebrow">Movaldem Fellowship</p><h1 class="h-display">Memories &amp; Moments</h1></div>
-      <button class="btn btn-gold" style="width:auto;min-height:40px;font-size:.78rem" data-toast="Photo upload coming soon"><span class="material-symbols-outlined">upload</span>Share Photo</button>
+    <div style="margin:.6rem 0 .2rem">
+      <p class="eyebrow">Movaldem Fellowship</p><h1 class="h-display">Memories &amp; Moments</h1>
     </div>
     <div class="tabs">
       <button class="tab2 ${isPhotos ? "active" : ""}" data-gallery-tab="photos"><span class="material-symbols-outlined">photo_library</span>Photos</button>
-      <button class="tab2 ${!isPhotos ? "active" : ""}" data-gallery-tab="clips"><span class="material-symbols-outlined">movie</span>Sermon Clips <span class="live-badge" style="background:var(--maroon)">4 New</span></button>
+      <button class="tab2 ${!isPhotos ? "active" : ""}" data-gallery-tab="clips"><span class="material-symbols-outlined">movie</span>Sermon Clips</button>
     </div>
     ${isPhotos ? `
     ${feat ? `
@@ -590,17 +570,11 @@
         <div class="g-foot">
           <button data-like aria-label="Like"><span class="material-symbols-outlined">favorite</span><span>${p.likes}</span></button>
           <span style="margin-left:auto"></span>
-          <button data-toast="Saved to device" aria-label="Download"><span class="material-symbols-outlined">download</span></button>
-          <button data-toast="Link copied" aria-label="Share"><span class="material-symbols-outlined">share</span></button>
+          ${p.url ? `<a href="${esc(p.url)}" download aria-label="Download" style="color:var(--muted);display:flex;align-items:center"><span class="material-symbols-outlined">download</span></a>` : ""}
         </div>
       </div>`).join("")}
     </div>
-    ${photos.length ? "" : `<p class="sub" style="text-align:center;margin-top:1rem">No photos yet.</p>`}
-    <div class="card" style="margin-top:1rem;display:flex;gap:.8rem;align-items:center">
-      <span class="material-symbols-outlined" style="color:var(--gold-deep);font-size:28px">cloud_upload</span>
-      <div style="flex:1"><b style="font-size:.88rem">Photographed Sunday?</b><p class="sub">Contribute captures to the sanctuary archive.</p></div>
-      <button class="btn btn-dark" style="width:auto;min-height:40px;font-size:.78rem" data-toast="Photo upload coming soon">Upload</button>
-    </div>` : `
+    ${photos.length ? "" : `<p class="sub" style="text-align:center;margin-top:1rem">No photos yet.</p>`}` : `
     <div class="card" style="text-align:center;padding:2rem 1rem">
       <span class="material-symbols-outlined" style="font-size:40px;color:var(--gold-deep)">movie</span>
       <h3 class="h-head" style="margin:.5rem 0">Sermon Clips</h3>
@@ -618,12 +592,26 @@
     return session.memberType === "worker" && Array.isArray(session.departments) && session.departments.includes("media");
   }
 
+  /* Cover priority: featured/cover photo, then the first uploaded image,
+     then the first video's YouTube thumbnail, so video-only catalogs
+     (the live ones today) show something instead of an empty tile. */
+  function catalogCover(c) {
+    if (c.cover) return c.cover;
+    const photos = Array.isArray(c.photos) ? c.photos : [];
+    if (photos.length && (photos[0].thumb || photos[0].url)) return photos[0].thumb || photos[0].url;
+    if (c.video_thumb) return c.video_thumb;
+    const videos = Array.isArray(c.videos) ? c.videos : [];
+    const vid = videos.length && videos[0].video_id ? videos[0].video_id : (c.first_video_id || "");
+    return vid ? "https://i.ytimg.com/vi/" + vid + "/hqdefault.jpg" : "";
+  }
+
   function catalogCard(c) {
     const d = c.date ? new Date(c.date) : null;
     const dateStr = d && !isNaN(d) ? d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : "";
+    const cover = catalogCover(c);
     return `
     <div class="card cat-card" data-nav="catalogs/${c.id}" style="cursor:pointer">
-      ${c.cover ? `<div class="cat-cover"><img src="${esc(c.cover)}" alt="" loading="lazy"/></div>` : `
+      ${cover ? `<div class="cat-cover"><img src="${esc(cover)}" alt="" loading="lazy"/></div>` : `
       <div class="cat-cover cat-cover-empty"><span class="material-symbols-outlined">photo_library</span></div>`}
       <div class="cat-body">
         <div class="cat-counts">
@@ -654,13 +642,14 @@
     </div>`}`;
   }
 
-  function catalogDetail(c) {
+  function catalogDetail(c, session) {
     const photos = Array.isArray(c.photos) ? c.photos : [];
     const videos = Array.isArray(c.videos) ? c.videos : [];
     return `
     <div class="appbar">
       <button class="icon-btn" data-nav="catalogs" aria-label="Back"><span class="material-symbols-outlined">arrow_back</span></button>
       <div class="brand"><div><b>Catalog</b><small>${esc(c.author || "Media Team")}</small></div></div>
+      ${canPostCatalog(session) ? `<button class="btn btn-gold" style="width:auto;min-height:36px;font-size:.78rem;margin-left:auto" data-nav="admin/catalog/${c.id}"><span class="material-symbols-outlined">edit</span>Edit</button>` : ""}
     </div>
     <div class="section" style="margin-top:.4rem">
       <p class="eyebrow">Program Catalog</p>
@@ -682,41 +671,62 @@
       <div class="section-head"><h2 class="h-head">Photos</h2><span class="link-gold">${photos.length} photo${photos.length === 1 ? "" : "s"}</span></div>
       <div class="cat-photos">
         ${photos.map((p) => `
-        <button class="cat-photo" data-cat-photo="${esc(p.url || p.thumb)}" aria-label="View photo${p.caption ? ": " + esc(p.caption) : ""}">
-          <img src="${esc(p.thumb || p.url)}" alt="${esc(p.caption || c.title)}" loading="lazy"/>
-        </button>`).join("")}
+        <div class="cat-photo-wrap">
+          <button class="cat-photo" data-cat-photo="${esc(p.url || p.thumb)}" aria-label="View photo${p.caption ? ": " + esc(p.caption) : ""}">
+            <img src="${esc(p.thumb || p.url)}" alt="${esc(p.caption || c.title)}" loading="lazy"/>
+          </button>
+          ${p.url ? `<a class="cat-dl" href="${esc(p.url)}" download aria-label="Download photo"><span class="material-symbols-outlined">download</span></a>` : ""}
+        </div>`).join("")}
       </div>` : `
       <p class="sub" style="text-align:center;margin-top:1rem">No photos in this catalog yet.</p>`}
     </div>`;
   }
 
-  /* Composer: only rendered when canPostCatalog(session) is true. */
-  function catalogComposer(err = "") {
+  /* Composer: only rendered when canPostCatalog(session) is true.
+     Pass an existing catalog to edit it: title/description/videos come
+     prefilled, existing photos can be removed, new ones added. */
+  function catalogComposer(err = "", existing = null) {
+    const editing = !!existing;
+    const photos = editing && Array.isArray(existing.photos) ? existing.photos : [];
+    const videos = editing && Array.isArray(existing.videos) ? existing.videos : [];
+    const ytRow = (url, title) => `
+            <div class="yt-row">
+              <input type="url" name="yt_url" placeholder="https://www.youtube.com/watch?v=…" inputmode="url" value="${esc(url || "")}"/>
+              <input type="text" name="yt_title" placeholder="Video title (optional)" maxlength="120" value="${esc(title || "")}"/>
+              <button type="button" class="icon-btn" data-yt-remove aria-label="Remove video"><span class="material-symbols-outlined">close</span></button>
+            </div>`;
     return `
     <div class="page-head">
       <button class="icon-btn" data-nav="catalogs" aria-label="Back"><span class="material-symbols-outlined">arrow_back</span></button>
-      <div><h1>New Catalog</h1><p class="sub">Photos &amp; YouTube videos</p></div>
+      <div><h1>${editing ? "Edit Catalog" : "New Catalog"}</h1><p class="sub">Photos &amp; YouTube videos</p></div>
     </div>
     <div class="section"><div class="card">
       ${err ? `<div class="auth-err">${esc(err)}</div>` : ""}
-      <form id="catalog-form">
-        <div class="field"><label>Title</label><input name="title" type="text" placeholder="e.g. Youth Evangelism Outreach" required maxlength="120"/></div>
-        <div class="field"><label>Description</label><textarea name="description" rows="3" placeholder="Say a little about this catalog…" maxlength="1000"></textarea></div>
-        <div class="field"><label>Photos <span class="lbl-hint">you can pick several</span></label>
+      <form id="catalog-form" ${editing ? `data-catalog-id="${esc(existing.id)}"` : ""}>
+        <div class="field"><label>Title</label><input name="title" type="text" placeholder="e.g. Youth Evangelism Outreach" required maxlength="120" value="${esc(editing ? (existing.title || "") : "")}"/></div>
+        <div class="field"><label>Description</label><textarea name="description" rows="3" placeholder="Say a little about this catalog…" maxlength="1000">${esc(editing ? (existing.description || "") : "")}</textarea></div>
+        ${photos.length ? `
+        <div class="field"><label>Current photos <span class="lbl-hint">tap &times; to remove one</span></label>
+          <div class="cat-photos">
+            ${photos.map((p) => `
+            <div class="cat-photo-wrap cat-keep" data-photo-id="${esc(p.id)}">
+              <img src="${esc(p.thumb || p.url)}" alt="${esc(p.caption || "")}" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:var(--r-sm)"/>
+              <button type="button" class="cat-rm" data-cat-photo-remove aria-label="Remove photo"><span class="material-symbols-outlined">close</span></button>
+            </div>`).join("")}
+          </div>
+        </div>` : ""}
+        <div class="field"><label>${editing ? "Add more photos" : "Photos"} <span class="lbl-hint">you can pick several</span></label>
           <input id="catalog-photos" type="file" accept="image/*" multiple/>
           <small class="sub" id="catalog-photos-hint">No photos selected yet.</small>
         </div>
         <div class="field"><label>YouTube videos <span class="lbl-hint">watch, shorts or live links</span></label>
           <div id="catalog-videos">
-            <div class="yt-row">
-              <input type="url" name="yt_url" placeholder="https://www.youtube.com/watch?v=…" inputmode="url"/>
-              <input type="text" name="yt_title" placeholder="Video title (optional)" maxlength="120"/>
-              <button type="button" class="icon-btn" data-yt-remove aria-label="Remove video"><span class="material-symbols-outlined">close</span></button>
-            </div>
+            ${videos.length ? videos.map((v) => ytRow(v.url, v.title)).join("") : ytRow("", "")}
           </div>
           <button type="button" class="btn btn-ghost" data-yt-add style="min-height:40px;font-size:.8rem"><span class="material-symbols-outlined">add</span>Add another video</button>
         </div>
-        <button class="btn btn-gold" type="submit"><span class="material-symbols-outlined">publish</span>Publish Catalog</button>
+        <button class="btn btn-gold" type="submit"><span class="material-symbols-outlined">publish</span>${editing ? "Save Changes" : "Publish Catalog"}</button>
+        ${editing ? `<button type="button" class="btn btn-ghost" data-catalog-delete style="margin-top:.6rem;color:var(--maroon)"><span class="material-symbols-outlined">delete</span>Delete Catalog</button>` : ""}
       </form>
     </div></div>`;
   }
@@ -818,13 +828,35 @@
       <button class="pm-item" data-notify-pref="verse"><span class="material-symbols-outlined">wb_sunny</span>Verse of the Day Alerts<span class="switch${p.verse ? " on" : ""}"></span></button>
       <button class="pm-item" data-notify-pref="devotion"><span class="material-symbols-outlined">auto_stories</span>Daily Devotion Alerts<span class="switch${p.devotion ? " on" : ""}"></span></button>
       <button class="pm-item" data-toast="Link copied — invite your family"><span class="material-symbols-outlined">share</span>Invite a Friend<span class="material-symbols-outlined go">chevron_right</span></button>
-      <button class="pm-item" data-toast="Opening WhatsApp"><span class="material-symbols-outlined">call</span>Contact the Church<span class="material-symbols-outlined go">chevron_right</span></button>
-      <button class="pm-item" data-toast="Privacy policy coming soon"><span class="material-symbols-outlined">privacy_tip</span>Privacy<span class="material-symbols-outlined go">chevron_right</span></button>
+      <button class="pm-item" data-nav="contact"><span class="material-symbols-outlined">call</span>Contact the Church<span class="material-symbols-outlined go">chevron_right</span></button>
     </div></div>
     <div class="section">
       <button class="btn btn-ghost" id="logout-btn"><span class="material-symbols-outlined">logout</span>Sign Out</button>
       <p class="sub" style="text-align:center;margin-top:1rem">${esc(C.CHURCH_ADDRESS)}<br/>${esc(C.CHURCH_PHONE)}</p>
     </div>`;
+  }
+
+  /* ---------------- Contact the Church ---------------- */
+  function contactChurch() {
+    const waNumber = String(C.CHURCH_PHONE || "").replace(/\D/g, "").replace(/^0/, "234");
+    return `
+    ${appbar("Movaldem", "Contact the Church", { bell: false })}
+    <div class="section"><div class="card" style="padding:1.1rem 1.15rem">
+      <p class="eyebrow">Mountain of Victory at the Last Day Evangelical Ministry</p>
+      <h1 class="h-display" style="font-size:1.4rem;margin:.3rem 0 1rem">MOVALDEM</h1>
+      <div class="field" style="margin-bottom:1rem">
+        <label style="display:flex;align-items:center;gap:.4rem"><span class="material-symbols-outlined" style="font-size:16px">location_on</span>Address</label>
+        <p style="margin:.2rem 0 0">${esc(C.CHURCH_ADDRESS)}</p>
+      </div>
+      <div class="field" style="margin-bottom:1rem">
+        <label style="display:flex;align-items:center;gap:.4rem"><span class="material-symbols-outlined" style="font-size:16px">call</span>Phone</label>
+        <p style="margin:.2rem 0 0"><a class="link-gold" href="tel:${esc(String(C.CHURCH_PHONE).replace(/[^+\d]/g, ""))}">${esc(C.CHURCH_PHONE)}</a></p>
+        <p class="sub" style="margin:.2rem 0 0">For prayers &amp; enquiries</p>
+      </div>
+      <a class="btn btn-gold" href="https://wa.me/${esc(waNumber)}?text=${encodeURIComponent("Hello MOVALDEM, I would like to make an enquiry.")}" target="_blank" rel="noopener">
+        <span class="material-symbols-outlined">chat</span>Chat on WhatsApp</a>
+      <p class="sub" style="text-align:center;margin-top:.8rem">Opens WhatsApp straight to the church line.</p>
+    </div></div>`;
   }
 
   /* Shown instantly while the home data loads, so the sign-in button
@@ -856,5 +888,5 @@
     </div>`;
   }
 
-  window.Screens = { splash, welcome, login, registerRole, registerForm, loading, loadError, notifyScreen, adminVerse, adminDevotion, DEPARTMENTS, canPostCatalog, home, events, quiz, quizPlay, quizResult, gallery, catalogs, catalogDetail, catalogComposer, notifications, notifDetail, devotionDetail, devotionsList, profile };
+  window.Screens = { splash, welcome, login, registerRole, registerForm, loading, loadError, notifyScreen, adminVerse, adminDevotion, DEPARTMENTS, canPostCatalog, home, events, quiz, quizPlay, quizResult, gallery, catalogs, catalogDetail, catalogComposer, notifications, notifDetail, devotionDetail, devotionsList, profile, contactChurch };
 })();
