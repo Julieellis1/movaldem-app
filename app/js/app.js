@@ -63,9 +63,23 @@
   }
 
   /* ---------------- radio ---------------- */
+  // Live Icecast stream. A plain <audio> element in a WebView stalls
+  // silently when the connection hiccups, and calling play() again on
+  // the same dead element does nothing, so the old code left the user
+  // with a silent player whose button still said "pause". The fix:
+  // track what the user WANTS separately from what is actually
+  // playing, and whenever the stream stalls, errors, ends, or pauses
+  // unexpectedly, reload it from a fresh URL and try again.
   const audio = new Audio();
   audio.preload = "none";
-  let radioPlaying = false;
+  let radioPlaying = false; // actually producing sound right now
+  let radioWanted = false; // user asked for radio and has not stopped it
+  let radioReconnectTimer = null;
+  let radioReconnectAttempts = 0;
+
+  function clearRadioReconnect() {
+    if (radioReconnectTimer) { clearTimeout(radioReconnectTimer); radioReconnectTimer = null; }
+  }
 
   function setRadioUI(playing) {
     radioPlaying = playing;
@@ -79,19 +93,83 @@
     miniPlayer.setAttribute("aria-hidden", String(!playing));
   }
 
+  function startRadioStream() {
+    clearRadioReconnect();
+    // Fresh URL each attempt: a cache-busting query defeats any stale
+    // buffered connection, and load() resets an element stuck in error.
+    const sep = C.ZENO_STREAM_URL.includes("?") ? "&" : "?";
+    audio.src = C.ZENO_STREAM_URL + sep + "_t=" + Date.now();
+    audio.load();
+    audio.volume = parseFloat(document.getElementById("radio-vol")?.value ?? 80) / 100;
+    audio.play().then(() => {
+      radioReconnectAttempts = 0;
+      setRadioUI(true);
+    }).catch(() => {
+      // Play was refused (or the stream died at once). Keep the button
+      // showing "playing" while we retry, so a tap means "stop".
+      setRadioUI(true);
+      scheduleRadioReconnect();
+    });
+  }
+
+  function scheduleRadioReconnect() {
+    if (!radioWanted || radioReconnectTimer) return;
+    radioReconnectAttempts += 1;
+    // 2s, 4s, 6s, 8s, then 10s cap. Stops entirely after 30 tries
+    // (about 5 minutes of retrying) so a dead station does not loop forever.
+    if (radioReconnectAttempts > 30) {
+      radioWanted = false;
+      setRadioUI(false);
+      toast("Movaldem Radio is unreachable right now. Tap play to try again.");
+      return;
+    }
+    const delay = Math.min(2000 * radioReconnectAttempts, 10000);
+    radioReconnectTimer = setTimeout(() => {
+      radioReconnectTimer = null;
+      if (radioWanted) startRadioStream();
+    }, delay);
+  }
+
+  // The stream died or stalled while the user still wants radio.
+  audio.addEventListener("error", () => { if (radioWanted) scheduleRadioReconnect(); });
+  audio.addEventListener("ended", () => { if (radioWanted) scheduleRadioReconnect(); });
+  audio.addEventListener("stalled", () => { if (radioWanted) scheduleRadioReconnect(); });
+  audio.addEventListener("pause", () => {
+    // A pause we did not ask for (network drop, WebView interruption):
+    // do not flip the button to "play", reconnect instead.
+    if (radioWanted) scheduleRadioReconnect();
+    else setRadioUI(false);
+  });
+  audio.addEventListener("playing", () => {
+    radioReconnectAttempts = 0;
+    clearRadioReconnect();
+    setRadioUI(true);
+  });
+
   function toggleRadio() {
     if (!C.ZENO_STREAM_URL) {
       toast("Movaldem Radio is coming soon — station setup in progress.");
       return;
     }
-    if (radioPlaying) { audio.pause(); setRadioUI(false); }
-    else {
-      if (audio.src !== C.ZENO_STREAM_URL) audio.src = C.ZENO_STREAM_URL;
-      audio.volume = parseFloat(document.getElementById("radio-vol")?.value ?? 80) / 100;
-      audio.play().then(() => setRadioUI(true)).catch(() => toast("Could not start the stream."));
+    if (radioWanted) {
+      radioWanted = false;
+      clearRadioReconnect();
+      audio.pause();
+      setRadioUI(false);
+    } else {
+      radioWanted = true;
+      radioReconnectAttempts = 0;
+      startRadioStream();
     }
   }
-  function stopRadio() { audio.pause(); audio.removeAttribute("src"); audio.load(); setRadioUI(false); }
+  function stopRadio() {
+    radioWanted = false;
+    clearRadioReconnect();
+    audio.pause();
+    audio.removeAttribute("src");
+    audio.load();
+    setRadioUI(false);
+  }
 
   /* ---------------- countdown ---------------- */
   let cdTimer = null;
