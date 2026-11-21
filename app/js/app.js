@@ -59,6 +59,7 @@
       throw err;
     }
     data = { verse, programs, events, quiz: quizHome, gallery, catalogs, notifications, devotion: devotionToday, devotions: devotions || [] };
+    clipsCache = null; // fresh app data: sermon clips refetch too
     return data;
   }
 
@@ -366,33 +367,26 @@
     }
   }
 
-  /* Sermon Clips are built automatically from the YouTube videos in the
-     media catalogs: fetch each video-bearing catalog's detail, flatten its
-     videos, newest catalog first. Cached against the catalog list so tab
-     switches do not refetch; the key changes whenever the list does. */
-  let clipsCache = { key: "", clips: [] };
+  /* Sermon Clips are built automatically from the sermons on the
+     website's Sermons page: every published sermon that carries a
+     YouTube video, newest first, with its title and date. The list comes
+     from the /movaldem/v1/sermons endpoint; cached for the session so
+     tab switches do not refetch, and cleared whenever app data reloads. */
+  let clipsCache = null;
   async function loadClips() {
-    const list = (data && Array.isArray(data.catalogs)) ? data.catalogs.filter((c) => (c.video_count || 0) > 0) : [];
-    const key = list.map((c) => c.id + ":" + (c.video_count || 0) + ":" + (c.date || "")).join("|");
-    if (clipsCache.key === key) return clipsCache.clips;
-    const details = await Promise.all(list.map((c) => Api.getCatalog(c.id).catch(() => null)));
-    const clips = [];
-    details.forEach((d) => {
-      if (!d) return;
-      (Array.isArray(d.videos) ? d.videos : []).forEach((v) => {
-        if (!v || !v.video_id) return;
-        const usable = v.title && !/^https?:\/\//i.test(v.title);
-        clips.push({
-          video_id: v.video_id,
-          url: v.url || ("https://www.youtube.com/watch?v=" + v.video_id),
-          title: usable ? v.title : (d.title || "Sermon"),
-          catalogTitle: d.title || "",
-          date: d.date || "",
-        });
-      });
-    });
+    if (clipsCache) return clipsCache;
+    const sermons = await Api.listSermons().catch(() => []);
+    const clips = (Array.isArray(sermons) ? sermons : [])
+      .filter((s) => s && s.video_id)
+      .map((s) => ({
+        video_id: s.video_id,
+        url: s.youtube_url || ("https://www.youtube.com/watch?v=" + s.video_id),
+        title: s.title || "Sermon",
+        catalogTitle: "",
+        date: s.date || "",
+      }));
     clips.sort((a, b) => new Date(b.date) - new Date(a.date));
-    clipsCache = { key, clips };
+    clipsCache = clips;
     return clips;
   }
 

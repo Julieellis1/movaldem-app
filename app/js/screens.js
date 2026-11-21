@@ -596,12 +596,12 @@
     </div>
     ${photos.length ? "" : `<p class="sub" style="text-align:center;margin-top:1rem">No photos yet.</p>`}` : `
     ${clips && clips.length ? `
-    <p class="sub" style="margin:.4rem 0 .8rem">Sermon videos from the media catalogs, newest first. Tap a video to play it here.</p>
+    <p class="sub" style="margin:.4rem 0 .8rem">Sermon videos from the website's Sermons page, newest first. Tap a video to play it here.</p>
     ${clips.map(clipCard).join("")}` : `
     <div class="card" style="text-align:center;padding:2rem 1rem">
       <span class="material-symbols-outlined" style="font-size:40px;color:var(--gold-deep)">movie</span>
       <h3 class="h-head" style="margin:.5rem 0">No sermon clips yet</h3>
-      <p class="sub">Clips appear here automatically once the media team adds a YouTube video to a catalog.</p>
+      <p class="sub">Clips appear here automatically when a sermon with a YouTube video is published on the website.</p>
     </div>`}`}`;
   }
 

@@ -426,6 +426,12 @@
       });
     },
 
+    /* --- sermons (website Sermons page videos, for Sermon Clips) --- */
+    async listSermons() {
+      if (CFG.USE_MOCK) return [];
+      return wp("/movaldem/v1/sermons").catch(() => []);
+    },
+
     /* --- catalogs --- */
     youtubeVideoId,
     async listCatalogs() {
