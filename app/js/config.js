@@ -6,7 +6,7 @@ window.MOVALDEM_CONFIG = {
 
   // WordPress site the app shares its database with.
   // Staging while the real domain cutover is pending.
-  WP_BASE: "https://movaldem.teta.dpdns.org",
+  WP_BASE: "https://movaldem.com",
   get WP_JSON() { return this.WP_BASE + "/wp-json"; },
 
   // Movaldem Radio stream — self-hosted AzuraCast on the church VPS.
