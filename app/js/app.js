@@ -366,6 +366,36 @@
     }
   }
 
+  /* Sermon Clips are built automatically from the YouTube videos in the
+     media catalogs: fetch each video-bearing catalog's detail, flatten its
+     videos, newest catalog first. Cached against the catalog list so tab
+     switches do not refetch; the key changes whenever the list does. */
+  let clipsCache = { key: "", clips: [] };
+  async function loadClips() {
+    const list = (data && Array.isArray(data.catalogs)) ? data.catalogs.filter((c) => (c.video_count || 0) > 0) : [];
+    const key = list.map((c) => c.id + ":" + (c.video_count || 0) + ":" + (c.date || "")).join("|");
+    if (clipsCache.key === key) return clipsCache.clips;
+    const details = await Promise.all(list.map((c) => Api.getCatalog(c.id).catch(() => null)));
+    const clips = [];
+    details.forEach((d) => {
+      if (!d) return;
+      (Array.isArray(d.videos) ? d.videos : []).forEach((v) => {
+        if (!v || !v.video_id) return;
+        const usable = v.title && !/^https?:\/\//i.test(v.title);
+        clips.push({
+          video_id: v.video_id,
+          url: v.url || ("https://www.youtube.com/watch?v=" + v.video_id),
+          title: usable ? v.title : (d.title || "Sermon"),
+          catalogTitle: d.title || "",
+          date: d.date || "",
+        });
+      });
+    });
+    clips.sort((a, b) => new Date(b.date) - new Date(a.date));
+    clipsCache = { key, clips };
+    return clips;
+  }
+
   async function renderAuthed(route, session) {
     const [base, arg] = route.split("/");
 
@@ -379,7 +409,10 @@
     if (base === "home") screen.innerHTML = S.home(data, session);
     else if (base === "events") screen.innerHTML = S.events(data, arg === "special" ? "special" : "programs");
     else if (base === "quiz") screen.innerHTML = S.quiz(data, arg === "board" ? "board" : "daily");
-    else if (base === "gallery") screen.innerHTML = S.gallery(data, arg === "clips" ? "clips" : "photos");
+    else if (base === "gallery") {
+      if (arg === "clips") { const clips = await loadClips(); screen.innerHTML = S.gallery(data, "clips", clips); }
+      else screen.innerHTML = S.gallery(data, "photos");
+    }
     else if (base === "catalogs" && arg) {
       const detail = await Api.getCatalog(arg).catch(() => null);
       if (detail) { screen.innerHTML = S.catalogDetail(detail, session); }
@@ -540,6 +573,17 @@
 
     const gt = e.target.closest("[data-gallery-tab]");
     if (gt) { location.hash = "#/gallery/" + gt.dataset.galleryTab; return; }
+
+    // Sermon Clips: tap a thumbnail to swap in the YouTube player in place.
+    const clipEl = e.target.closest("[data-clip-play]");
+    if (clipEl) {
+      const vid = clipEl.dataset.clipPlay;
+      clipEl.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(vid)}?rel=0&autoplay=1" title="Sermon clip"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+      clipEl.removeAttribute("data-clip-play");
+      clipEl.style.cursor = "";
+      return;
+    }
 
     // Catalog composer: add / remove YouTube rows.
     if (e.target.closest("[data-yt-add]")) {

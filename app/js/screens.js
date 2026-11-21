@@ -528,7 +528,27 @@
   }
 
   /* ---------------- Gallery ---------------- */
-  function gallery(data, tab = "photos") {
+  /* One sermon clip: a YouTube video pulled automatically from a media
+     catalog. Title falls back to the catalog title when the video itself
+     has no usable title (the API sometimes stores the raw URL there). */
+  function clipCard(clip) {
+    const d = clip.date ? new Date(clip.date) : null;
+    const dateStr = d && !isNaN(d) ? d.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", year: "numeric" }) : "";
+    const sub = [dateStr, clip.catalogTitle && clip.catalogTitle !== clip.title ? clip.catalogTitle : ""].filter(Boolean).join(" · ");
+    return `
+    <div class="card" style="margin-bottom:.8rem;padding:.7rem">
+      <div class="vid-wrap" data-clip-play="${esc(clip.video_id)}" role="button" aria-label="Play ${esc(clip.title)}" style="cursor:pointer">
+        <img src="https://i.ytimg.com/vi/${esc(clip.video_id)}/hqdefault.jpg" alt="" loading="lazy"/>
+        <span class="clip-play"><span class="material-symbols-outlined">play_circle</span></span>
+      </div>
+      <b style="font-size:.92rem;display:block;margin-top:.55rem">${esc(clip.title)}</b>
+      ${sub ? `<p class="sub" style="margin:.15rem 0 .3rem">${esc(sub)}</p>` : ""}
+      <a class="link-gold" href="${esc(clip.url)}" target="_blank" rel="noopener" style="font-size:.78rem;cursor:pointer">
+        <span class="material-symbols-outlined" style="font-size:14px;vertical-align:-2px">open_in_new</span> Watch on YouTube</a>
+    </div>`;
+  }
+
+  function gallery(data, tab = "photos", clips = null) {
     const isPhotos = tab === "photos";
     const gal = (data && data.gallery) || {};
     const albums = Array.isArray(gal.albums) ? gal.albums : [];
@@ -575,13 +595,14 @@
       </div>`).join("")}
     </div>
     ${photos.length ? "" : `<p class="sub" style="text-align:center;margin-top:1rem">No photos yet.</p>`}` : `
+    ${clips && clips.length ? `
+    <p class="sub" style="margin:.4rem 0 .8rem">Sermon videos from the media catalogs, newest first. Tap a video to play it here.</p>
+    ${clips.map(clipCard).join("")}` : `
     <div class="card" style="text-align:center;padding:2rem 1rem">
       <span class="material-symbols-outlined" style="font-size:40px;color:var(--gold-deep)">movie</span>
-      <h3 class="h-head" style="margin:.5rem 0">Sermon Clips</h3>
-      <p class="sub">Short, shareable moments from recent messages — powered by Movaldem TV on YouTube.</p>
-      <div style="height:.8rem"></div>
-      <button class="btn btn-gold" data-toast="Opening Movaldem TV"><span class="material-symbols-outlined">play_circle</span>Watch on YouTube</button>
-    </div>`}`;
+      <h3 class="h-head" style="margin:.5rem 0">No sermon clips yet</h3>
+      <p class="sub">Clips appear here automatically once the media team adds a YouTube video to a catalog.</p>
+    </div>`}`}`;
   }
 
   /* ---------------- Catalogs ---------------- */
